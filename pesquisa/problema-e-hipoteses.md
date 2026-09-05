@@ -30,18 +30,18 @@ Avaliar empiricamente a qualidade e os defeitos presentes em sistemas de softwar
 
 ## 4. Pergunta principal
 
-> Como diferentes agentes/modelos de IA generativa influenciam a qualidade, os tipos de defeitos e a testabilidade de software produzido sob requisitos controlados?
+> Como diferentes agentes de Inteligência Artificial generativa influenciam a qualidade, a densidade e a natureza dos defeitos, a testabilidade e a reprodutibilidade de sistemas de software desenvolvidos sob requisitos controlados?
 
 ## 5. Perguntas de pesquisa (rascunho RQ1–RQ8)
 
-- **RQ1:** Existem diferenças na qualidade funcional dos sistemas produzidos por diferentes agentes/modelos?
-- **RQ2:** Existem diferenças na quantidade e na densidade de defeitos?
-- **RQ3:** Existem diferenças nos tipos de defeitos?
+- **RQ1:** Existem diferenças na qualidade funcional entre sistemas produzidos por diferentes agentes?
+- **RQ2:** Existem diferenças na densidade de defeitos?
+- **RQ3:** Quais categorias de defeitos são predominantes em cada agente?
 - **RQ4:** Existem diferenças na severidade dos defeitos?
-- **RQ5:** Existem diferenças na cobertura e efetividade dos testes?
-- **RQ6:** Os testes gerados pela própria IA conseguem detectar os defeitos do software que ela produziu?
-- **RQ7:** Existem diferenças em características não funcionais (segurança, manutenção, complexidade)?
-- **RQ8:** Os resultados permanecem consistentes em múltiplas execuções? *(justificada pelo não-determinismo [B04])*
+- **RQ5:** Existem diferenças de segurança e manutenibilidade?
+- **RQ6:** Os testes gerados pelo próprio agente conseguem detectar seus defeitos?
+- **RQ7:** Quão reprodutíveis são os sistemas gerados?
+- **RQ8:** Quanto os resultados variam entre execuções do mesmo agente? *(justificada pelo não-determinismo [B04])*
 
 ## 6. Hipóteses (rascunho)
 
@@ -62,6 +62,7 @@ Avaliar empiricamente a qualidade e os defeitos presentes em sistemas de softwar
   - qualidade estrutural (complexidade, duplicação, code smells, manutenibilidade).
 - **Matriz de defeitos**: `ID · IA · Categoria · Severidade · Detectado automaticamente?`.
 - **Análise estatística** sobre os resultados (comparações entre modelos).
+- **Neutralidade experimental:** a pesquisa não parte de "IA é ruim" — deve permitir que os dados mostrem IA melhor, igual ou pior conforme o contexto ([D02](), [D03]()).
 
 ## 8. Dimensões do experimento
 

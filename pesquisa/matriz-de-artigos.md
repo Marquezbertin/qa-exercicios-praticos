@@ -1,6 +1,6 @@
 # Matriz de Artigos — Revisão Bibliográfica
 
-**Status:** buscas iniciais concluídas · **Meta:** 25–30 artigos · **Atual:** 19 registrados
+**Status:** buscas iniciais concluídas · **Meta:** 25–30 artigos · **Atual:** 25 registrados
 
 > Convenção: campos marcados **"a confirmar"** ainda não foram verificados na fonte oficial (DOI, afiliação etc.). Antes de consolidar uma ficha, o DOI/link deve ser confirmado — nunca manter DOI inventado.
 
@@ -129,6 +129,24 @@
 - **Resultado principal:** detecção de bugs muito limitada (vários modelos acharam poucos/nenhum bug) e precisão baixa dos testes gerados.
 - **Lacuna:** sustenta a necessidade de **suíte independente + QA humano** no experimento.
 
+### C05 — A utilidade de métricas de cobertura e mutation score (réplica)
+- **Autores:** a confirmar
+- **Ano:** 2026
+- **DOI:** a confirmar
+- **Tipo:** Replicação (estudo empírico)
+- **Métricas avaliadas:** line coverage, branch coverage, mutation score
+- **Resultado principal:** a utilidade dessas métricas depende do contexto; quando o código sob teste já contém um bug, coverage e mutation score deixam de ser indicadores confiáveis da capacidade real de detecção do bug.
+- **Lacuna:** **não usar coverage isoladamente como critério de qualidade** — combinar métricas no nosso oráculo.
+
+### C06 — Geração de testes unitários (data leakage controlado)
+- **Autores:** a confirmar
+- **Ano:** 2026
+- **DOI:** a confirmar
+- **Tipo:** Estudo Empírico
+- **Linguagem:** Python (12 métodos desenvolvidos para evitar data leakage)
+- **Resultado principal:** melhor configuração alcançou **96,3% branch coverage**, **57% mutation score** e quase 100% de compilação; porém **todos os modelos omitiram sistematicamente testes de robustez** com valores especiais (None, inf, NaN).
+- **Lacuna:** conversa diretamente com a taxonomia de Tambon (**missing corner cases**) — nossos testes negativos precisam incluir valores especiais.
+
 ---
 
 ## Grupo D — Qualidade de software
@@ -174,6 +192,15 @@
 - **Referencial:** ISO/IEC 25010
 - **Resultado principal:** literatura concentra-se em correção funcional; segurança, manutenção e performance menos exploradas; profissionais destacam manutenção, legibilidade e dívida técnica.
 - **Lacuna:** **adotar ISO/IEC 25010 como referência de qualidade não funcional** no nosso experimento.
+
+### D05 — Dívida técnica e code smells em commits de IA ("Debt Behind the AI Boom")
+- **Autores:** a confirmar ("Debt Behind the AI Boom")
+- **Ano:** 2026
+- **DOI:** a confirmar
+- **Tipo:** Estudo Empírico (large-scale, retrospectivo)
+- **Amostra:** **304.362 commits** verificados como produzidos por IA, em **6.275 repositórios** do GitHub, 5 assistentes de programação
+- **Resultado principal:** **484.606 problemas** identificados, dos quais **89,1% eram code smells**; mais de **15% dos commits de cada assistente** introduziram ao menos um problema; **24,2% dos problemas introduzidos pela IA permaneciam no código** na revisão mais recente do repositório.
+- **Lacuna:** evidência de **acúmulo de problemas** ao longo do tempo — justifica medir manutenibilidade/dívida no nosso experimento.
 
 ---
 
@@ -223,8 +250,8 @@
 - **Lacuna:** **modelo ≠ agente de programação** — nosso estudo deve diferenciar essas categorias no desenho.
 
 ### F02 — Código gerado por IA não é reproduzível (ainda)
-- **Autores:** a confirmar
-- **Ano:** a confirmar
+- **Autores:** Vangala et al.
+- **Ano:** 2025/2026
 - **DOI:** a confirmar
 - **Tipo:** Estudo Empírico
 - **Agentes:** Claude Code, OpenAI Codex, Gemini
@@ -241,6 +268,25 @@
 - **Resultado principal:** em um experimento o GPT-4o introduziu 22 vulnerabilidades contra 10 presentes nos prompts originais; em outro, distribuição mais equilibrada.
 - **Lacuna:** separar **erro pré-existente no requisito/prompt** de **erro introduzido pela IA** — controle metodológico importante.
 
+### F04 — PRs aceitos/rejeitados de agentes de IA (mundo real)
+- **Autores:** a confirmar
+- **Ano:** 2026
+- **DOI:** a confirmar
+- **Tipo:** Estudo Empírico (retrospectivo, GitHub)
+- **Amostra:** **33 mil pull requests** produzidos por agentes de IA, 5 agentes
+- **Análises:** PRs aceitos/rejeitados, mudanças de código, resultados de CI, dinâmica das revisões
+- **Resultado principal:** comportamento dos agentes no mundo real difere do comportamento em benchmarks.
+- **Lacuna:** fonte para entender o comportamento de agentes no mundo real (aliado ao nosso ambiente controlado).
+
+### F05 — "When AI Code Doesn't Stick": reversões de código de agentes
+- **Autores:** a confirmar
+- **Ano:** 2026
+- **DOI:** a confirmar
+- **Tipo:** Estudo Empírico (retrospectivo, GitHub)
+- **Amostra:** **33.580 PRs** de agentes com **86.315 commits** (Claude, Copilot, Cursor, Devin, OpenAI Codex)
+- **Resultado principal:** **2,66%** dos PRs continham ao menos um commit de reversão; grandes diferenças entre agentes — **OpenAI Codex 0,7%** vs. **GitHub Copilot 7,6%**.
+- **Lacuna:** **agentes não são equivalentes em confiabilidade** — sustenta a comparação entre agentes no nosso experimento.
+
 ---
 
 ## Resumo por temas (contagem)
@@ -249,10 +295,10 @@
 |---|---|---|
 | A | LLMs em ES | 2 |
 | B | Defeitos | 4 |
-| C | Testes | 4 |
-| D | Qualidade | 4 |
+| C | Testes | 6 |
+| D | Qualidade | 5 |
 | E | Segurança | 3 |
-| F | Agentes | 3 |
-| **Total** | | **19** |
+| F | Agentes | 5 |
+| **Total** | | **25** |
 
-**Meta da próxima rodada:** +6–11 artigos (prioridade: estudos que avaliem **sistemas completos**, agentes de programação 2025/2026 e QA não funcional).
+**Meta da próxima rodada:** consolidar DOIs/autores (campos *a confirmar*) e adicionar estudos sobre **manutenibilidade**, **qualidade não funcional** e **agentes 2025/2026** até 30 artigos.
