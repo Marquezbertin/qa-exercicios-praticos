@@ -17,7 +17,8 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Etapa | Status |
 |---|---|
 | Revisão bibliográfica — Parte 1 | ✅ em andamento |
-| Matriz de artigos (25–30) | 🔶 ~19 registrados |
+| Matriz de artigos (25–30) | 🔶 25 registrados |
+| Análise quantitativa da matriz | ✅ v1 (frequências e cruzamentos) |
 | Mapa da literatura / análise de lacunas | 🔶 em construção |
 | Problema de pesquisa + RQs + hipóteses | 🔶 rascunho salvo |
 | Metodologia experimental | ⏳ não iniciada |
@@ -31,6 +32,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `README.md` | Este guia do projeto de pesquisa |
 | `revisao-bibliografica.md` | Documento principal da Parte 1 (método, síntese, lacunas) |
 | `matriz-de-artigos.md` | Matriz detalhada com as fichas completas dos artigos (A–F) |
+| `analise-quantitativa.md` | Análise quantitativa da matriz (frequências e cruzamentos que sustentam a lacuna) |
 | `problema-e-hipoteses.md` | Rascunho: problema, perguntas de pesquisa e hipóteses |
 
 ## Convenções
@@ -44,6 +46,6 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 1. Expandir a matriz para 25–30 artigos (buscar sistematicamente ACM, IEEE, Springer, Elsevier, arXiv).
 2. Consolidar DOIs e metadados de cada artigo.
-3. Construir o **mapa da literatura**: o que já foi provado, o que é controverso, o que é lacuna.
+3. Construir o **mapa da literatura** (o que já foi provado, o que é controverso, o que é lacuna).
 4. Fechar problema de pesquisa + RQs + hipóteses com fundamentação.
 5. Definir e documentar a metodologia experimental (requisitos controlados, mesmos prompts, múltiplas execuções, oráculo independente).

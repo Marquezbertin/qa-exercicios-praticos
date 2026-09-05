@@ -166,7 +166,7 @@ O campo já provou que a IA gera software funcional, mas com **perfil de defeito
 
 1. Consolidar a matriz em **25–30 artigos** atualizada (25 hoje); priorizar confirmação de DOIs e de autores pendentes.
 2. Confirmar **DOIs/links** (campos marcados *a confirmar*).
-3. Fazer a **análise quantitativa da matriz** (frequências: % snippets vs sistemas completos, % oráculo independente, % segurança, % reprodutibilidade).
+3. Análise quantitativa da matriz **concluída (v1)** (`analise-quantitativa.md`): 8% geram sistema completo; 12% usam oráculo independente; 0% combinam sistema completo + defeitos + segurança; 0% executam o desenho integral.
 4. Montar o **mapa da literatura** (provado/controverso/inexplorado).
 5. Fechar problema, RQs (RQ1–RQ8) e hipóteses (ver `problema-e-hipoteses.md`).
 6. Definir metodologia experimental e criar o oráculo independente.
