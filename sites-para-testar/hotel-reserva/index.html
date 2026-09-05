@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserva Fácil - Sistema de Reservas de Hotel</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#fdf8f5; color:#2d2a26; }
+  header { background:#7c3aed; color:white; padding:18px 28px; }
+  header h1 { font-size:1.3rem; }
+  header h1 span { font-weight:300; }
+  main { max-width:1080px; margin:0 auto; padding:24px; }
+  .busca { background:white; border-radius:14px; padding:22px; box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom:24px; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; align-items:end; }
+  .campo label { display:block; font-size:.8rem; font-weight:700; color:#6b7280; margin-bottom:6px; }
+  .campo input, .campo select { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:8px; }
+  #btnBuscar { background:#7c3aed; color:white; padding:11px 20px; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+  #btnBuscar:hover { background:#6d28d9; }
+  .msg-criterio { font-size:.85rem; color:#6b7280; margin-top:8px; }
+  .info-resumo { background:#f3f4f6; border-radius:10px; padding:14px; font-size:.9rem; margin-bottom:20px; line-height:1.6; }
+  .quartos { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px; }
+  .quarto { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.07); display:flex; flex-direction:column; }
+  .quarto .foto { height:130px; display:flex; align-items:center; justify-content:center; font-size:2.8rem; }
+  .quarto .corpo { padding:16px; display:flex; flex-direction:column; flex:1; }
+  .quarto h3 { font-size:1rem; margin-bottom:4px; }
+  .quarto .desc { color:#6b7280; font-size:.8rem; margin-bottom:10px; }
+  .quarto .capacidade { font-size:.8rem; color:#374151; margin-bottom:8px; }
+  .quarto .preco-noite { font-size:1.1rem; font-weight:800; margin:6px 0; }
+  .quarto .preco-noite small { font-size:.75rem; color:#9ca3af; font-weight:400; }
+  .quarto .total-est { font-size:.9rem; color:#7c3aed; font-weight:600; margin-bottom:10px; }
+  .quarto button { background:#059669; color:white; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; margin-top:auto; }
+  .quarto button:hover { background:#047857; }
+  .quarto button:disabled { background:#9ca3af; cursor:not-allowed; }
+  .quarto .indisponivel { background:#e5e7eb; color:#6b7280; padding:10px; border-radius:8px; text-align:center; font-size:.8rem; }
+  .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:100; align-items:center; justify-content:center; }
+  .modal.aberto { display:flex; }
+  .modal-conteudo { background:white; border-radius:14px; padding:26px; width:min(420px,90vw); }
+  .modal-conteudo h2 { margin-bottom:14px; color:#7c3aed; }
+  .modal-conteudo label { display:block; font-size:.85rem; font-weight:600; margin:12px 0 4px; }
+  .modal-conteudo input, .modal-conteudo select { width:100%; padding:9px; border:1px solid #d1d5db; border-radius:8px; }
+  .modal-botoes { display:flex; gap:10px; margin-top:18px; }
+  .modal-botoes button { flex:1; padding:11px; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+  #btnConfirmar { background:#059669; color:white; }
+  #btnCancelarModal { background:#e5e7eb; color:#374151; }
+  .modal-msg { font-size:.8rem; margin-top:10px; min-height:16px; }
+  .ok { color:#059669; }
+  .err { color:#dc2626; }
+  .confirmacao { background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:18px; margin-top:20px; }
+  .confirmacao h3 { color:#059669; margin-bottom:10px; }
+  footer { text-align:center; padding:26px; color:#9ca3af; font-size:.8rem; }
+</style>
+</head>
+<body>
+<header><h1>Reserva Fácil <span>• Hotel & Resort</span></h1></header>
+
+<main>
+  <div class="busca">
+    <div class="campo">
+      <label for="checkin">Data de Check-in</label>
+      <input type="date" id="checkin">
+    </div>
+    <div class="campo">
+      <label for="checkout">Data de Check-out</label>
+      <input type="date" id="checkout">
+    </div>
+    <div class="campo">
+      <label for="hospedes">Hóspedes</label>
+      <select id="hospedes">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </div>
+    <div class="campo">
+      <label for="tipo">Tipo de quarto</label>
+      <select id="tipo">
+        <option value="todos">Todos</option>
+        <option value="standard">Standard</option>
+        <option value="deluxe">Deluxe</option>
+        <option value="suíte">Suíte Premium</option>
+      </select>
+    </div>
+    <button id="btnBuscar" onclick="buscar()">Buscar quartos</button>
+  </div>
+
+  <div class="msg-criterio" id="msgCriterio">Preencha as datas para buscar disponibilidade.</div>
+  <div class="info-resumo" id="infoResumo" style="display:none"></div>
+
+  <div class="quartos" id="quartos"></div>
+
+  <div id="confirmacao" class="confirmacao" style="display:none"></div>
+</main>
+
+<!-- Modal de confirmação -->
+<div class="modal" id="modal">
+  <div class="modal-conteudo">
+    <h2 id="modalTitulo">Confirmar reserva</h2>
+    <label>Nome completo</label>
+    <input type="text" id="modalNome" placeholder="Ex: Maria Oliveira">
+    <label>E-mail</label>
+    <input type="email" id="modalEmail" placeholder="exemplo@email.com">
+    <label>Hóspedes</label>
+    <input type="number" id="modalHospedes" min="1" value="2">
+    <div class="modal-msg" id="modalMsg"></div>
+    <div class="modal-botoes">
+      <button id="btnCancelarModal" onclick="fecharModal()">Cancelar</button>
+      <button id="btnConfirmar" onclick="confirmar()">Confirmar reserva</button>
+    </div>
+  </div>
+</div>
+
+<footer>Sistema fictício para testes de QA - Bugs intencionais</footer>
+
+<script>
+// Dados dos quartos
+var quartos = [
+  { id: 1, nome: "Quarto Standard", tipo: "standard", desc: "Cama queen, 28 m², vista para o jardim", cap: 2, preco: 250, cor: "#dbeafe", emoji: "🛏️" },
+  { id: 2, nome: "Quarto Standard Duplo", tipo: "standard", desc: "Duas camas de solteiro, 30 m²", cap: 2, preco: 280, cor: "#dbeafe", emoji: "🛌" },
+  { id: 3, nome: "Deluxe Vista Mar", tipo: "deluxe", desc: "Cama king, 36 m², varanda com vista", cap: 3, preco: 450, cor: "#fef3c7", emoji: "🌊" },
+  { id: 4, nome: "Deluxe Family", tipo: "deluxe", desc: "Cama queen + sofá-cama, 45 m²", cap: 4, preco: 520, cor: "#fef3c7", emoji: "👨‍👩‍👧" },
+  { id: 5, nome: "Suíte Presidencial", tipo: "suíte", desc: "2 quartos, living, 90 m², serviço de butler", cap: 5, preco: 1200, cor: "#fce7f3", emoji: "👑" }
+];
+
+// Reservas existentes para simular indisponibilidade
+var reservas = [
+  { quarto: 2, ini: "2026-09-10", fim: "2026-09-12" },
+  { quarto: 5, ini: "2026-09-15", fim: "2026-09-18" },
+  { quarto: 1, ini: "2026-09-20", fim: "2026-09-25" }
+];
+
+var dataIni, dataFim, numHospedes;
+var quartoSelecionado = null;
+
+function hoje() {
+  var d = new Date();
+  return d.toISOString().split("T")[0];
+}
+
+function somarDias(ds, n) {
+  var d = new Date(ds);
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split("T")[0];
+}
+
+function diferençaDias(ini, fim) {
+  var a = new Date(ini), b = new Date(fim);
+  return Math.round((b - a) / (1000 * 60 * 60 * 24));
+}
+
+function validarPeriodo(ini, fim, hosp) {
+  var erros = [];
+
+  if (ini === "" || fim === "") {
+    erros.push("Preencha as datas de check-in e check-out.");
+  }
+
+  if (ini !== "" && ini < hoje()) {
+    erros.push("Check-in não pode ser uma data passada.");
+  }
+
+  if (ini !== "" && fim !== "" && fim < ini) {
+    erros.push("Check-out deve ser posterior ao check-in.");
+  }
+
+  if (hosp < 1 || hosp > 6) {
+    erros.push("Número de hóspedes deve estar entre 1 e 6.");
+  }
+
+  return erros;
+}
+
+function buscar() {
+  dataIni = document.getElementById("checkin").value;
+  dataFim = document.getElementById("checkout").value;
+  numHospedes = parseInt(document.getElementById("hospedes").value, 10);
+
+  var erros = validarPeriodo(dataIni, dataFim, numHospedes);
+
+  document.getElementById("msgCriterio").innerHTML = erros.length ?
+    '<span style="color:#dc2626">' + erros.join("<br>") + '</span>' :
+    '';
+
+  var container = document.getElementById("quartos");
+  container.innerHTML = "";
+
+  if (erros.length) {
+    document.getElementById("infoResumo").style.display = "none";
+    document.getElementById("confirmacao").style.display = "none";
+    return;
+  }
+
+  var noches = diferençaDias(dataIni, dataFim);
+  var tipoFiltro = document.getElementById("tipo").value;
+  document.getElementById("infoResumo").style.display = "block";
+  document.getElementById("infoResumo").innerHTML =
+    "📅 <strong>" + dataIni + "</strong> até <strong>" + dataFim + "</strong> • " +
+    noches + " noite(s) • " + numHospedes + " hóspede(s)<br>" +
+    "🎁 Promoção: a <strong>7ª noite é grátis</strong> em estadias de 7 noites ou mais!";
+
+  quartos.forEach(function(q) {
+    if (tipoFiltro !== "todos" && q.tipo !== tipoFiltro) return;
+
+    var card = document.createElement("div");
+    card.className = "quarto";
+
+    var disponivel = true;
+    for (var i = 0; i < reservas.length; i++) {
+      var r = reservas[i];
+      if (r.quarto === q.id) {
+        // Verifica sobreposição
+        if (dataIni < r.fim && dataFim > r.ini) {
+          disponivel = false;
+          break;
+        }
+      }
+    }
+
+    var capacidadeOk = numHospedes <= q.cap;
+    var precoTotal = q.preco * noches;
+
+    card.innerHTML =
+      '<div class="foto" style="background:' + q.cor + '">' + q.emoji + '</div>' +
+      '<div class="corpo">' +
+        '<h3>' + q.nome + '</h3>' +
+        '<div class="desc">' + q.desc + '</div>' +
+        '<div class="capacidade">👥 Até ' + q.cap + ' hóspedes</div>' +
+        '<div class="preco-noite">R$ ' + q.preco.toFixed(2) + ' <small>/ noite</small></div>' +
+        '<div class="total-est">' + noches + ' noite(s): R$ ' + precoTotal.toFixed(2) + '</div>';
+
+    if (!disponivel) {
+      card.innerHTML += '<div class="indisponivel">Indisponível no período</div>';
+    } else if (!capacidadeOk) {
+      card.innerHTML += '<div class="indisponivel">Capacidade insuficiente (' + numHospedes + ' hóspedes)</div>';
+    } else {
+      card.innerHTML += '<button onclick="abrirModal(' + q.id + ')">Reservar</button>';
+    }
+
+    container.appendChild(card);
+  });
+}
+
+function abrirModal(quartoId) {
+  quartoSelecionado = quartos.find(function(q) { return q.id === quartoId; });
+  document.getElementById("modalTitulo").textContent = "Reservar: " + quartoSelecionado.nome;
+  document.getElementById("modalHospedes").value = numHospedes;
+  document.getElementById("modalNome").value = "";
+  document.getElementById("modalEmail").value = "";
+  document.getElementById("modalMsg").textContent = "";
+  document.getElementById("modal").classList.add("aberto");
+}
+
+function fecharModal() {
+  document.getElementById("modal").classList.remove("aberto");
+  quartoSelecionado = null;
+}
+
+function confirmar() {
+  var nome = document.getElementById("modalNome").value.trim();
+  var email = document.getElementById("modalEmail").value.trim();
+  var hosp = parseInt(document.getElementById("modalHospedes").value, 10);
+  var msg = document.getElementById("modalMsg");
+
+  var erros = [];
+
+  if (nome.length < 3) erros.push("Informe o nome completo (mínimo 3 caracteres).");
+  if (email.indexOf("@") < 1 || !email.includes(".")) erros.push("E-mail inválido.");
+  if (isNaN(hosp) || hosp < 1) erros.push("Número de hóspedes inválido.");
+  if (hosp > quartoSelecionado.cap) erros.push("Capacidade excedida para este quarto (máximo " + quartoSelecionado.cap + ").");
+
+  if (erros.length) {
+    msg.innerHTML = erros.join("<br>");
+    msg.className = "modal-msg err";
+    return;
+  }
+
+  var noches = diferençaDias(dataIni, dataFim);
+  var total = quartoSelecionado.preco * noches;
+
+  // Salva reserva
+  reservas.push({ quarto: quartoSelecionado.id, ini: dataIni, fim: dataFim });
+
+  var conf = document.getElementById("confirmacao");
+  conf.style.display = "block";
+  conf.innerHTML =
+    '<h3>✅ Reserva confirmada!</h3>' +
+    '<p><strong>' + quartoSelecionado.nome + '</strong><br>' +
+    'Check-in: ' + dataIni + ' • Check-out: ' + dataFim + '<br>' +
+    'Hóspedes: ' + hosp + ' • Total: <strong>R$ ' + total.toFixed(2) + '</strong><br>' +
+    'Confirmado para: ' + nome + ' (' + email + ')</p>';
+
+  fecharModal();
+  buscar();
+}
+
+// Datas padrão (amanhã + 3 noites)
+document.getElementById("checkin").value = somarDias(hoje(), 1);
+document.getElementById("checkout").value = somarDias(hoje(), 4);
+buscar();
+</script>
+</body>
+</html>

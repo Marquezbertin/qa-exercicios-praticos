@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodGo - Delivery de Comida</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#fff7ed; color:#431407; }
+  header { background:#ea580c; color:white; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; }
+  header h1 span { font-weight:300; }
+  main { max-width:1000px; margin:0 auto; padding:20px; }
+  .pedido-box { background:white; border-radius:14px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,.06); margin-bottom:20px; }
+  .pedido-box h2 { color:#c2410c; font-size:1rem; margin-bottom:14px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .item-menu { padding:14px; border:2px solid #f1f5f9; border-radius:10px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+  .item-menu.selecionado { border-color:#ea580c; background:#fff7ed; }
+  .item-menu .nome { font-weight:700; }
+  .item-menu .desc { font-size:.75rem; color:#9a3412; }
+  .item-menu .preco { font-weight:800; color:#c2410c; }
+  .combos { display:flex; gap:12px; margin-top:14px; }
+  .combo { flex:1; padding:12px; border:2px solid #f1f5f9; border-radius:10px; cursor:pointer; text-align:center; }
+  .combo.selecionado { border-color:#ea580c; background:#fff7ed; }
+  .combo h4 { font-size:.9rem; }
+  .combo .pc { font-size:.8rem; color:#c2410c; font-weight:700; }
+  .linha { display:flex; justify-content:space-between; padding:6px 0; font-size:.9rem; }
+  .linha.total { font-weight:800; font-size:1.05rem; border-top:2px solid #fdba74; margin-top:8px; padding-top:10px; }
+  .campo { margin-bottom:12px; }
+  .campo label { display:block; font-size:.82rem; font-weight:700; margin-bottom:4px; color:#9a3412; }
+  .campo input, .campo select { width:100%; padding:10px; border:1px solid #fed7aa; border-radius:8px; font-size:.95rem; }
+  .btn { width:100%; padding:13px; background:#ea580c; color:white; border:none; border-radius:10px; font-weight:800; font-size:1rem; cursor:pointer; margin-top:6px; }
+  .btn:hover { background:#c2410c; }
+  .btn:disabled { background:#fdba74; cursor:not-allowed; }
+  .msg { font-size:.8rem; margin-top:8px; min-height:16px; }
+  .ok { color:#059669; }
+  .err { color:#dc2626; }
+  .info { color:#9a3412; }
+  .aviso-horario { background:#fef3c7; border:1px solid #fcd34d; border-radius:8px; padding:10px; font-size:.82rem; margin:10px 0; display:none; }
+  footer { text-align:center; padding:20px; color:#c2410c; font-size:.78rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Food<span>Go</span> - Delivery</h1>
+  <div style="font-size:.85rem">🕐 Aberto todos os dias das 11h às 23h</div>
+</header>
+
+<main>
+  <div class="aviso-horario" id="avisoHorario">
+    ⚠️ O restaurante está <strong>FECHADO</strong> agora (funcionamento 11h-23h). Pedidos realizados neste horário podem sofrer atraso.
+  </div>
+
+  <div class="pedido-box">
+    <h2>1. Monte seu pedido</h2>
+    <div class="grid-2" id="itens"></div>
+  </div>
+
+  <div class="pedido-box">
+    <h2>2. Combos promocionais</h2>
+    <div class="combos" id="combos"></div>
+    <div class="linha" style="margin-top:12px" id="comboInfo"></div>
+  </div>
+
+  <div class="pedido-box">
+    <h2>3. Entrega</h2>
+    <div class="campo">
+      <label for="cep">CEP (apenas dígitos)</label>
+      <input type="text" id="cep" placeholder="Ex: 01310-100">
+    </div>
+    <div class="campo">
+      <label for="pagamento">Forma de pagamento</label>
+      <select id="pagamento">
+        <option value="dinheiro">Dinheiro</option>
+        <option value="cartao">Cartão</option>
+        <option value="pix">PIX</option>
+      </select>
+    </div>
+    <div class="campo" id="divTroco" style="display:none">
+      <label for="troco">Valor pago em dinheiro (R$)</label>
+      <input type="number" id="troco" placeholder="0,00" step="0.01" min="0">
+    </div>
+
+    <div class="linha"><span>Subtotal</span><span id="resSubtotal">R$ 0,00</span></div>
+    <div class="linha"><span>Desconto combo</span><span id="resDesconto">R$ 0,00</span></div>
+    <div class="linha"><span>Taxa de entrega</span><span id="resTaxa">R$ 0,00</span></div>
+    <div class="linha total"><span>Total</span><span id="resTotal">R$ 0,00</span></div>
+
+    <div class="msg" id="msgPedido"></div>
+    <button class="btn" id="btnPedido" onclick="confirmarPedido()">Finalizar pedido</button>
+  </div>
+</main>
+
+<footer>FoodGo - Sistema fictício para testes de QA - Bugs intencionais</footer>
+
+<script>
+var cardapio = [
+  { id: 1, nome: "X-Burger", desc: "Pão, hambúrguer, queijo, alface", preco: 22.90 },
+  { id: 2, nome: "X-Salada", desc: "Pão, hambúrguer, queijo, salada, maionese", preco: 25.90 },
+  { id: 3, nome: "Pizza Grande", desc: "Calabresa, 8 fatias", preco: 49.90 },
+  { id: 4, nome: "Açaí 500ml", desc: "Com banana e granola", preco: 18.00 },
+  { id: 5, nome: "Batata Frita", desc: "330g com cheddar e bacon", preco: 34.90 },
+  { id: 6, nome: "Refrigerante Lata", desc: "350ml", preco: 6.50 }
+];
+
+// Combo: qualquer 💥 = soma com 10% de desconto
+var combos = [
+  { nome: "Combo Burger", itens: [1, 2], label: "💥 X-Burger + X-Salada" },
+  { nome: "Combo Pizza + Refri", itens: [3, 6], label: "💥 Pizza Grande + Refri" },
+  { nome: "Combo Doce", itens: [4, 5], label: "💥 Açaí + Batata" }
+];
+
+// Encargo promocional: taxa entrega por CEP
+var faixasCep = [
+  { inicio: "01000", fim: "05999", taxa: 5.90 },
+  { inicio: "06000", fim: "09999", taxa: 8.90 },
+  { inicio: "10000", fim: "19999", taxa: 12.90 }
+];
+
+var selecionado = {};
+// Itens a adicionar de forma "a vontade": selecionados via clique
+var selecionados = [];
+var comboEscolhido = null;
+
+function renderCardapio() {
+  var box = document.getElementById("itens");
+  box.innerHTML = "";
+  cardapio.forEach(function(it) {
+    var div = document.createElement("div");
+    div.className = "item-menu";
+    div.id = "it" + it.id;
+    div.onclick = function() { alternarItem(it.id); };
+    div.innerHTML =
+      '<div><div class="nome">' + it.nome + '</div><div class="desc">' + it.desc + '</div></div>' +
+      '<div class="preco">R$ ' + it.preco.toFixed(2) + '</div>';
+    box.appendChild(div);
+  });
+}
+
+function renderCombos() {
+  var box = document.getElementById("combos");
+  box.innerHTML = "";
+  combos.forEach(function(c) {
+    var div = document.createElement("div");
+    div.className = "combo";
+    div.id = "cb" + combos.indexOf(c);
+    div.onclick = function() { escolherCombo(combos.indexOf(c)); };
+    div.innerHTML = '<h4>' + c.label + '</h4><div class="pc">-10% no combo</div>';
+    box.appendChild(div);
+  });
+}
+
+function alternarItem(id) {
+  var i = selecionados.indexOf(id);
+  if (i >= 0) {
+    selecionados.splice(i, 1);
+  } else {
+    selecionados.push(id);
+  }
+  document.getElementById("it" + id).classList.toggle("selecionado", i < 0);
+}
+
+function escolherCombo(idx) {
+  var c = combos[idx];
+  if (comboEscolhido === idx) {
+    comboEscolhido = null;
+  } else {
+    comboEscolhido = idx;
+    // Adiciona os itens do combo ao pedido
+    c.itens.forEach(function(it) {
+      if (selecionados.indexOf(it) < 0) {
+        selecionados.push(it);
+        document.getElementById("it" + it.id).classList.add("selecionado");
+      }
+    });
+  }
+  for (var i = 0; i < combos.length; i++) {
+    document.getElementById("cb" + i).classList.toggle("selecionado", i === comboEscolhido);
+  }
+  document.getElementById("comboInfo").innerHTML =
+    comboEscolhido !== null ? ('Combo aplicado: <strong>' + combos[comboEscolhido].label + '</strong>') : "";
+}
+
+function getItem(id) {
+  return cardapio.find(function(x) { return x.id === id; });
+}
+
+function subtotal() {
+  var s = 0;
+  selecionados.forEach(function(id) { s += getItem(id).preco; });
+  return s;
+}
+
+function descontoCombo() {
+  if (comboEscolhido === null) return 0;
+  var c = combos[comboEscolhido];
+  var somaComb = 0;
+  c.itens.forEach(function(id) { somaComb += getItem(id).preco; });
+  return somaComb * 0.10;
+}
+
+function taxaEntrega(cep) {
+  // Taxa por faixa de CEP
+  var prefixo = (cep || "").replace(/\D/g, "").slice(0, 5);
+  if (prefixo.length < 5) {
+    return null; // CEP incompleto
+  }
+  for (var i = 0; i < faixasCep.length; i++) {
+    var f = faixasCep[i];
+    if (prefixo >= f.inicio && prefixo <= f.fim) {
+      return f.taxa;
+    }
+  }
+  return "fora";
+}
+
+function validarCep(cep) {
+  var dig = (cep || "").replace(/\D/g, "");
+  if (dig.length !== 8) return "CEP inválido. Use 8 dígitos (ex: 01310100 ou 01310-100).";
+  var taxa = taxaEntrega(cep);
+  if (taxa === "fora") return "Não entregamos neste CEP. Área fora da cobertura.";
+  if (taxa === null) return "CEP incompleto.";
+  return null;
+}
+
+function formatar(v) {
+  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function recalcular() {
+  var sub = subtotal();
+  var desc = descontoCombo();
+  var cep = document.getElementById("cep").value;
+  var taxa = taxaEntrega(cep);
+
+  var taxaExibida = 0;
+  if (typeof taxa === "number") {
+    taxaExibida = taxa;
+  } else if (taxa === "fora" || taxa === null) {
+    taxaExibida = null;
+  }
+
+  var total = sub - desc + (taxaExibida || 0);
+  if (total < 0) total = 0;
+
+  document.getElementById("resSubtotal").textContent = formatar(sub);
+  document.getElementById("resDesconto").textContent = "- " + formatar(desc);
+  document.getElementById("resTaxa").textContent =
+    taxaExibida === null ? "Consultar CEP" : formatar(taxaExibida);
+  document.getElementById("resTotal").textContent = formatar(total);
+}
+
+function confirmarPedido() {
+  var msg = document.getElementById("msgPedido");
+  var sub = subtotal();
+
+  if (selecionados.length === 0) {
+    msg.textContent = "Selecione pelo menos um item.";
+    msg.className = "msg err";
+    return;
+  }
+
+  var erroCep = validarCep(document.getElementById("cep").value);
+  if (erroCep) {
+    msg.textContent = erroCep;
+    msg.className = "msg err";
+    return;
+  }
+
+  // Horário de funcionamento: 11h-23h
+  var hora = new Date().getHours();
+  var fechado = hora < 11 || hora >= 23;
+  document.getElementById("avisoHorario").style.display = fechado ? "block" : "none";
+  if (fechado) {
+    msg.textContent = "Não enviaremos. Pedimos desculpas, estamos fora do horário de funcionamento (11h-23h).";
+    msg.className = "msg err";
+    return;
+  }
+
+  // Pedido mínimo
+  if (sub < 15) {
+    msg.textContent = "Pedido mínimo de R$ 15,00.";
+    msg.className = "msg err";
+    return;
+  }
+
+  var pag = document.getElementById("pagamento").value;
+  var total = sub - descontoCombo() + taxaEntrega(document.getElementById("cep").value);
+
+  if (pag === "dinheiro") {
+    var pago = parseFloat(document.getElementById("troco").value || "0");
+    if (pago < total) {
+      msg.textContent = "Para pagamento em dinheiro, informe o valor a pagar (maior ou igual ao total de " + formatar(total) + ").";
+      msg.className = "msg err";
+      return;
+    }
+    var trocoCliente = pago - total;
+    msg.innerHTML = '<span class="ok">✅ Pedido confirmado! Troco a devolver: <strong>' + formatar(trocoCliente) + '</strong></span>';
+    msg.className = "msg ok";
+  } else {
+    msg.textContent = "✅ Pedido confirmado! Total: " + formatar(total) + " (pago via " + pag + ").";
+    msg.className = "msg ok";
+  }
+}
+
+// ===== Bindings =====
+document.getElementById("pagamento").addEventListener("change", function() {
+  var dinheiro = this.value === "dinheiro";
+  document.getElementById("divTroco").style.display = dinheiro ? "block" : "none";
+});
+
+// Recalcula ao mudar o CEP
+document.getElementById("cep").addEventListener("input", recalcular);
+// Recalcula sempre (para refletir seleções)
+document.addEventListener("click", function(e) {
+  if (e.target.closest(".item-menu") || e.target.closest(".combo")) {
+    recalcular();
+  }
+});
+
+renderCardapio();
+renderCombos();
+recalcular();
+</script>
+</body>
+</html>

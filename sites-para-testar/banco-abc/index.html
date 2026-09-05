@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco ABC - Internet Banking</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f8fafc; color:#0f172a; }
+  .login-screen { max-width:400px; margin:80px auto; background:white; border-radius:14px; padding:32px; box-shadow:0 4px 20px rgba(0,0,0,.08); }
+  .login-screen h1 { color:#1e3a8a; margin-bottom:6px; }
+  .login-screen .sub { color:#64748b; margin-bottom:24px; font-size:.9rem; }
+  .login-screen label { display:block; font-size:.85rem; font-weight:600; margin:14px 0 4px; }
+  .login-screen input { width:100%; padding:11px; border:1px solid #cbd5e1; border-radius:8px; font-size:1rem; }
+  .login-screen button { width:100%; margin-top:20px; padding:12px; background:#1d4ed8; color:white; border:none; border-radius:8px; font-weight:700; font-size:1rem; cursor:pointer; }
+  .login-screen button:hover { background:#1e40af; }
+  .login-msg { color:#dc2626; font-size:.85rem; margin-top:10px; min-height:18px; }
+  .dica { background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px; margin-top:20px; font-size:.8rem; color:#1e40af; line-height:1.5; }
+  .app { display:none; max-width:1000px; margin:0 auto; padding:20px; }
+  header.app-header { background:#1e40af; color:white; border-radius:0 0 14px 14px; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; }
+  header.app-header h1 { font-size:1.2rem; }
+  .logout { background:rgba(255,255,255,.15); color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; }
+  .saldo-cartao { background:linear-gradient(135deg,#1e3a8a,#3b82f6); color:white; border-radius:14px; padding:24px; margin-top:20px; display:flex; justify-content:space-between; align-items:center; }
+  .saldo-cartao .rotulo { font-size:.85rem; opacity:.85; }
+  .saldo-cartao .valor { font-size:2rem; font-weight:800; margin-top:6px; }
+  .saldo-cartao .ocultar { background:rgba(255,255,255,.2); border:none; color:white; padding:6px 10px; border-radius:6px; cursor:pointer; }
+  .acoes { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-top:20px; }
+  .acao { background:white; border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+  .acao h3 { font-size:.95rem; color:#1e3a8a; margin-bottom:12px; }
+  .acao label { display:block; font-size:.8rem; font-weight:600; margin:10px 0 4px; }
+  .acao input, .acao select { width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:8px; font-size:.95rem; }
+  .acao button { margin-top:14px; width:100%; padding:10px; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+  .btn-azul { background:#1d4ed8; color:white; }
+  .btn-verde { background:#059669; color:white; }
+  .btn-cinza { background:#e2e8f0; color:#0f172a; }
+  .msg { font-size:.8rem; margin-top:8px; min-height:16px; }
+  .ok { color:#059669; }
+  .err { color:#dc2626; }
+  .extrato { background:white; border-radius:12px; padding:20px; margin-top:20px; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+  .extrato h2 { font-size:1rem; color:#1e3a8a; margin-bottom:12px; }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  th { text-align:left; color:#64748b; font-size:.8rem; padding:8px; border-bottom:2px solid #e2e8f0; }
+  td { padding:9px 8px; border-bottom:1px solid #f1f5f9; }
+  .credito { color:#059669; font-weight:700; }
+  .debito { color:#dc2626; font-weight:700; }
+  .taxa-visivel { color:#94a3b8; font-size:.75rem; }
+</style>
+</head>
+<body>
+
+<!-- Tela de login -->
+<div class="login-screen" id="loginScreen">
+  <h1>Banco ABC</h1>
+  <div class="sub">Internet Banking Seguro</div>
+  <label for="agencia">Agência</label>
+  <input type="text" id="agencia" placeholder="0001">
+  <label for="conta">Conta</label>
+  <input type="text" id="conta" placeholder="12345-6">
+  <label for="senha">Senha</label>
+  <input type="password" id="senha" maxlength="8" placeholder="••••••••">
+  <button onclick="entrar()">Entrar</button>
+  <div class="login-msg" id="loginMsg"></div>
+  <div class="dica">
+    <strong>QA:</strong> teste o login sem dados, com dados errados e com dados corretos.<br>
+    Contas demo: <strong>0001 / 12345-6</strong> (senha <strong>qatest123</strong>)
+  </div>
+</div>
+
+<!-- App -->
+<div class="app" id="app">
+  <header class="app-header">
+    <h1>🏦 Banco ABC - Olá, <span id="titular">Cliente</span></h1>
+    <button class="logout" onclick="sair()">Sair</button>
+  </header>
+
+  <div class="saldo-cartao">
+    <div>
+      <div class="rotulo">Saldo disponível</div>
+      <div class="valor" id="valorSaldo">R$ 0,00</div>
+    </div>
+    <button class="ocultar" id="btnOcultar" onclick="alternarSaldo()">👁 Ocultar</button>
+  </div>
+
+  <div class="acoes">
+    <div class="acao">
+      <h3>Transferência</h3>
+      <label for="destConta">Conta destino</label>
+      <input type="text" id="destConta" placeholder="Ex: 65432-1">
+      <label for="valorTransf">Valor (R$)</label>
+      <input type="number" id="valorTransf" placeholder="0,00" step="0.01">
+      <div class="msg" id="transfMsg"></div>
+      <button class="btn-azul" onclick="transferir()">Transferir</button>
+      <div class="taxa-visivel" id="taxaInfo">Taxa de 2% para valores acima de R$ 1.000,00</div>
+    </div>
+
+    <div class="acao">
+      <h3>Depósito</h3>
+      <label for="valorDep">Valor (R$)</label>
+      <input type="number" id="valorDep" placeholder="0,00" step="0.01">
+      <div class="msg" id="depMsg"></div>
+      <button class="btn-verde" onclick="depositar()">Depositar</button>
+    </div>
+
+    <div class="acao">
+      <h3>Saúde financeira</h3>
+      <p style="font-size:.85rem; color:#475569; margin-bottom:12px;">Consulte seu limite de crédito pré-aprovado.</p>
+      <button class="btn-cinza" onclick="consultaCredito()">Consultar crédito</button>
+      <div class="msg" id="creditoMsg"></div>
+    </div>
+  </div>
+
+  <div class="extrato">
+    <h2>Extrato da conta</h2>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Saldo após</th></tr>
+      </thead>
+      <tbody id="corpoExtrato"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+var saldo = 5000.00;
+var saldoOculto = false;
+var extrato = [
+  { data: "05/09/2026", desc: "Saldo inicial", valor: 5000.00 }
+];
+
+// ===== Login =====
+function entrar() {
+  var ag = document.getElementById("agencia").value.trim();
+  var cta = document.getElementById("conta").value.trim();
+  var senha = document.getElementById("senha").value;
+  var msg = document.getElementById("loginMsg");
+
+  if (ag === "" || cta === "" || senha === "") {
+    msg.textContent = "Preencha todos os campos para entrar.";
+    return;
+  }
+  if (senha.length < 4) {
+    msg.textContent = "Senha deve ter no mínimo 4 caracteres.";
+    return;
+  }
+  // Demo: qualquer conta válida entra (simplificação do sistema)
+  if (ag === "0001" && cta === "12345-6" && senha.length === 8) {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("titular").textContent = "João da Silva";
+    atualizarSaldo();
+    renderizarExtrato();
+  } else {
+    msg.textContent = "Agência, conta ou senha inválidos.";
+  }
+}
+
+function sair() {
+  document.getElementById("app").style.display = "none";
+  document.getElementById("loginScreen").style.display = "block";
+  document.getElementById("agencia").value = "";
+  document.getElementById("conta").value = "";
+  document.getElementById("senha").value = "";
+  document.getElementById("loginMsg").textContent = "";
+}
+
+// ===== Saldo =====
+function formatarMoeda(v) {
+  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function atualizarSaldo() {
+  var valor = saldoOculto ? "R$ ••••" : formatarMoeda(saldo);
+  document.getElementById("valorSaldo").textContent = valor;
+}
+
+function alternarSaldo() {
+  saldoOculto = !saldoOculto;
+  atualizarSaldo();
+}
+
+// ===== Registro no extrato =====
+function registrar(desc, valor, saldoApos) {
+  var hoje = new Date();
+  var str = hoje.getDate().toString().padStart(2,"0") + "/" +
+            (hoje.getMonth()+1).toString().padStart(2,"0") + "/" +
+            hoje.getFullYear();
+  extrato.unshift({ data: str, desc: desc, valor: valor, saldoApos: saldoApos });
+  renderizarExtrato();
+}
+
+function renderizarExtrato() {
+  var corpo = document.getElementById("corpoExtrato");
+  corpo.innerHTML = "";
+  for (var i = 0; i < extrato.length; i++) {
+    var e = extrato[i];
+    var linha = document.createElement("tr");
+    var classe = e.valor >= 0 ? "credito" : "debito";
+    var sinal = e.valor >= 0 ? "+" : "-";
+    linha.innerHTML =
+      "<td>" + e.data + "</td>" +
+      "<td>" + e.desc + "</td>" +
+      "<td class='" + classe + "'>" + sinal + " " + formatarMoeda(Math.abs(e.valor)) + "</td>" +
+      "<td>" + formatarMoeda(e.saldoApos) + "</td>";
+    corpo.appendChild(linha);
+  }
+}
+
+// ===== Depósito =====
+function depositar() {
+  var valor = parseFloat(document.getElementById("valorDep").value);
+  var msg = document.getElementById("depMsg");
+
+  if (isNaN(valor) || valor <= 0) {
+    msg.textContent = "Informe um valor de depósito válido.";
+    msg.className = "msg err";
+    return;
+  }
+  if (valor > 10000) {
+    msg.textContent = "Depósito máximo permitido: R$ 10.000,00 por transação.";
+    msg.className = "msg err";
+    return;
+  }
+
+  saldo += valor;
+  registrar("Depósito", valor, saldo);
+  atualizarSaldo();
+  msg.textContent = "Depósito realizado com sucesso!";
+  msg.className = "msg ok";
+  document.getElementById("valorDep").value = "";
+}
+
+// ===== Transferência =====
+function transferir() {
+  var destino = document.getElementById("destConta").value.trim();
+  var valor = parseFloat(document.getElementById("valorTransf").value);
+  var msg = document.getElementById("transfMsg");
+
+  if (destino === "") {
+    msg.textContent = "Informe a conta de destino.";
+    msg.className = "msg err";
+    return;
+  }
+  if (isNaN(valor) || valor <= 0) {
+    msg.textContent = "Informe um valor de transferência válido.";
+    msg.className = "msg err";
+    return;
+  }
+
+  // Validação da conta destino (só contas no formato NNNNN-N)
+  var padrao = /^\d{5}-\d{1}$/;
+  if (!padrao.test(destino)) {
+    msg.textContent = "Conta destino inválida. Use o formato 12345-6.";
+    msg.className = "msg err";
+    return;
+  }
+
+  // Contas de destino válidas (simulação de verificação no banco)
+  var contasValidas = { "53421-0": "Maria Oliveira", "65432-1": "Carlos Souza", "11223-4": "Ana Pereira" };
+
+  // Cálculo da taxa: 2% sobre valores acima de R$ 1.000,00 (cobrada do DESTINATÁRIO num bug, do remetente no esperado)
+  var taxa = 0;
+  if (valor > 1000) {
+    taxa = valor * 0.02;
+  }
+
+  var totalDebito = valor + taxa;
+
+  if (totalDebito > saldo) {
+    msg.textContent = "Saldo insuficiente para a transferência (valor + taxa de R$ " + (taxa).toFixed(2) + ").";
+    msg.className = "msg err";
+    return;
+  }
+
+  if (destino === "12345-6") {
+    msg.textContent = "Não é possível transferir para sua própria conta.";
+    msg.className = "msg err";
+    return;
+  }
+
+  if (contasValidas[destino]) {
+    saldo -= totalDebito;
+    var desc = "Transferência para " + contasValidas[destino] + " (conta " + destino + ")";
+    if (taxa > 0) desc += " + taxa 2%";
+    registrar(desc, -totalDebito, saldo);
+    atualizarSaldo();
+    msg.textContent = "Transferência de " + formatarMoeda(valor) + " enviada" +
+                      (taxa > 0 ? " (taxa de " + formatarMoeda(taxa) + ")" : "") + "!";
+    msg.className = "msg ok";
+    document.getElementById("valorTransf").value = "";
+    document.getElementById("destConta").value = "";
+  } else {
+    msg.textContent = "Conta destino não encontrada no Banco ABC: " + destino;
+    msg.className = "msg err";
+  }
+}
+
+// ===== Crédito =====
+function consultaCredito() {
+  var msg = document.getElementById("creditoMsg");
+  // Simula consulta ao bureau de crédito
+  msg.textContent = "Crédito pré-aprovado de R$ 2.500,00 na sua conta!";
+  msg.className = "msg ok";
+}
+</script>
+
+</body>
+</html>

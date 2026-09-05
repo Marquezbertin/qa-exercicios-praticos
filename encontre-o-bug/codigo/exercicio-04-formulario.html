@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+ENCONTRE O BUG - Exercício 04
+Nível: Intermediário
+Tema: Formulário com validação JavaScript
+
+Este arquivo contém BUGS. Sua missão é encontrá-los e corrigi-los.
+
+REGRAS DO NEGÓCIO:
+1. CPF deve ter exatamente 14 caracteres no formato 000.000.000-00
+2. E-mail deve conter "@" e um ponto depois do "@"
+3. Senha deve ter no mínimo 8 caracteres
+4. Confirmar senha deve ser igual à senha
+5. Idade deve ser entre 18 e 120 anos
+6. Ao clicar em "Cadastrar" sem preencher, deve mostrar erro
+7. Botão "Limpar" deve zerar todos os campos e esconder os erros
+8. Sem erros, deve mostrar mensagem de sucesso
+
+Dica: há pelo menos 6 bugs escondidos (verifique também o HTML).
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Encontre o Bug</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 40px auto; }
+    .campo { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 4px; font-weight: bold; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; }
+    .erro { color: red; font-size: 12px; display: none; margin-top: 3px; }
+    #mensagem { margin-top: 20px; font-weight: bold; }
+    .sucesso { color: green; }
+    .falha { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Formulário de Cadastro</h1>
+
+  <form id="formCadastro" onsubmit="return false;">
+    <div class="campo">
+      <label for="nome">Nome completo</label>
+      <input type="text" id="nome" placeholder="Ex: Maria Silva">
+      <div class="erro" id="erroNome">Nome é obrigatório.</div>
+    </div>
+
+    <div class="campo">
+      <label for="cpf">CPF</label>
+      <input type="text" id="cpf" placeholder="000.000.000-00">
+      <div class="erro" id="erroCpf">CPF inválido.</div>
+    </div>
+
+    <div class="campo">
+      <label for="email">E-mail</label>
+      <input type="text" id="email" placeholder="exemplo@email.com">
+      <div class="erro" id="erroEmail">E-mail inválido.</div>
+    </div>
+
+    <div class="campo">
+      <label for="idade">Idade</label>
+      <input type="number" id="idade" placeholder="ex: 25">
+      <div class="erro" id="erroIdade">Idade deve ser entre 18 e 120.</div>
+    </div>
+
+    <div class="campo">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Mínimo 8 caracteres">
+      <div class="erro" id="erroSenha">Senha deve ter no mínimo 8 caracteres.</div>
+    </div>
+
+    <div class="campo">
+      <label for="confirmaSenha">Confirmar senha</label>
+      <input type="password" id="confirmaSenha" placeholder="Repita a senha">
+      <div class="erro" id="erroConfirmaSenha">As senhas não coincidem.</div>
+    </div>
+
+    <button type="button" id="btnCadastrar">Cadastrar</button>
+    <button type="button" id="btnLimpar">Limpar</button>
+  </form>
+
+  <div id="mensagem"></div>
+
+  <script>
+    function validarCpf(cpf) {
+      var regex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+      return regex.test(cpf);
+    }
+
+    function validarEmail(email) {
+      var partes = email.split("@");
+      if (partes.length !== 2) return false;
+      var dominio = partes[1];
+      return dominio.indexOf(".") >= 0;
+    }
+
+    function validarIdade(idade) {
+      var valor = parseInt(idade, 10);
+      return valor >= 18 && valor <= 120;
+    }
+
+    function mostrarErro(id, visivel) {
+      document.getElementById(id).style.display = visivel ? "block" : "none";
+    }
+
+    function cadastrar() {
+      var nome = document.getElementById("nome").value.trim();
+      var cpf = document.getElementById("cpf").value.trim();
+      var email = document.getElementById("email").value.trim();
+      var idade = document.getElementById("idade").value;
+      var senha = document.getElementById("senha").value;
+      var confirma = document.getElementById("confirmaSenha").value;
+
+      var valido = true;
+
+      if (nome === "") {
+        mostrarErro("erroNome", true);
+        valido = false;
+      } else {
+        mostrarErro("erroNome", false);
+      }
+
+      if (!validarCpf(cpf)) {
+        mostrarErro("erroCpf", true);
+        valido = false;
+      } else {
+        mostrarErro("erroCpf", false);
+      }
+
+      if (!validarEmail(email)) {
+        mostrarErro("erroEmail", true);
+        valido = false;
+      } else {
+        mostrarErro("erroEmail", false);
+      }
+
+      if (!validarIdade(idade)) {
+        mostrarErro("erroIdade", true);
+        valido = false;
+      } else {
+        mostrarErro("erroIdade", false);
+      }
+
+      if (senha.length < 8) {
+        mostrarErro("erroSenha", true);
+        valido = false;
+      } else {
+        mostrarErro("erroSenha", false);
+      }
+
+      if (confirma !== senha) {
+        mostrarErro("erroConfirmaSenha", true);
+        valido = false;
+      } else {
+        mostrarErro("erroConfirmaSenha", false);
+      }
+
+      var mensagem = document.getElementById("mensagem");
+      if (valido) {
+        mensagem.textContent = "Cadastro realizado com sucesso!";
+        mensagem.className = "sucesso";
+      } else {
+        mensagem.textContent = "Verifique os campos em vermelho.";
+        mensagem.className = "falha";
+      }
+    }
+
+    function limpar() {
+      var itens = ["nome", "cpf", "email", "idade", "senha", "confirmaSenha"];
+      for (var i = 0; i < itens.length; i++) {
+        document.getElementById(itens[i]).value = "";
+      }
+      var erros = ["erroNome", "erroCpf", "erroEmail", "erroIdade", "erroSenha", "erroConfirmaSenha"];
+      for (var j = 0; j < erros.length; j++) {
+        mostrarErro(erros[j], false);
+      }
+      var mensagem = document.getElementById("mensagem");
+      mensagem.textContent = "";
+      mensagem.className = "";
+    }
+
+    document.getElementById("btnCadastrar").addEventListener("click", cadastrar);
+    document.getElementById("btnLimpar").addEventListener("click", limpar);
+  </script>
+</body>
+</html>

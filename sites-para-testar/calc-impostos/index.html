@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contabilidade KM - Calculadora de Impostos</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f5f5f4; color:#1c1917; }
+  header { background:#78350f; color:white; padding:16px 28px; }
+  header h1 { font-size:1.2rem; }
+  main { max-width:760px; margin:0 auto; padding:22px; }
+  .painel { background:white; border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,.08); margin-bottom:20px; }
+  .painel h2 { font-size:1rem; color:#78350f; margin-bottom:12px; }
+  .campo { margin-bottom:14px; }
+  .campo label { display:block; font-size:.82rem; font-weight:700; color:#57534e; margin-bottom:5px; }
+  .campo input { width:100%; padding:10px; border:1px solid #d6d3d1; border-radius:8px; font-size:1rem; }
+  .btn { background:#78350f; color:white; padding:12px 18px; border:none; border-radius:8px; font-weight:700; cursor:pointer; width:100%; }
+  .btn:hover { background:#92400e; }
+  .resultado { background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:16px; margin-top:16px; }
+  .resultado .linha { display:flex; justify-content:space-between; padding:5px 0; font-size:.9rem; }
+  .resultado .linha.total { font-weight:800; font-size:1.05rem; border-top:1px solid #fcd34d; margin-top:6px; padding-top:8px; }
+  .tabela { font-size:.82rem; color:#57534e; line-height:1.6; margin-top:14px; background:#fafaf9; padding:12px; border-radius:8px; }
+  .msg { font-size:.82rem; margin-top:10px; min-height:14px; }
+  .err { color:#dc2626; }
+  .ok { color:#059669; }
+  footer { text-align:center; padding:20px; color:#a8a29e; font-size:.78rem; }
+</style>
+</head>
+<body>
+
+<header><h1>Contabilidade KM - Calculadora de Tributos</h1></header>
+
+<main>
+  <div class="painel">
+    <h2>Simulação de Imposto de Renda (Pessoa Física)</h2>
+    <div class="campo">
+      <label for="salario">Renda mensal bruta (R$)</label>
+      <input type="number" id="salario" placeholder="Ex: 5000" step="0.01" min="0">
+    </div>
+    <div class="campo">
+      <label for="dependentes">Número de dependentes</label>
+      <input type="number" id="dependentes" placeholder="0" step="1" min="0">
+    </div>
+    <button class="btn" onclick="calcular()">Calcular impostos</button>
+    <div class="msg" id="msg"></div>
+
+    <div id="resultado" class="resultado" style="display:none">
+      <div class="linha"><span>Salário bruto</span><span id="rSalario">R$ 0,00</span></div>
+      <div class="linha"><span>INSS</span><span id="rInss">R$ 0,00</span></div>
+      <div class="linha"><span>Base de cálculo IR</span><span id="rBase">R$ 0,00</span></div>
+      <div class="linha"><span>Alíquota IR</span><span id="rAliq">0%</span></div>
+      <div class="linha"><span>CPMF / Contrib.</span><span id="rCpmf">R$ 0,00</span></div>
+      <div class="linha total"><span>Salário líquido</span><span id="rLiquido">R$ 0,00</span></div>
+    </div>
+
+    <div class="tabela" id="tabelaFaixas"></div>
+  </div>
+</main>
+
+<footer>Contabilidade KM - Sistema fictício para testes de QA - Bugs intencionais</footer>
+
+<script>
+// Tabelas oficiais (base 2024/2025)
+var IRPF = [
+  { ate: 2259.20, ali: 0, ded: 0 },
+  { ate: 2826.65, ali: 0.075, ded: 169.44 },
+  { ate: 3751.05, ali: 0.15, ded: 381.44 },
+  { ate: 4664.68, ali: 0.225, ded: 662.77 },
+  { ate: Infinity, ali: 0.275, ded: 896.00 }
+];
+
+var INSS = [
+  { ate: 1412.00, ali: 0.075 },
+  { ate: 2666.68, ali: 0.09 },
+  { ate: 4000.03, ali: 0.12 },
+  { ate: 7786.02, ali: 0.14 }
+];
+var TETO_INSS = 7786.02;
+
+function formatar(v) {
+  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function faixaIR(salario) {
+  for (var i = 0; i < IRPF.length; i++) {
+    if (salario <= IRPF[i].ate) {
+      return IRPF[i];
+    }
+  }
+  return IRPF[IRPF.length - 1];
+}
+
+function calcInss(salario) {
+  // Cálculo por faixas (progressivo) com teto
+  var contribuicao = 0;
+  var teto = TETO_INSS;
+  var menor = 0;
+  for (var i = 0; i < INSS.length; i++) {
+    var f = INSS[i];
+    var fim = Math.min(f.ate, salario, teto);
+    if (fim > menor) {
+      contribuicao += (fim - menor) * f.ali;
+      menor = fim;
+    }
+    if (menor >= salario || menor >= teto) break;
+  }
+  return contribuicao;
+}
+
+function calcular() {
+  var salario = parseFloat(document.getElementById("salario").value || "0");
+  var dep = parseInt(document.getElementById("dependentes").value || "0", 10);
+  var msg = document.getElementById("msg");
+
+  if (isNaN(salario) || salario < 0) {
+    msg.textContent = "Informe uma renda válida (maior ou igual a zero).";
+    msg.className = "msg err";
+    return;
+  }
+  if (isNaN(dep) || dep < 0) {
+    msg.textContent = "Dependentes deve ser um número inteiro maior ou igual a zero.";
+    msg.className = "msg err";
+    return;
+  }
+
+  // INSS
+  var inss = calcInss(salario);
+
+  // Base de cálculo do IR = salário - INSS - dependentes (189,59 cada)
+  var dependenteDesconto = dep * 189.59;
+  var base = salario - inss - dependenteDesconto;
+  if (base < 0) base = 0;
+
+  var faixa = faixaIR(base);
+
+  // IRPF mensal = (base x alíquota) - parcela dedutível
+  var ir = (base * faixa.ali) - faixa.ded;
+  if (ir < 0) ir = 0;
+
+  // CPMF: 0,38% sobre o salário bruto
+  var cpmf = salario * 0.0038;
+
+  var liquido = salario - inss - ir - cpmf;
+
+  document.getElementById("rSalario").textContent = formatar(salario);
+  document.getElementById("rInss").textContent = formatar(inss);
+  document.getElementById("rBase").textContent = formatar(base) + ' <span style="color:#78716c;font-size:.75rem">(- dep ' + formatar(dependenteDesconto) + ')</span>';
+  document.getElementById("rAliq").textContent = (faixa.ali * 100).toFixed(1) + '%' +
+    (faixa.ded > 0 ? ' (ded ' + formatar(faixa.ded) + ')' : '');
+  document.getElementById("rCpmf").textContent = formatar(cpmf);
+  document.getElementById("rLiquido").textContent = formatar(liquido);
+
+  document.getElementById("resultado").style.display = "block";
+  msg.textContent = "Cálculo concluído.";
+  msg.className = "msg ok";
+}
+
+// Exibe a tabela de faixas
+(function tabela() {
+  var t = '<strong>Tabela IRPF mensal (2024/2025):</strong><br>';
+  t += 'Até R$ 2.259,20 - isento<br>';
+  t += 'R$ 2.259,21 a R$ 2.826,65 - 7,5% (dedução R$ 169,44)<br>';
+  t += 'R$ 2.826,66 a R$ 3.751,05 - 15% (dedução R$ 381,44)<br>';
+  t += 'R$ 3.751,06 a R$ 4.664,68 - 22,5% (dedução R$ 662,77)<br>';
+  t += 'Acima de R$ 4.664,68 - 27,5% (dedução R$ 896,00)<br><br>';
+  t += '<strong>INSS:**<br> Teto de R$ 7.786,02 aplicado.';
+  document.getElementById("tabelaFaixas").innerHTML = t;
+})();
+</script>
+</body>
+</html>

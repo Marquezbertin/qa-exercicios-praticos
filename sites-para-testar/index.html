@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub de Sites para Teste de QA</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    header { background: linear-gradient(135deg, #1e293b, #0ea5e9); padding: 40px 20px; text-align: center; }
+    header h1 { font-size: 2rem; margin-bottom: 10px; }
+    header p { color: #cbd5e1; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+    main { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: #38bdf8; }
+    .card h2 { font-size: 1.2rem; margin-bottom: 8px; color: #38bdf8; }
+    .card .empresa { font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .card p { color: #cbd5e1; font-size: 0.9rem; line-height: 1.5; flex: 1; }
+    .card .botoes { display: flex; gap: 10px; margin-top: 15px; }
+    .btn {
+      display: inline-block; padding: 8px 14px; border-radius: 8px; text-decoration: none;
+      font-size: 0.85rem; font-weight: 600; text-align: center; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-abrir { background: #0ea5e9; color: white; }
+    .btn-roteiro { background: #1e293b; border: 1px solid #38bdf8; color: #38bdf8; }
+    .section-title { color: #f8fafc; margin: 30px 0 15px; font-size: 1.3rem; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    .badge { display: inline-block; background: #059669; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 6px; }
+    footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.85rem; }
+    .dica { background: #1e293b; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 8px; margin: 20px 0; color: #fbbf24; font-size: 0.9rem; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>QA Simulator - Sites para Testar</h1>
+    <p>Você é o QA dessas empresas fictícias. Cada sistema abaixo contém BUGS intencionais. Abra o site, explore como um tester, encontre os defeitos e documente usando o roteiro de teste.</p>
+  </header>
+
+  <main>
+    <div class="dica">
+      <strong>Como usar:</strong> abra cada site em uma nova aba (ou use F12 no DevTools para inspecionar). Anote cada bug: título, passos para reproduzir, resultado esperado vs obtido, severidade. Depois confira com os roteiros de teste.
+    </div>
+
+    <h2 class="section-title">Sistemas Web para Testar</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="empresa">TechStore S.A.</div>
+        <h2>Loja Virtual TechStore</h2>
+        <p>Carrinho de compras com cupons de desconto, frete e pagamento. Teste cálculos, cupons, quantidades e valores limite.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="techstore/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="techstore/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">Banco ABC S.A.</div>
+        <h2>Internet Banking ABC</h2>
+        <p>Transferências, depósitos, extratos e gerenciamento de contas. Teste saldos, taxas, valores e contas inexistentes.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="banco-abc/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="banco-abc/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">Reserva Fácil LTDA</div>
+        <h2>Sistema de Reservas de Hotel</h2>
+        <p>Busca de quartos, datas de check-in/check-out, capacidade e preços dinâmicos. Teste regras de disponibilidade chamativo.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="hotel-reserva/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="hotel-reserva/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">Portal Cliente</div>
+        <h2>Cadastro e Login</h2>
+        <p>Formulário de registro, login e recuperação de senha. Teste validações de e-mail, CPF, senha e mensagens de erro.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="portal-cliente/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="portal-cliente/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">FoodGo Brasil</div>
+        <h2>Delivery de Comida FoodGo</h2>
+        <p>Cardápio, pedidos, troco e área de entrega. Teste combos, troco exato, CEP fora da área e horário de funcionamento.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="foodgo/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="foodgo/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">CRM Connect</div>
+        <h2>CRM de Clientes</h2>
+        <p>CRUD de clientes com busca, edição e exclusão. Teste validações de cadastro, duplicidade e telefones.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="crm-connect/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="crm-connect/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">Contabilidade KM</div>
+        <h2>Calculadora de Impostos</h2>
+        <p>Simulador de IRPF simplificado e cálculo de INSS. Teste faixas de valores, tetos, arredondamentos e campos vazios.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="calc-impostos/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="calc-impostos/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">Vida+ Saúde</div>
+        <h2>Agendamento Médico</h2>
+        <p>Agenda de consultas, horários disponíveis, especialidades e cancelamento. Teste conflitos de horário e datas passadas.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="agenda-medica/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="agenda-medica/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="empresa">Momento Matador</div>
+        <h2>Loja de Games</h2>
+        <p>Carrinho com bug de preço conhecido e busca com problemas de case. Ache os defeitos e documente como um QA.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="momento-matador/index.html">Abrir Site</a>
+          <a class="btn btn-roteiro" href="momento-matador/roteiro-de-teste.md">Roteiro</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    QA Simulator - Repositório de práticas para QA Tester. Bugs são intencionais para fins de estudo.
+  </footer>
+</body>
+</html>

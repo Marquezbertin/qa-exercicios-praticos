@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momento Matador - Loja de Games</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#0f0f1a; color:#e2e8f0; }
+  header { background:#8b5cf6; color:white; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; }
+  header h1 span { font-weight:300; }
+  main { max-width:1100px; margin:0 auto; padding:20px; }
+  .busca { margin-bottom:18px; display:flex; gap:10px; }
+  .busca input { flex:1; padding:11px; background:#1e1b2e; border:1px solid #374151; color:#e2e8f0; border-radius:8px; font-size:.95rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; }
+  .jogo { background:#1a1730; border:1px solid #36305a; border-radius:12px; padding:16px; display:flex; flex-direction:column; }
+  .jogo .cap { height:110px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:2.2rem; margin-bottom:12px; }
+  .jogo h3 { font-size:.98rem; margin-bottom:4px; }
+  .jogo .plat { color:#94a3b8; font-size:.75rem; margin-bottom:10px; }
+  .jogo .preco { font-size:1.15rem; font-weight:800; margin-bottom:4px; }
+  .jogo .preco-antigo { font-size:.78rem; color:#94a3b8; text-decoration:line-through; }
+  .jogo .desconto-tag { display:inline-block; background:#16a34a; color:white; font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:8px; margin-bottom:8px; }
+  .jogo button { background:#8b5cf6; border:none; color:white; padding:9px; border-radius:8px; font-weight:700; cursor:pointer; margin-top:auto; }
+  .jogo button:hover { background:#7c3aed; }
+  .mensagem { padding:12px; border-radius:10px; margin-bottom:16px; text-align:center; font-weight:700; }
+  .ok { background:#052e16; color:#4ade80; }
+  .carrinho { margin-top:18px; background:#1a1730; border-radius:12px; padding:16px; }
+  .carrinho h2 { font-size:1rem; margin-bottom:10px; color:#c4b5fd; }
+  .carrinho .total { font-size:1.2rem; font-weight:800; border-top:1px solid #36305a; margin-top:10px; padding-top:10px; }
+  footer { text-align:center; padding:20px; color:#6b7280; font-size:.78rem; }
+</style>
+</head>
+<body>
+
+<header><h1>Momento <span>Matador</span> - Loja de Games</h1></header>
+
+<main>
+  <div class="busca">
+    <input type="text" id="busca" placeholder="Buscar jogo (ex: zelda, god of war...)">
+  </div>
+  <div class="mensagem ok" id="aviso">🎮 Aproveite: desconto de 10% no jogo <strong>Zelda</strong> até hoje!</div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="carrinho" id="carrinho">
+    <h2>🛒 Seu carrinho</h2>
+    <div id="itensCarrinho" style="font-size:.9rem">Vazio.</div>
+    <div class="total">Total: <span id="totalCarrinho">R$ 0,00</span></div>
+  </div>
+</main>
+
+<footer>Momento Matador - Sistema fictício para testes de QA - Bugs intencionais</footer>
+
+<script>
+var jogos = [
+  { id: 1, nome: "The Legend of Zelda", plat: "Switch", preco: 299.90, desconto: 10, img: "🧝", cor: "#164e63" },
+  { id: 2, nome: "God of War", plat: "PlayStation", preco: 249.90, desconto: 0, img: "⚔️", cor: "#7f1d1d" },
+  { id: 3, nome: "Hollow Knight", plat: "PC", preco: 39.99, desconto: 0, img: "🪲", cor: "#3b0764" },
+  { id: 4, nome: "Cyberpunk 2077", plat: "PC / PlayStation", preco: 199.90, desconto: 20, img: "🤖", cor: "#78350f" },
+  { id: 5, nome: "Elden Ring", plat: "PC / Xbox", preco: 299.90, desconto: 0, img: "🐉", cor: "#1c1917" },
+  { id: 6, nome: "Stardew Valley", plat: "PC / Switch", preco: 24.99, desconto: 0, img: "🌾", cor: "#14532d" }
+];
+
+var carrinho = {};
+
+function renderizar(filtro) {
+  var grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  var lista = jogos;
+  if (filtro) {
+    // BUSCA: deve ser case-insensitive (Zelda deve achar com "ZELDA" ou "zelda")
+    lista = jogos.filter(function(j) { return j.nome.indexOf(filtro) >= 0; });
+  }
+
+  lista.forEach(function(j) {
+    var card = document.createElement("div");
+    card.className = "jogo";
+    var precoAntigo = j.desconto > 0 ? j.preco.toFixed(2) : null;
+    var precoAtual = j.desconto > 0 ? j.preco * (1 - j.desconto / 100) : j.preco;
+
+    card.innerHTML =
+      '<div class="cap" style="background:' + j.cor + '">' + j.img + '</div>' +
+      '<h3>' + j.nome + '</h3>' +
+      '<div class="plat">' + j.plat + '</div>' +
+      (j.desconto > 0 ? '<span class="desconto-tag">-' + j.desconto + '%</span>' : '') +
+      '<div class="preco">R$ ' + precoAtual.toFixed(2) + '</div>' +
+      (precoAntigo ? '<div class="preco-antigo">R$ ' + precoAntigo + '</div>' : '') +
+      '<button onclick="comprar(' + j.id + ')">Comprar</button>';
+    grid.appendChild(card);
+  });
+}
+
+function comprar(id) {
+  carrinho[id] = (carrinho[id] || 0) + 1;
+  atualizarCarrinho();
+}
+
+function atualizarCarrinho() {
+  var total = 0;
+  var html = "";
+  var qualquer = false;
+  for (var id in carrinho) {
+    var j = jogos.find(function(x) { return x.id === parseInt(id, 10); });
+    if (!j) continue;
+    qualquer = true;
+    var preco = j.desconto > 0 ? j.preco * (1 - j.desconto / 100) : j.preco;
+    total += preco * carrinho[id];
+    html += '<div>' + j.nome + ' x' + carrinho[id] + ' - <strong>R$ ' + (preco * carrinho[id]).toFixed(2) + '</strong></div>';
+  }
+  document.getElementById("itensCarrinho").innerHTML = qualquer ? html : "Vazio.";
+  document.getElementById("totalCarrinho").textContent = "R$ " + total.toFixed(2);
+}
+
+document.getElementById("busca").addEventListener("input", function() {
+  renderizar(this.value.trim());
+});
+
+renderizar("");
+atualizarCarrinho();
+</script>
+</body>
+</html>

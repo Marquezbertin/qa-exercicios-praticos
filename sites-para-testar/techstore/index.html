@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechStore - Loja Virtual</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f1f5f9; color:#0f172a; }
+  header { background:#1e293b; color:white; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:50; }
+  header h1 { font-size:1.4rem; }
+  header h1 span { color:#38bdf8; }
+  .carrinho-btn { background:#38bdf8; color:#0f172a; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.95rem; }
+  .carrinho-btn:hover { background:#7dd3fc; }
+  nav { background:#0ea5e9; padding:10px 28px; display:flex; gap:20px; }
+  nav a { color:white; text-decoration:none; font-weight:600; font-size:0.9rem; }
+  nav a:hover { text-decoration:underline; }
+  main { max-width:1200px; margin:0 auto; padding:24px; }
+  .banner { background:linear-gradient(135deg,#0ea5e9,#6366f1); color:white; border-radius:12px; padding:28px; margin-bottom:28px; }
+  .banner h2 { margin-bottom:6px; }
+  .banner p { opacity:.9; }
+  .produtos { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px; }
+  .produto { background:white; border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,.1); display:flex; flex-direction:column; }
+  .produto .img { height:130px; background:#e2e8f0; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin-bottom:14px; }
+  .produto h3 { font-size:1rem; margin-bottom:6px; }
+  .produto .marca { color:#64748b; font-size:.75rem; margin-bottom:8px; }
+  .produto .preco { font-size:1.25rem; font-weight:800; color:#0f172a; margin-bottom:6px; }
+  .produto .preco-antigo { font-size:.8rem; color:#94a3b8; text-decoration:line-through; }
+  .produto .avaliacao { color:#f59e0b; font-size:.85rem; margin-bottom:12px; }
+  .produto .qtd { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .produto .qtd button { width:28px; height:28px; border:1px solid #cbd5e1; background:white; border-radius:6px; cursor:pointer; font-weight:700; }
+  .produto .qtd input { width:50px; text-align:center; padding:4px; border:1px solid #cbd5e1; border-radius:6px; }
+  .add-btn { background:#059669; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:auto; }
+  .add-btn:hover { background:#10b981; }
+  /* Modal carrinho */
+  .modal { display:none; position:fixed; inset:0; background:rgba(15,23,42,.6); z-index:100; }
+  .modal.aberto { display:flex; align-items:flex-start; justify-content:center; padding-top:60px; }
+  .modal-conteudo { background:white; border-radius:12px; width:min(500px,92vw); padding:24px; max-height:80vh; overflow:auto; }
+  .modal-conteudo h2 { margin-bottom:16px; }
+  .item-carrinho { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; font-size:.9rem; }
+  .item-carrinho .preco-item { font-weight:700; }
+  .resumo { margin-top:16px; font-size:.95rem; }
+  .resumo .linha { display:flex; justify-content:space-between; padding:6px 0; }
+  .resumo .linha.total { font-size:1.2rem; font-weight:800; border-top:2px solid #e2e8f0; padding-top:10px; margin-top:6px; }
+  .cupom { display:flex; gap:8px; margin-top:12px; }
+  .cupom input { flex:1; padding:9px; border:1px solid #cbd5e1; border-radius:8px; }
+  .cupom button { background:#6366f1; color:white; border:none; padding:9px 14px; border-radius:8px; cursor:pointer; font-weight:600; }
+  .cupom-msg { font-size:.8rem; margin-top:8px; min-height:18px; }
+  .ok { color:#059669; }
+  .err { color:#dc2626; }
+  .finalizar { background:#0ea5e9; color:white; border:none; width:100%; padding:13px; border-radius:8px; font-weight:700; font-size:1rem; cursor:pointer; margin-top:14px; }
+  .finalizar:hover { background:#0284c7; }
+  .fechar-btn { background:#e2e8f0; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; float:right; font-weight:600; }
+  .desconto-exibido { color:#059669; }
+  footer { text-align:center; padding:24px; color:#94a3b8; font-size:.8rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Tech<span>Store</span></h1>
+  <button class="carrinho-btn" onclick="abrirCarrinho()">Carrinho (<span id="contador">0</span>)</button>
+</header>
+
+<nav>
+  <a href="#">Todos</a>
+  <a href="#">Computadores</a>
+  <a href="#">Periféricos</a>
+  <a href="#">Gadgets</a>
+  <a href="#">Áudio</a>
+</nav>
+
+<main>
+  <div class="banner">
+    <h2>Frete grátis em compras acima de R$ 100!</h2>
+    <p>Use o cupom <strong>QA10</strong> para 10% de desconto. Cupons não acumulativos.</p>
+  </div>
+
+  <div class="produtos" id="produtos"></div>
+</main>
+
+<footer>Sistema fictício para testes de QA - Bugs intencionais</footer>
+
+<!-- Modal do carrinho -->
+<div class="modal" id="modalCarrinho">
+  <div class="modal-conteudo">
+    <button class="fechar-btn" onclick="fecharCarrinho()">X Fechar</button>
+    <h2>Seu Carrinho</h2>
+    <div id="itensCarrinho"></div>
+
+    <div class="cupom">
+      <input type="text" id="cupomInput" placeholder="Digite seu cupom">
+      <button onclick="aplicarCupom()">Aplicar</button>
+    </div>
+    <div class="cupom-msg" id="cupomMsg"></div>
+
+    <div class="resumo">
+      <div class="linha"><span>Subtotal</span><span id="resSubtotal">R$ 0,00</span></div>
+      <div class="linha"><span>Desconto</span><span id="resDesconto">R$ 0,00</span></div>
+      <div class="linha"><span>Frete</span><span id="resFrete">---</span></div>
+      <div class="linha total"><span>Total</span><span id="resTotal">R$ 0,00</span></div>
+    </div>
+
+    <button class="finalizar" onclick="finalizar()">Finalizar Compra</button>
+  </div>
+</div>
+
+<script>
+// ===== Banco de dados fictício de produtos =====
+var produtos = [
+  { id: 1, nome: "Notebook Pro 16", marca: "TechStore", preco: 4599.00, promocao: 4299.00, img: "💻", avaliacao: 4.8, cat: "Computadores" },
+  { id: 2, nome: "Monitor 27\" QHD", marca: "Vision", preco: 1299.90, promocao: 0, img: "🖥️", avaliacao: 4.5, cat: "Computadores" },
+  { id: 3, nome: "Teclado Mecânico RGB", marca: "KeyDex", preco: 349.90, promocao: 299.90, img: "⌨️", avaliacao: 4.6, cat: "Periféricos" },
+  { id: 4, nome: "Mouse Sem Fio", marca: "ClickPad", preco: 99.90, promocao: 0, img: "🖱️", avaliacao: 4.2, cat: "Periféricos" },
+  { id: 5, nome: "Fone Bluetooth ANC", marca: "SoundMax", preco: 599.00, promocao: 0, img: "🎧", avaliacao: 4.7, cat: "Áudio" },
+  { id: 6, nome: "Caixa de Som Portátil", marca: "SoundMax", preco: 199.00, promocao: 149.90, img: "🔊", avaliacao: 4.1, cat: "Áudio" },
+  { id: 7, nome: "Smartwatch Fitness", marca: "WristFit", preco: 799.00, promocao: 699.00, img: "⌚", avaliacao: 4.4, cat: "Gadgets" },
+  { id: 8, nome: "Carregador Rápido 65W", marca: "PowerGo", preco: 149.90, promocao: 0, img: "🔌", avaliacao: 4.3, cat: "Gadgets" }
+];
+
+var carrinho = {};
+var cupomAplicado = null;
+
+// ===== Renderização de produtos =====
+function renderizarProdutos() {
+  var container = document.getElementById("produtos");
+  container.innerHTML = "";
+  produtos.forEach(function(p) {
+    var card = document.createElement("div");
+    card.className = "produto";
+    var precoExibida = p.promocao > 0 ? p.promocao : p.preco;
+    var precoAntigo = p.promocao > 0 ? '<div class="preco-antigo">R$ ' + p.preco.toFixed(2) + '</div>' : "";
+    card.innerHTML =
+      '<div class="img">' + p.img + '</div>' +
+      '<h3>' + p.nome + '</h3>' +
+      '<div class="marca">' + p.marca + ' • ' + p.cat + '</div>' +
+      '<div class="preco">R$ ' + precoExibida.toFixed(2) + '</div>' +
+      precoAntigo +
+      '<div class="avaliacao">★ ' + p.avaliacao.toFixed(1) + '</div>' +
+      '<div class="qtd">' +
+        '<button onclick="diminuirQtd(' + p.id + ')">-</button>' +
+        '<input type="number" id="qtd' + p.id + '" value="1" min="1" onchange="validarQtd(' + p.id + ')">' +
+        '<button onclick="aumentarQtd(' + p.id + ')">+</button>' +
+      '</div>' +
+      '<button class="add-btn" onclick="adicionarCarrinho(' + p.id + ')">Adicionar ao Carrinho</button>';
+    container.appendChild(card);
+  });
+}
+
+function precoProduto(p) {
+  return p.promocao > 0 ? p.promocao : p.preco;
+}
+
+function adicionarCarrinho(id) {
+  var input = document.getElementById("qtd" + id);
+  var qtd = parseInt(input.value, 10);
+  if (isNaN(qtd) || qtd < 1) {
+    alert("Quantidade inválida. Informe 1 ou mais.");
+    input.value = 1;
+    return;
+  }
+  if (carrinho[id]) {
+    carrinho[id] += qtd;
+  } else {
+    carrinho[id] = qtd;
+  }
+  atualizarContador();
+  alert("Produto adicionado ao carrinho!");
+}
+
+function aumentarQtd(id) {
+  var input = document.getElementById("qtd" + id);
+  input.value = (parseInt(input.value, 10) || 0) + 1;
+}
+
+function diminuirQtd(id) {
+  var input = document.getElementById("qtd" + id);
+  var v = parseInt(input.value, 10) || 0;
+  if (v > 1) input.value = v - 1;
+}
+
+function validarQtd(id) {
+  var input = document.getElementById("qtd" + id);
+  var v = parseInt(input.value, 10);
+  if (isNaN(v) || v < 1) {
+    alert("Quantidade mínima é 1.");
+    input.value = 1;
+  }
+}
+
+function atualizarContador() {
+  var total = 0;
+  for (var id in carrinho) total += carrinho[id];
+  document.getElementById("contador").textContent = total;
+}
+
+// ===== Cálculos do carrinho =====
+function subtotal() {
+  var total = 0;
+  for (var id in carrinho) {
+    var p = produtos.find(function(x) { return x.id === parseInt(id, 10); });
+    if (p) total += precoProduto(p) * carrinho[id];
+  }
+  return total;
+}
+
+function calcularFrete(sub) {
+  // REGRA: frete grátis para compras ACIMA de R$ 100 (>= 100 reais)
+  if (sub >= 100) return 0;
+  return 15;
+}
+
+function descontoAplicado(sub) {
+  // Cupom QA10 = 10% de desconto no SUBTOTAL
+  if (cupomAplicado === "QA10") return sub * 0.10;
+  if (cupomAplicado === "FRETEGRATIS") return calcularFrete(sub) * -1; // remove o frete
+  return 0;
+}
+
+// ===== Modal do carrinho =====
+function abrirCarrinho() {
+  var sub = subtotal();
+  var frete = calcularFrete(sub);
+  var desc = descontoAplicado(sub);
+  var total = sub - desc + frete;
+  if (total < 0) total = 0;
+
+  var lista = document.getElementById("itensCarrinho");
+  lista.innerHTML = "";
+  var algumItem = false;
+  for (var id in carrinho) {
+    var p = produtos.find(function(x) { return x.id === parseInt(id, 10); });
+    if (!p) continue;
+    algumItem = true;
+    var linha = document.createElement("div");
+    linha.className = "item-carrinho";
+    linha.innerHTML =
+      '<span>' + p.nome + ' <span style="color:#64748b">x' + carrinho[id] + '</span></span>' +
+      '<span class="preco-item">R$ ' + (precoProduto(p) * carrinho[id]).toFixed(2) + '</span>';
+    lista.appendChild(linha);
+  }
+  if (!algumItem) {
+    lista.innerHTML = '<p style="color:#94a3b8">Seu carrinho está vazio.</p>';
+    document.getElementById("resSubtotal").textContent = "R$ 0,00";
+    document.getElementById("resDesconto").textContent = "R$ 0,00";
+    document.getElementById("resFrete").textContent = "---";
+    document.getElementById("resTotal").textContent = "R$ 0,00";
+  } else {
+    var freteTxt = frete === 0 ? "Grátis" : "R$ " + frete.toFixed(2);
+    var descTxt = cupomAplicado ? "R$ " + desc.toFixed(2) + " <span class='desconto-exibido'>(" + cupomAplicado + ")</span>" : "R$ 0,00";
+    document.getElementById("resSubtotal").innerHTML = "R$ " + sub.toFixed(2);
+    document.getElementById("resDesconto").innerHTML = descTxt;
+    document.getElementById("resFrete").textContent = freteTxt;
+    document.getElementById("resTotal").textContent = "R$ " + total.toFixed(2);
+  }
+  document.getElementById("modalCarrinho").classList.add("aberto");
+}
+
+function fecharCarrinho() {
+  document.getElementById("modalCarrinho").classList.remove("aberto");
+}
+
+function aplicarCupom() {
+  var codigo = document.getElementById("cupomInput").value.trim().toUpperCase();
+  var msg = document.getElementById("cupomMsg");
+
+  if (codigo === "QA10") {
+    cupomAplicado = "QA10";
+    msg.textContent = "Cupom QA10 aplicado! 10% de desconto.";
+    msg.className = "cupom-msg ok";
+  } else if (codigo === "FRETEGRATIS") {
+    if (cupomAplicado === "QA10") {
+      cupomAplicado = "FRETEGRATIS";
+      msg.textContent = "Cupom FRETEGRATIS aplicado (substituiu o QA10).";
+      msg.className = "cupom-msg ok";
+    } else {
+      cupomAplicado = "FRETEGRATIS";
+      msg.textContent = "Frete grátis para seu pedido!";
+      msg.className = "cupom-msg ok";
+    }
+  } else {
+    cupomAplicado = null;
+    msg.textContent = "Cupom inválido: " + codigo;
+    msg.className = "cupom-msg err";
+  }
+  abrirCarrinho();
+}
+
+function finalizar() {
+  var sub = subtotal();
+  if (sub === 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
+  var frete = calcularFrete(sub);
+  var desc = descontoAplicado(sub);
+  var total = sub - desc + frete;
+  if (total < 0) total = 0;
+  alert("Pedido confirmado! Total: R$ " + total.toFixed(2) + "\n\nObrigado por comprar na TechStore!");
+}
+
+// ===== Inicialização =====
+renderizarProdutos();
+</script>
+
+</body>
+</html>

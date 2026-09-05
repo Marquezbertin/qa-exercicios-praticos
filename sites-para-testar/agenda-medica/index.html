@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vida+ Saúde - Agendamento Médico</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f0fdfa; color:#134e4a; }
+  header { background:#0f766e; color:white; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; }
+  header h1 { font-size:1.2rem; }
+  main { max-width:920px; margin:0 auto; padding:22px; }
+  .painel { background:white; border-radius:12px; padding:18px; box-shadow:0 1px 4px rgba(0,0,0,.08); margin-bottom:18px; }
+  .painel h2 { font-size:1rem; color:#0f766e; margin-bottom:12px; }
+  .campo { margin-bottom:12px; }
+  .campo label { display:block; font-size:.82rem; font-weight:700; margin-bottom:4px; color:#475569; }
+  .campo input, .campo select { width:100%; padding:10px; border:1px solid #99f6e4; border-radius:8px; font-size:.95rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+  .btn { padding:11px 16px; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+  .btn-primario { background:#0f766e; color:white; width:100%; }
+  .btn-perigo { background:#fee2e2; color:#991b1b; }
+  .btn-perigo:hover { background:#fecaca; }
+  .horarios { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  .horario { padding:10px 14px; border:2px solid #ccfbf1; border-radius:8px; cursor:pointer; font-weight:700; background:white; transition:.15s; }
+  .horario:hover { border-color:#0f766e; }
+  .horario.ocupado { background:#fee2e2; border-color:#fecaca; color:#991b1b; cursor:not-allowed; }
+  .horario.selecionado { background:#0f766e; color:white; border-color:#0f766e; }
+  .msg { font-size:.82rem; margin-top:8px; min-height:14px; }
+  .ok { color:#059669; }
+  .err { color:#dc2626; }
+  .info { color:#0f766e; }
+  .lista-consultas { font-size:.88rem; }
+  .consulta-item { display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #f0fdfa; }
+  .consulta-item .detalhe { flex:1; }
+  .consulta-item .status { font-size:.72rem; font-weight:700; padding:3px 8px; border-radius:10px; }
+  .st-agendado { background:#ccfbf1; color:#0f766e; }
+  .st-cancelado { background:#fee2e2; color:#991b1b; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  th { text-align:left; color:#0f766e; font-size:.72rem; text-transform:uppercase; padding:7px; border-bottom:2px solid #ccfbf1; }
+  td { padding:8px 7px; border-bottom:1px solid #f0fdfa; }
+  footer { text-align:center; padding:20px; color:#5eead4; font-size:.78rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Vida+ Saúde - Agendamento de Consultas</h1>
+  <span style="font-size:.8rem">Atendimento: Seg a Sáb, 8h às 18h</span>
+</header>
+
+<main>
+  <div class="painel">
+    <h2>Nova consulta</h2>
+    <div class="grid">
+      <div class="campo">
+        <label for="especialidade">Especialidade</label>
+        <select id="especialidade">
+          <option value="clinica">Clínico Geral</option>
+          <option value="cardio">Cardiologia</option>
+          <option value="pediatria">Pediatria</option>
+          <option value="derma">Dermatologia</option>
+          <option value="gineco">Ginecologia</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="medico">Médico</label>
+        <select id="medico"></select>
+      </div>
+      <div class="campo">
+        <label for="data">Data da consulta</label>
+        <input type="date" id="data">
+      </div>
+      <div class="campo">
+        <label for="paciente">Nome do paciente</label>
+        <input type="text" id="paciente" placeholder="Nome completo">
+      </div>
+    </div>
+    <div class="msg" id="msgHorario"></div>
+    <div class="horarios" id="horarios"></div>
+    <div style="margin-top:14px">
+      <button class="btn btn-primario" onclick="agendar()">Agendar consulta</button>
+    </div>
+    <div class="msg" id="msgAgendar"></div>
+  </div>
+
+  <div class="painel">
+    <h2>Consultas agendadas</h2>
+    <table>
+      <thead>
+        <tr><th>Paciente</th><th>Data</th><th>Horário</th><th>Médico</th><th>Status</th><th>Ação</th></tr>
+      </thead>
+      <tbody id="corpoAgenda"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>Vida+ Saúde - Sistema fictício para testes de QA - Bugs intencionais</footer>
+
+<script>
+var medicosPorEspec = {
+  clinica: ["Dra. Fernanda Alves", "Dr. Paulo Rocha"],
+  cardio: ["Dr. Marcelo Tavares"],
+  pediatria: ["Dra. Beatriz Nunes"],
+  derma: ["Dr. André Custódio"],
+  gineco: ["Dra. Camila Lopes"]
+};
+
+var horariosDia = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+                   "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
+
+var consultas = [];
+
+function hoje() {
+  var d = new Date();
+  return d.toISOString().split("T")[0];
+}
+
+function diaDaSemana(dataStr) {
+  var d = new Date(dataStr);
+  return d.getDay(); // 0 = domingo
+}
+
+function renderMedicos() {
+  var esp = document.getElementById("especialidade").value;
+  var sel = document.getElementById("medico");
+  sel.innerHTML = "";
+  medicosPorEspec[esp].forEach(function(m) {
+    var op = document.createElement("option");
+    op.value = m;
+    op.textContent = m;
+    sel.appendChild(op);
+  });
+}
+
+function horariosOcupados(medico, data) {
+  return consultas
+    .filter(function(c) { return c.medico === medico && c.data === data && c.status === "agendado"; })
+    .map(function(c) { return c.horario; });
+}
+
+function renderHorarios() {
+  var medico = document.getElementById("medico").value;
+  var data = document.getElementById("data").value;
+  var box = document.getElementById("horarios");
+  box.innerHTML = "";
+  var msg = document.getElementById("msgHorario");
+
+  // Valida data
+  if (data === "") {
+    msg.textContent = "Selecione uma data.";
+    msg.className = "msg err";
+    return;
+  }
+  if (data < hoje()) {
+    msg.textContent = "Essa data já passou. Escolha uma data futura.";
+    msg.className = "msg err";
+    return;
+  }
+  if (diaDaSemana(data) === 0) {
+    msg.textContent = "A clínica não atende aos domingos.";
+    msg.className = "msg err";
+    return;
+  }
+
+  msg.textContent = "Horários disponíveis para " + medico + " em " + data;
+  msg.className = "msg info";
+
+  // Calcula distância (em dias) para decidir horários disponíveis (alteração de agenda)
+  var ocupados = horariosOcupados(medico, data);
+
+  horariosDia.forEach(function(h) {
+    var d = document.createElement("div");
+    d.className = "horario";
+    d.textContent = h;
+    if (ocupados.indexOf(h) >= 0) {
+      d.classList.add("ocupado");
+    }
+    d.onclick = function() {
+      if (d.classList.contains("ocupado")) return;
+      var jaSelecionado = d.classList.contains("selecionado");
+      document.querySelectorAll(".horario.selecionado").forEach(function(x) { x.classList.remove("selecionado"); });
+      if (!jaSelecionado) d.classList.add("selecionado");
+    };
+    box.appendChild(d);
+  });
+}
+
+function agendar() {
+  var paciente = document.getElementById("paciente").value.trim();
+  var medico = document.getElementById("medico").value;
+  var data = document.getElementById("data").value;
+  var msg = document.getElementById("msgAgendar");
+
+  var selecionado = document.querySelector(".horario.selecionado");
+  var horario = selecionado ? selecionado.textContent : "";
+
+  var erros = [];
+
+  if (paciente.length < 3) erros.push("Informe o nome do paciente (mínimo 3 caracteres).");
+  if (data === "") erros.push("Selecione a data.");
+  if (data !== "" && data < hoje()) erros.push("Data no passado.");
+  if (data !== "" && diaDaSemana(data) === 0) erros.push("Não atendemos aos domingos.");
+  if (horario === "") erros.push("Selecione um horário.");
+
+  if (erros.length) {
+    msg.innerHTML = erros.join("<br>");
+    msg.className = "msg err";
+    return;
+  }
+
+  // Verifica conflito de horário (mesmo médico)
+  var conflito = consultas.some(function(c) {
+    return c.medico === medico && c.data === data && c.horario === horario && c.status === "agendado";
+  });
+
+  if (conflito) {
+    msg.textContent = "Esse horário acabou de ser ocupado. Escolha outro.";
+    msg.className = "msg err";
+    return;
+  }
+
+  consultas.push({
+    paciente: paciente,
+    medico: medico,
+    data: data,
+    horario: horario,
+    status: "agendado"
+  });
+
+  msg.textContent = "Consulta agendada com sucesso para " + horario + " em " + data;
+  msg.className = "msg ok";
+  renderHorarios();
+  renderAgenda();
+}
+
+function cancelar(id) {
+  var c = consultas[id];
+  if (c.status === "cancelado") {
+    alert("Este agendamento já foi cancelado.");
+    return;
+  }
+  var ok = confirm("Cancelar a consulta de " + c.paciente + " em " + c.data + " às " + c.horario + "?");
+  if (ok) {
+    c.status = "cancelado";
+    renderHorarios();
+    renderAgenda();
+  }
+}
+
+function renderAgenda() {
+  var corpo = document.getElementById("corpoAgenda");
+  corpo.innerHTML = "";
+  if (consultas.length === 0) {
+    corpo.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:20px">Nenhuma consulta agendada.</td></tr>';
+    return;
+  }
+  consultas.forEach(function(c, i) {
+    var tr = document.createElement("tr");
+    var stClass = "st-" + c.status;
+    var stLabel = c.status === "agendado" ? "Agendado" : "Cancelado";
+    var acao = c.status === "agendado"
+      ? '<button class="btn btn-perigo" onclick="cancelar(' + i + ')">Cancelar</button>'
+      : "";
+    tr.innerHTML =
+      "<td>" + c.paciente + "</td>" +
+      "<td>" + c.data + "</td>" +
+      "<td>" + c.horario + "</td>" +
+      "<td>" + c.medico + "</td>" +
+      "<td><span class='status " + stClass + "'>" + stLabel + "</span></td>" +
+      "<td>" + acao + "</td>";
+    corpo.appendChild(tr);
+  });
+}
+
+// Bindings
+document.getElementById("especialidade").addEventListener("change", function() {
+  renderMedicos();
+  renderHorarios();
+});
+document.getElementById("medico").addEventListener("change", renderHorarios);
+document.getElementById("data").addEventListener("change", renderHorarios);
+
+// Inicialização
+datasIniciais();
+renderMedicos();
+renderAgenda();
+
+function datasIniciais() {
+  var d = new Date();
+  d.setDate(d.getDate() + 3);
+  // Garante que não caia no domingo
+  while (d.getDay() === 0) { d.setDate(d.getDate() + 1); }
+  document.getElementById("data").value = d.toISOString().split("T")[0];
+  renderHorarios();
+}
+</script>
+</body>
+</html>
