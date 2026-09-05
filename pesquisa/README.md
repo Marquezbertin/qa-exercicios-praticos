@@ -20,7 +20,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Matriz de artigos (25–30) | ✅ 25 registrados, DOIs/metadados consolidados |
 | Análise quantitativa da matriz | ✅ v1 (frequências e cruzamentos) |
 | Mapa da literatura / análise de lacunas | ✅ v0.1 (provado/controverso/inexplorado/lacuna final) |
-| Problema de pesquisa + RQs + hipóteses | 🔶 rascunho salvo (consolidar com base no mapa) |
+| Problema de pesquisa + RQs + hipóteses | ✅ consolidado (v0.2, ancorado no mapa) |
 | Metodologia experimental | ⏳ não iniciada |
 | Experimento controlado | ⏳ não iniciado |
 | Escrita do artigo | ⏳ não iniciada |
@@ -45,7 +45,6 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Próximos passos
 
-1. Consolidar **problema + RQs + hipóteses** com base no mapa da literatura (transformar `problema-e-hipoteses.md` de rascunho em consolidado).
-2. Definir e documentar a metodologia experimental (requisitos controlados, mesmos prompts, múltiplas execuções, oráculo independente, ISO/IEC 25010).
-3. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
-4. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
+1. Definir e documentar a **metodologia experimental** (requisito controlado, agentes selecionados, múltiplas execuções, oráculo independente, ISO/IEC 25010).
+2. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
+3. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
