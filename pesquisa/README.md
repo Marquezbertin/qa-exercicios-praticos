@@ -21,7 +21,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Análise quantitativa da matriz | ✅ v1 (frequências e cruzamentos) |
 | Mapa da literatura / análise de lacunas | ✅ v0.1 (provado/controverso/inexplorado/lacuna final) |
 | Problema de pesquisa + RQs + hipóteses | ✅ consolidado (v0.2, ancorado no mapa) |
-| Metodologia experimental | ⏳ não iniciada |
+| Metodologia experimental | 🔶 v0.1 (proposta; stack definida: Python + FastAPI + PostgreSQL) |
 | Experimento controlado | ⏳ não iniciado |
 | Escrita do artigo | ⏳ não iniciada |
 
@@ -34,7 +34,8 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `matriz-de-artigos.md` | Matriz detalhada com as fichas completas dos artigos (A–F) |
 | `mapa-da-literatura.md` | Mapa: o que foi provado, o que é controvertido, o que é inexplorado e a lacuna final |
 | `analise-quantitativa.md` | Análise quantitativa da matriz (frequências e cruzamentos que sustentam a lacuna) |
-| `problema-e-hipoteses.md` | Rascunho: problema, perguntas de pesquisa e hipóteses |
+| `problema-e-hipoteses.md` | Problema, perguntas de pesquisa e hipóteses (consolidado) |
+| `metodologia-experimental.md` | Protocolo do experimento controlado (oráculo independente, stack, métricas, estatística) |
 
 ## Convenções
 
@@ -45,6 +46,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Próximos passos
 
-1. Definir e documentar a **metodologia experimental** (requisito controlado, agentes selecionados, múltiplas execuções, oráculo independente, ISO/IEC 25010).
-2. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
-3. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
+1. **Fechar decisões da metodologia** (seção 11 do protocolo): lista de agentes, detalhamento da especificação, ferramentas do oráculo.
+2. Fase 1 do experimento: fechar especificação v1.0 e construir o **oráculo independente** (artefatos privados, fora do alcance dos agentes).
+3. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
+4. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
