@@ -26,9 +26,9 @@ Experimento **controlado, prospectivo e reproduzível** (não retrospectivo como
 | Blindagem | Oráculo **escrito por QA independente** e **mantido em repositório privado/fora do alcance dos agentes** (evita data leakage — cf. C06) |
 | Ambiente de execução | Contêiner Docker limpo e idêntico para todas as execuções (reprodutibilidade F02) |
 
-### 2.1 Agentes candidatos **[DECIDIR]**
+### 2.1 Agentes — **D8 (RESOLVIDA 2026-09-05)**
 
-Critérios de seleção (para serem aplicados na escolha final):
+Critérios de seleção (aplicados na escolha):
 
 1. Modo **agente** (loop de tarefas/arquivos/testes — F01/F02), não apenas modelo via chat.
 2. Disponibilidade/acessibilidade para o pesquisador (inclui custo).
@@ -36,6 +36,17 @@ Critérios de seleção (para serem aplicados na escolha final):
 4. Documentar **versão/modelo exato** usado em cada execução (agentes têm versões; F05 mostrou diferenças entre agentes).
 
 Proposta inicial de 4 agentes **[DECIDIR]**: **Claude Code**, **OpenAI Codex**, **Gemini CLI**, + 1 alternativa (ex.: **Cursor** ou agente open source). N=4 agentes × 3 execuções = **12 sistemas completos gerados e avaliados**. (Ampliar para 5×3 se recurso permitir.)
+
+> **D8 (RESOLVIDA):** na máquina de execução só o **opencode** está disponível (sem CLIs comerciais autenticados). Os 4 tratamentos passam a ser **opencode como shell único de agente** + 4 modelos distintos (mesmo loop de agente, comparando modelos — máxima redução de confundimento de ferramenta):
+>
+> | Modelo | ID opencode |
+> |---|---|
+> | Nemotron 3 Ultra (NVIDIA) | `opencode/nemotron-3-ultra-free` |
+> | Nemotron 3.5 Lightning (NVIDIA) | `opencode/nemotron-3.5-lightning-free` |
+> | Ling 3.0 Flash | `opencode/ling-3.0-flash-fin-free` |
+> | Mimo v2.5 | `opencode/mimo-v2.5-free` |
+>
+> Famílias distintas (2× Nemotron, Ling, Mimo) atendem ao critério de linhagens diferentes. A versão exata de cada modelo é capturada por execução (critério 4). Riscos registrados: (a) perde-se a comparação entre **ferramentas** agentes (mitigado: os modelos comparados expõem o mesmo loop de navegação/edição/teste do opencode); (b) mudanças de naming/rotas dos modelos free exigem congelar os IDs e registrá-los no manifest.
 
 > Nota metodológica: estudos F (F01, F02, F04, F05) são **retrospectivos** e não isolam requisito; nosso desenho prospectivo elimina o confundimento de requisitos diferentes entre grupos (G4).
 
@@ -138,6 +149,8 @@ Cada defeito detectado é registrado com:
 5. Avaliar cada entrega apenas com o **oráculo** e a **matriz de defeitos** (avaliadores cegos quanto ao agente, se possível).
 6. Registrar tudo em planilha de evidências (link a commits/artefatos).
 
+> **D9 (RESOLVIDA 2026-09-05):** ambiente de validação = **Docker Desktop na máquina local** (docker compose sobe PostgreSQL e o deliverable; oráculo roda black-box sobre a porta exposta).
+
 > Evitar viés: definir fim do experimento e análise **antes** de ver os resultados (pré-registro em repositório privado — para evitar p-hacking).
 
 ---
@@ -179,7 +192,7 @@ Cada defeito detectado é registrado com:
 |---|---|
 | 1. Fechar especificação v1.0 | `spec-tarefas-v1.0` (privado) |
 | 2. Construir oráculo + sistema golden | Suíte completa (privado) |
-| 3. Piloto (1 agente, 1 execução) | Ajuste de protocolo |
+| 3. Piloto (1 modelo opencode, 1 execução) | Ajuste de protocolo |
 | 4. Execução completa (4×3) | 12 entregas + registros |
 | 5. Classificação e análise | Matriz de defeitos, estatística |
 | 6. Consolidação | Seção de resultados do artigo |
@@ -188,7 +201,8 @@ Cada defeito detectado é registrado com:
 
 ## 11. Decisões em aberto **[DECIDIR]**
 
-- Lista final de agentes (critérios na seção 2.1).
+- ~~Lista final de agentes~~ → **D8 RESOLVIDA** (opencode + 4 modelos, seção 2.1).
+- ~~Ambiente de validação~~ → **D9 RESOLVIDA** (Docker Desktop local, seção 7).
 - Detalhamento final da especificação FR/NFR (documento privado).
 - Ferramentas exatas do oráculo (propostas na seção 4; validar licença/custo).
 - Quantidade de executores na dupla classificação (2 propostos).
