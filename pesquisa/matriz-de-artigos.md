@@ -1,291 +1,284 @@
 # Matriz de Artigos — Revisão Bibliográfica
 
-**Status:** buscas iniciais concluídas · **Meta:** 25–30 artigos · **Atual:** 25 registrados
+**Status:** DOIs/metadados consolidados (25/25) · **Meta:** 25–30 artigos · **Atual:** 25 registrados
+**Data consolidação:** 2026-09-05
 
-> Convenção: campos marcados **"a confirmar"** ainda não foram verificados na fonte oficial (DOI, afiliação etc.). Antes de consolidar uma ficha, o DOI/link deve ser confirmado — nunca manter DOI inventado.
+> Todos os DOIs, autores, anos e veículos abaixo foram **verificados** via busca na web (ACM, IEEE, ScienceDirect, Springer, arXiv) em 05/09/2026. Itens marcados *preprint* ainda não têm publicação revisada por pares confirmada. D03 (GitHub) é relatório institucional, sem DOI. Nenhuma referência foi inventada.
 
 ## Campos da ficha
 
-`ID · Autor(es) · Ano · Universidade/Afiliação · Publicação · DOI · Tipo (SLR/Survey/Empírico/Misto) · Modelo(s) · Agente(s) · Linguagem(ns) · Amostra · Sistema completo? · Testes independentes? · Métricas · Bugs avaliados como? · Segurança avaliada? · Resultado principal · Limitações · Lacuna para nossa pesquisa`
+`ID · Título exato · Autor(es) · Ano · Veículo · DOI · arXiv · Amostra · Sistema completo? · Testes independentes? · Métricas · Bugs avaliados como? · Segurança? · Resultado principal · Lacuna para nossa pesquisa`
 
 ---
 
 ## Grupo A — LLMs aplicados à Engenharia de Software
 
-### A01 — Revisão sistemática de LLMs em Engenharia de Software
-- **Autores:** Hou et al.
+### A01 — SLR de LLMs em Engenharia de Software
+- **Título:** *Large Language Models for Software Engineering: A Systematic Literature Review*
+- **Autores:** Xinyi Hou, Yanjie Zhao, Yue Liu, Zhou Yang, Kailong Wang, Li Li, Xiapu Luo, David Lo, John Grundy, Haoyu Wang
 - **Ano:** 2024
-- **Publicação:** ACM (ToSEM — Trans. on Software Engineering and Methodology)
-- **DOI:** a confirmar
-- **Tipo:** Revisão Sistemática (SLR)
-- **Amostra:** 395 artigos (jan/2017–jan/2024)
-- **Conteúdo:** 85 tarefas de SE em 6 atividades (Requisitos, Design, Desenvolvimento, Quality Assurance, Manutenção, Gerenciamento); modelos, datasets, técnicas de prompting, métodos de avaliação, desafios e lacunas.
-- **Modelo/Ferramenta:** diversos
-- **Sistema completo?** — · **Testes independentes?** —
-- **Resultado principal:** LLMs permeiam todo o ciclo de SE; campo amplo com lacunas de pesquisa identificadas.
-- **Limitações:** até jan/2024; rápido desatualização.
-- **Lacuna:** contexto e vocabulário comum para nossas RQs; base para a seção de trabalhos relacionados.
+- **Veículo:** ACM Transactions on Software Engineering and Methodology, vol. 33, n. 8, art. 220
+- **DOI:** `10.1145/3695988`
+- **arXiv:** 2308.10620
+- **Tipo:** SLR · **Amostra:** 395 artigos (jan/2017–jan/2024) · 85 tarefas de SE em 6 atividades
+- **Resultado:** LLMs permeiam todo o ciclo de SE; lacunas identificadas (métodos de avaliação, prompting, datasets).
+- **Para nossa pesquisa:** base da seção de trabalhos relacionados; vocabulário comum das RQs.
 
-### A02 — Revisão sistemática sobre geração de código por LLMs
-- **Autores:** a confirmar
+### A02 — SLR sobre geração de código por LLMs
+- **Título:** *LLM-Based Code Generation: A Systematic Literature Review With Technical and Demographic Insights*
+- **Autores:** Umama; Kamaluddeen Usman Danyaro; Maged Nasser; Abubakar Zakari; Shamsu Abdullahi; Atika Khanzada; Muntasir Yakubu; S. Shoaib
 - **Ano:** 2025
-- **Publicação:** IEEE Access
-- **DOI:** a confirmar
-- **Tipo:** SLR
-- **Amostra:** 58 estudos
-- **Resultado principal:** limitações recorrentes — alucinações, vulnerabilidades de segurança, baixa generalização e problemas de interpretabilidade.
-- **Lacuna:** fundamenta o estudo de defeitos (alucinação, segurança) como objetos de avaliação.
+- **Veículo:** IEEE Access, vol. 13, pp. 194915–194939
+- **DOI:** `10.1109/ACCESS.2025.3631952`
+- **Tipo:** SLR (PRISMA) · **Amostra:** 58 estudos (2020–2025)
+- **Resultado:** limitações recorrentes — alucinações, vulnerabilidades de segurança, baixa generalização, falta de interpretabilidade.
+- **Para nossa pesquisa:** fundamenta alucinação e segurança como objetos de avaliação.
 
 ---
 
 ## Grupo B — Defeitos em código gerado por LLMs
 
-### B01 — Bugs em código gerado por LLMs
+### B01 — Bugs em código gerado por LLMs (taxonomia)
+- **Título:** *Bugs in Large Language Models Generated Code: An Empirical Study*
 - **Autores:** Florian Tambon, Arghavan Moradi Dakhel, Amin Nikanjam, Foutse Khomh, Michel C. Desmarais, Giuliano Antoniol
-- **Ano:** 2024
-- **Publicação:** IEEE/ACM (empírico)
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Modelos:** CodeGen, PanGu-Coder, Codex
-- **Amostra:** 333 bugs
-- **Método:** análise de bugs em código gerado; taxonomia validada por 34 pesquisadores e profissionais
-- **Bugs avaliados como?** Taxonomia de 10 padrões:
-  1. Misinterpretation 2. Syntax Error 3. Silly Mistake 4. Prompt-biased Code 5. Missing Corner Case 6. Wrong Input Type 7. Hallucinated Object 8. Wrong Attribute 9. Incomplete Generation 10. Non-Prompted Consideration
-- **Resultado principal:** defeitos de código gerado por LLM possuem padrões características e recorrentes.
-- **Limitações:** código gerado em contexto de função/problema; sem sistema completo; sem avaliação de severidade.
-- **Lacuna:** **usar a taxonomia como base da classificação de defeitos do nosso experimento.**
+- **Ano:** 2025 (arXiv 2024: 2403.08937)
+- **Veículo:** Empirical Software Engineering, vol. 30, art. 65
+- **DOI:** `10.1007/s10664-025-10614-4`
+- **Tipo:** Empírico · **Modelos:** CodeGen, PanGu-Coder, Codex · **Amostra:** 333 bugs
+- **Bugs avaliados:** taxonomia de 10 padrões (misinterpretation, syntax error, silly mistake, prompt-biased code, missing corner case, wrong input type, hallucinated object, wrong attribute, incomplete generation, non-prompted consideration), validada por 34 pesquisadores/profissionais.
+- **Resultado:** defeitos de código gerado por LLM possuem padrões característicos e recorrentes.
+- **Para nossa pesquisa:** **base da classificação de defeitos do nosso experimento.**
 
-### B02 — O que está errado com código gerado por LLMs?
-- **Autores:** Dou et al.
-- **Ano:** 2024
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Modelos:** 3 LLMs fechados + 4 open source
-- **Benchmarks:** 3 benchmarks + 140 tarefas do mundo real
-- **Resultado principal:** distribuição de bugs difere entre benchmarks acadêmicos e mundo real; self-critique + correção iterativa elevou aprovação em 29,2% após 2 iterações.
-- **Lacuna:** sugere futura variável "revisão pela própria IA", a manter fora da primeira versão do experimento (controlar primeiro).
+### B02 — Tipos e causas de bugs em código gerado
+- **Título:** *What's Wrong with Your Code Generated by Large Language Models? An Extensive Study*
+- **Autores:** Shihan Dou, Haoxiang Jia, Shenxi Wu, Huiyuan Zheng, Muling Wu, Mingxu Chai, Jessica Fan, Zhiheng Xi, Caishuang Huang, Yunbo Tao, Yan Liu, Enyu Zhou, Ming Zhang, Yuhao Zhou, Yueming Wu, Rui Zheng, Ming Wen, Rongxiang Weng, Jingang Wang, Xunliang Cai, Tao Gui, Xipeng Qiu, Qi Zhang, Xuanjing Huang
+- **Ano:** 2024 · **Veículo:** arXiv preprint (cs.SE) — veículo revisado ainda não identificado
+- **arXiv:** 2407.06153
+- **Tipo:** Empírico · **Modelos:** 3 fechados + 4 open source · **Amostra:** 3 benchmarks + 140 tarefas do mundo real
+- **Resultado:** distribuição de bugs difere entre benchmarks e mundo real; self-critique + correção iterativa aumentou aprovação 29,2% (2 iterações).
+- **Para nossa pesquisa:** variável futura "revisão pela própria IA" — manter fora da 1ª versão do experimento.
 
-### B03 — Código humano vs. código gerado por IA (grande escala)
-- **Autores:** Cotroneo, Improta, Liguori
+### B03 — Código humano vs. IA (grande escala)
+- **Título:** *Human-Written vs. AI-Generated Code: A Large-Scale Study of Defects, Vulnerabilities, and Complexity*
+- **Autores:** Domenico Cotroneo, Cristina Improta, Pietro Liguori (Università di Napoli Federico II)
 - **Ano:** 2025
-- **Publicação:** IEEE ISSRE 2025
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (large-scale)
-- **Modelos:** ChatGPT, DeepSeek-Coder, Qwen-Coder
-- **Linguagens:** Python, Java
-- **Amostra:** >500 mil amostras
+- **Veículo:** 2025 IEEE 36th Intl. Symposium on Software Reliability Engineering (ISSRE), pp. 252–263
+- **DOI:** `10.1109/ISSRE66568.2025.00035` · **arXiv:** 2508.21634
+- **Tipo:** Empírico large-scale · **Modelos:** ChatGPT, DeepSeek-Coder, Qwen-Coder · **Linguagens:** Python, Java · **Amostra:** >500 mil amostras
 - **Métricas:** defeitos (ODC), vulnerabilidades (CWE), complexidade
-- **Resultado principal:** perfis de defeitos diferentes entre IA e humanos; IA com mais constructs não utilizados, debugging hardcoded e vulnerabilidades de segurança de alto risco.
-- **Lacuna:** aponta para **hipótese de perfil de defeitos** em vez de "mais/menos bugs"; base para comparar IA×IA também.
+- **Resultado:** IA vs humanos têm **perfis de defeitos diferentes**; IA com mais constructs não utilizados, debugging hardcoded e vulnerabilidades de segurança de alto risco.
+- **Para nossa pesquisa:** **hipótese de perfil de defeitos**, não "mais/menos bugs"; base para comparar IA×IA.
 
-### B04 — Não-determinismo do ChatGPT em geração de código
-- **Autores:** Ouyang et al.
-- **Ano:** 2025
-- **Publicação:** ACM
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Modelos:** ChatGPT
-- **Benchmarks:** CodeContests, APPS, HumanEval (829 problemas)
-- **Resultado principal:** mesmo prompt produz saídas diferentes; afeta correção, consistência e reprodutibilidade de experimentos.
-- **Lacuna:** **justifica múltiplas execuções independentes por modelo** no nosso desenho experimental.
+### B04 — Não-determinismo do ChatGPT
+- **Título:** *An Empirical Study of the Non-Determinism of ChatGPT in Code Generation*
+- **Autores:** Shuyin Ouyang, Jie M. Zhang, Mark Harman, Meng Wang
+- **Ano:** 2025 (publicação 22 jan 2025)
+- **Veículo:** ACM ToSEM, vol. 34, n. 2, art. 42
+- **DOI:** `10.1145/3697010` · **arXiv:** 2308.02828
+- **Tipo:** Empírico · **Modelos:** ChatGPT · **Benchmarks:** CodeContests, APPS, HumanEval (829 problemas)
+- **Resultado:** mesmo prompt → saídas diferentes; afeta correção, consistência e **reprodutibilidade científica**.
+- **Para nossa pesquisa:** **justifica múltiplas execuções independentes por modelo.**
 
 ---
 
 ## Grupo C — LLM + testes de software
 
 ### C01 — Testes de software com LLMs (survey)
-- **Autores:** Wang et al.
+- **Título:** *Software Testing With Large Language Models: Survey, Landscape, and Vision*
+- **Autores:** Junjie Wang, Yuchao Huang, Chunyang Chen, Zhe Liu, Song Wang, Qing Wang
 - **Ano:** 2024
-- **Tipo:** Survey
-- **Amostra:** 102 estudos
-- **Resultado principal:** geração de casos de teste, geração de código de teste e reparo de programas são aplicações representativas.
-- **Lacuna:** motiva dimensão C (testabilidade) da nossa pesquisa.
+- **Veículo:** IEEE Transactions on Software Engineering, vol. 50, n. 4, pp. 911–936
+- **DOI:** `10.1109/TSE.2024.3368208` · **arXiv:** 2307.07221
+- **Tipo:** Survey · **Amostra:** 102 estudos
+- **Resultado:** geração de casos/testes e reparo de programas são aplicações representativas.
+- **Para nossa pesquisa:** motiva a dimensão C (testabilidade).
 
-### C02 — Exame de código gerado por LLMs
-- **Autores:** Beer et al.
-- **Ano:** 2024
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (controlado)
-- **Modelos:** ChatGPT, GitHub Copilot
-- **Linguagens:** Java, Python
-- **Método:** geração de algoritmos + testes unitários; avaliação de correção, qualidade e cobertura
+### C02 — Exame de código e testes gerados por LLMs
+- **Título:** *Examination of Code generated by Large Language Models* (variante: *Analysis of Code and Test-Code generated by Large Language Models*)
+- **Autores:** Andreas Beer, Simon Feix, Tobias Guttzeit, Rui Muras, Michael Müller, Jens Rauscher, René Schäffler, Torsten Löwe
+- **Ano:** 2024 · **Veículo:** arXiv preprint
+- **DOI (arXiv):** `10.48550/arXiv.2408.16601`
+- **Tipo:** Empírico controlado · **Modelos:** ChatGPT, GitHub Copilot · **Linguagens:** Java, Python · **Amostra:** algoritmos + testes unitários
 - **Testes independentes?** Sim
-- **Resultado principal:** diferenças significativas entre modelos, linguagens, código vs. testes e ao longo do tempo.
-- **Limitações:** algoritmos relativamente pequenos.
-- **Lacuna:** avançar de algoritmos para **sistema completo controlado**.
+- **Resultado:** diferenças significativas entre modelos, linguagens, código vs. testes e ao longo do tempo.
+- **Para nossa pesquisa:** mais próximo do recorte; avança de algoritmos para **sistema completo controlado**.
 
-### C03 — Test smells em testes gerados por Copilot (Brasil)
-- **Autores:** a confirmar (CBSoft)
-- **Ano:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Resultado principal:** testes gerados por Copilot exibem test smells mesmo quando válidos.
-- **Lacuna:** reforça que **testes da própria IA não bastam como oráculo**.
+### C03 — Test smells em testes gerados por Copilot
+- **Título:** *Detecting Test Smells in Python Test Code Generated by LLM: An Empirical Study with GitHub Copilot*
+- **Autores:** Victor Anthony Alves, Cristiano Santos, Carla Ilane Moreira Bezerra, Ivan Machado
+- **Ano:** 2024
+- **Veículo:** XXXVIII Simpósio Brasileiro de Engenharia de Software (SBES 2024), CBSoft
+- **DOI:** `10.5753/sbes.2024.3561`
+- **Tipo:** Empírico
+- **Resultado:** testes gerados exibem test smells mesmo quando válidos.
+- **Para nossa pesquisa:** **testes da própria IA não bastam como oráculo.**
 
-### C04 — Geração de testes em larga escala (Defects4J)
-- **Autores:** a confirmar
-- **Ano:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Amostra:** Defects4J
-- **Resultado principal:** detecção de bugs muito limitada (vários modelos acharam poucos/nenhum bug) e precisão baixa dos testes gerados.
-- **Lacuna:** sustenta a necessidade de **suíte independente + QA humano** no experimento.
+### C04 — Avaliação de LLMs em geração de testes
+- **Título:** *On the Evaluation of Large Language Models in Unit Test Generation*
+- **Autores:** Lin Yang, Chen Yang, Shutao Gao, Weijing Wang, Bo Wang, Qihao Zhu, Xiao Chu, Jianyi Zhou, Guangtai Liang, Qianxiang Wang, Junjie Chen
+- **Ano:** 2024
+- **Veículo:** ASE 2024 (IEEE/ACM Intl. Conf. on Automated Software Engineering)
+- **DOI:** `10.1145/3691620.3695529` · **arXiv:** 2406.18181
+- **Tipo:** Empírico · **Modelos:** 5 LLMs open source (7B–34B) · **Amostra:** 17 projetos do Defects4J
+- **Resultado:** detecção de defeitos limitada (29–60% dos defeitos detectáveis) e baixa validade dos testes gerados.
+- **Para nossa pesquisa:** sustenta a necessidade de **suíte independente + QA humano**.
 
-### C05 — A utilidade de métricas de cobertura e mutation score (réplica)
-- **Autores:** a confirmar
+### C05 — Utilidade de coverage e mutation score (réplica)
+- **Título:** *Do Coverage and Mutation Scores of LLM-Generated Test Suites Correlate with Their Effectiveness? (Replicability Study)*
+- **Autores:** Junda Zhao, Shurui Zhou, Eldan Cohen
 - **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Replicação (estudo empírico)
-- **Métricas avaliadas:** line coverage, branch coverage, mutation score
-- **Resultado principal:** a utilidade dessas métricas depende do contexto; quando o código sob teste já contém um bug, coverage e mutation score deixam de ser indicadores confiáveis da capacidade real de detecção do bug.
-- **Lacuna:** **não usar coverage isoladamente como critério de qualidade** — combinar métricas no nosso oráculo.
+- **Veículo:** ISSTA 2026 — Proc. ACM on Software Engineering, vol. 3, art. ISSTA002
+- **DOI:** `10.1145/3832093` · **arXiv:** 2607.22880
+- **Tipo:** Replicação
+- **Resultado:** quando o código sob teste contém bug, coverage deixa de ser indicador confiável de detecção; mutation score não se aplica bem nesse cenário.
+- **Para nossa pesquisa:** **não usar coverage isoladamente** como critério de qualidade.
 
-### C06 — Geração de testes unitários (data leakage controlado)
-- **Autores:** a confirmar
+### C06 — Geração de testes com controle de data leakage
+- **Título:** *Impact of code context and prompting strategies on automated unit test generation with modern general-purpose large language models*
+- **Autores:** Jakub Walczak, Piotr Tomalak, Artur Laskowski
 - **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Linguagem:** Python (12 métodos desenvolvidos para evitar data leakage)
-- **Resultado principal:** melhor configuração alcançou **96,3% branch coverage**, **57% mutation score** e quase 100% de compilação; porém **todos os modelos omitiram sistematicamente testes de robustez** com valores especiais (None, inf, NaN).
-- **Lacuna:** conversa diretamente com a taxonomia de Tambon (**missing corner cases**) — nossos testes negativos precisam incluir valores especiais.
+- **Veículo:** Journal of Systems and Software, vol. 237, art. 112834
+- **DOI:** `10.1016/j.jss.2026.112834` · **arXiv:** 2507.14256
+- **Tipo:** Empírico · **Linguagem:** Python (12 métodos, sem data leakage)
+- **Resultado:** melhor config: 96,3% branch coverage / 57% mutation / ~100% compilação; **todos os modelos omitiram testes de valores especiais (None, inf, NaN)**.
+- **Para nossa pesquisa:** testes negativos devem incluir corner cases (eco da taxonomia de Tambon).
 
 ---
 
 ## Grupo D — Qualidade de software
 
-### D01 — Qualidade de código gerado por diferentes engines
+### D01 — Qualidade de código por engines de IA
+- **Título:** *Studying the Quality of Source Code Generated by Different AI Generative Engines: An Empirical Evaluation*
 - **Autores:** Davide Tosi
 - **Ano:** 2024
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Modelos:** 3 engines de IA
-- **Amostra:** 3 problemas complexos de programação
-- **Método:** suítes de testes humanas + métricas de qualidade + análise de código
+- **Veículo:** Future Internet (MDPI), vol. 16, n. 6, art. 188
+- **DOI:** `10.3390/fi16060188`
+- **Tipo:** Empírico · **Modelos:** GPT-3.5, GPT-4, Google Bard · **Amostra:** 3 problemas Java · **Avaliação:** SonarCloud + testes
 - **Testes independentes?** Sim
-- **Resultado principal:** engines resolveram os problemas, mas com necessidade de supervisão de especialistas para código executável e de boa qualidade.
-- **Lacuna:** metodologia parecida com a nossa para a parte experimental; avançar para múltiplos agentes/sistema completo.
+- **Resultado:** engines resolveram os problemas, mas exigem supervisão de especialistas para código executável e de qualidade.
+- **Para nossa pesquisa:** base metodológica da parte experimental.
 
-### D02 — Qualidade LLM vs. humano (SonarQube)
-- **Autores:** Molison et al.
-- **Ano:** 2025
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Método:** SonarQube + diferentes configurações/estratégias de geração
-- **Resultado principal:** em algumas situações a IA teve menos bugs e menor esforço estimado de correção; problemas estruturais aparecem em tarefas mais complexas.
-- **Lacuna:** exige neutralidade: resultado pode ser melhor, igual ou pior conforme a situação.
+### D02 — Manutenibilidade e confiabilidade (SonarQube)
+- **Título:** *Is LLM-Generated Code More Maintainable & Reliable than Human-Written Code?*
+- **Autores:** Alfred Santa Molison, Marcia Moraes, Glaucia Melo, Fabio Santos, Wesley K. G. Assunção
+- **Ano:** 2025 · **Veículo:** arXiv preprint (submetido/aceito MSR 2025)
+- **arXiv:** 2508.00700
+- **Tipo:** Empírico · **Método:** SonarQube; dataset de 10.000 questões; 3 configurações (zero-shot, few-shot, fine-tuning)
+- **Resultado:** em algumas situações a IA teve menos bugs e menor esforço estimado de correção; problemas estruturais em tarefas complexas; fine-tuning reduz severidade.
+- **Para nossa pesquisa:** neutralidade — resultado pode ser melhor, igual ou pior conforme o contexto.
 
 ### D03 — Experimento controlado do GitHub (Copilot)
-- **Autores:** a confirmar
-- **Ano:** a confirmar
-- **DOI:** a confirmar
-- **Tipo:** Experimento controlado (202 desenvolvedores de 243 recrutados)
-- **Modelos/Ferramenta:** GitHub Copilot
-- **Tarefa:** endpoints de aplicação web
-- **Resultado principal:** grupo com IA teve maior probabilidade de passar todos os testes e melhor avaliação em funcionalidade, legibilidade, confiabilidade, manutenção e concisão.
-- **Lacuna:** evidência favorável à IA → nossa pesquisa deve permitir confirmação ou refutação pelos dados.
+- **Título:** *Does GitHub Copilot improve code quality? Here's what the data says* (relatório do GitHub Customer Research)
+- **Autores:** Jared Bauer, Laura Lindeman, Lee Reilly, Mario Rodriguez (GitHub Customer Research)
+- **Ano:** 2024 · **Veículo:** GitHub Blog (Research) — **relatório institucional, sem DOI**
+- **Link:** https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/
+- **Tipo:** RCT · **Amostra:** 202 devs (104 com Copilot, 98 sem) · **Tarefa:** endpoints web Python (restaurant reviews), 10 unit tests; 25 revisores cegos
+- **Resultado:** 53,2% maior chance de passar todos os testes (p<0,01); melhorias em legibilidade, confiabilidade, manutenibilidade, concisão.
+- **Para nossa pesquisa:** evidência favorável à IA — nosso experimento deve permitir confirmação/refutação pelos dados.
 
 ### D04 — QA de código gerado por LLM (aspectos não funcionais)
-- **Autores:** Sun, Ståhl, Sandahl, Kessler
+- **Título:** *Quality assurance of LLM-generated code: Addressing non-functional quality characteristics*
+- **Autores:** Xin Sun, Daniel Ståhl, Kristian Sandahl, Christoph Kessler (Linköping University)
 - **Ano:** 2026
-- **Publicação:** Journal of Systems and Software
-- **DOI:** a confirmar
-- **Tipo:** Misto (109 artigos + workshops + experimento com 3 LLMs)
-- **Modelos:** 3 LLMs
-- **Referencial:** ISO/IEC 25010
-- **Resultado principal:** literatura concentra-se em correção funcional; segurança, manutenção e performance menos exploradas; profissionais destacam manutenção, legibilidade e dívida técnica.
-- **Lacuna:** **adotar ISO/IEC 25010 como referência de qualidade não funcional** no nosso experimento.
+- **Veículo:** Journal of Systems and Software, vol. 238, art. 112885
+- **DOI:** `10.1016/j.jss.2026.112885` · **arXiv:** 2511.10271
+- **Tipo:** Misto (108/109 artigos + 2 workshops industriais + experimento com 3 LLMs em SWE-bench Lite) · **Referencial:** ISO/IEC 25010
+- **Resultado:** literatura privilegia correção funcional; security 41% / performance 31,2% / maintainability 20% / reliability 7,5%; indústria prioriza manutenibilidade e legibilidade (dívida técnica); trade-offs entre dimensões ao otimizar prompts.
+- **Para nossa pesquisa:** **adotar ISO/IEC 25010** como referência de qualidade não funcional.
 
-### D05 — Dívida técnica e code smells em commits de IA ("Debt Behind the AI Boom")
-- **Autores:** a confirmar ("Debt Behind the AI Boom")
-- **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (large-scale, retrospectivo)
-- **Amostra:** **304.362 commits** verificados como produzidos por IA, em **6.275 repositórios** do GitHub, 5 assistentes de programação
-- **Resultado principal:** **484.606 problemas** identificados, dos quais **89,1% eram code smells**; mais de **15% dos commits de cada assistente** introduziram ao menos um problema; **24,2% dos problemas introduzidos pela IA permaneciam no código** na revisão mais recente do repositório.
-- **Lacuna:** evidência de **acúmulo de problemas** ao longo do tempo — justifica medir manutenibilidade/dívida no nosso experimento.
+### D05 — Dívida técnica e code smells em commits de IA
+- **Título:** *Debt Behind the AI Boom: A Large-Scale Empirical Study of AI-Generated Code in the Wild*
+- **Autores:** Yue Liu, Ratnadira Widyasari, Yanjie Zhao, Ivana Clairine Irsan, Junkai Chen, David Lo
+- **Ano:** 2026 · **Veículo:** arXiv preprint (v1 + v2)
+- **arXiv:** 2603.28592
+- **Tipo:** Empírico retrospectivo · **Amostra:** 304.362 commits de IA, 6.275 repositórios, 5 assistentes (Copilot, Claude, Cursor, Gemini, Devin)
+- **Resultado:** 484.606 problemas; **89,1% code smells**; >15% dos commits por assistente introduziram problema; **24,2% persistem** na revisão mais recente.
+- **Para nossa pesquisa:** justifica medir manutenibilidade/dívida técnica no experimento.
 
 ---
 
 ## Grupo E — Segurança
 
-### E01 — Vulnerabilidades em snippets gerados por IA (GitHub, grande escala)
-- **Autores:** Fu et al.
-- **Ano:** 2025
-- **Publicação:** ACM Transactions on Software Engineering and Methodology
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Ferramentas:** GitHub Copilot, CodeWhisperer, Codeium
-- **Amostra:** 733 snippets de projetos reais do GitHub
-- **Resultado principal:** vulnerabilidades em 29,5% dos snippets Python e 24,2% dos JavaScript; 43 categorias CWE.
-- **Lacuna:** baseline de segurança para our check-list (OWASP/CWE) no oráculo.
+### E01 — Fraquezas de segurança em snippets gerados por IA
+- **Título:** *Security Weaknesses of Copilot-Generated Code in GitHub Projects: An Empirical Study*
+- **Autores:** Yujia Fu, Peng Liang, Amjed Tahir, Zengyang Li, Mojtaba Shahin, Jiaxin Yu, Jinfu Chen
+- **Ano:** 2025 (preprint 2023)
+- **Veículo:** ACM ToSEM, vol. 34, n. 8
+- **DOI:** `10.1145/3716848` · **arXiv:** 2310.02059
+- **Tipo:** Empírico · **Ferramentas:** Copilot, CodeWhisperer, Codeium · **Amostra:** 733 snippets
+- **Resultado:** 29,5% (Python) e 24,2% (JS) vulneráveis; 43 categorias CWE.
+- **Para nossa pesquisa:** baseline de segurança (OWASP/CWE) no oráculo.
 
 ### E02 — Segurança em 7 LLMs
-- **Autores:** Morkonda et al.
-- **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Modelos:** 7 LLMs
-- **Resultado principal:** todos os modelos produziram código com vulnerabilidades, muitas de severidade alta ou crítica.
-- **Lacuna:** medir severidade da segurança no nosso experimento.
+- **Título:** *Security of LLM-generated Code: A Comparative Analysis*
+- **Autores:** Srivathsan G. Morkonda, Mahmoud Selim, Hala Assal
+- **Ano:** 2026 · **Veículo:** arXiv preprint
+- **arXiv:** 2605.23091
+- **Tipo:** Empírico · **Modelos:** 7 LLMs (Claude 3, Perplexity, GPT-4o, Gemini, Phind-70B, CodeWhisperer, IBM watsonx)
+- **Resultado:** todos geraram código vulnerável; 995 vulnerabilidades, 65% high e 33% critical.
+- **Para nossa pesquisa:** medir severidade de segurança no experimento.
 
-### E03 — Segurança + prompting
-- **Autores:** Aldosari, Aldawsari
-- **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (multi-modelo)
-- **Modelos:** 5 LLMs
-- **Resultado principal:** prompting orientado à segurança modificou a distribuição das vulnerabilidades, mas não reduziu significativamente a frequência/densidade geral.
-- **Lacuna:** variável experimental "estratégia de prompt" não elimina vulnerabilidades.
+### E03 — Segurança × prompting
+- **Título:** *An Empirical Evaluation of LLM-Generated Code Security Across Prompting Methods*
+- **Autores:** Mohammed Kharma, Ahmed Sabbah, Mohammad Alkhanafseh, Mohammad Hammoudeh, David Mohaisen
+- **Ano:** 2026 · **Veículo:** arXiv preprint
+- **arXiv:** 2605.24298
+- **Tipo:** Empírico · **Modelos:** 5 LLMs · **Método:** 4 métodos de prompting
+- **Resultado:** prompting **não reduz significativamente** frequência/densidade de vulnerabilidades (χ²), mas **muda a distribuição** de CWEs.
+- **Nota:** autoria original reportada como "Aldosari & Aldawsari" foi substituída por esta verificação.
+- **Para nossa pesquisa:** estratégia de prompt não elimina vulnerabilidades.
 
 ---
 
 ## Grupo F — Agentes de programação (AI coding agents)
 
-### F01 — Refatoração agêntica (estudo empírico de agentes)
-- **Autores:** Horikawa et al.
-- **Ano:** 2025
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Agentes:** OpenAI Codex, Claude Code, Cursor
-- **Amostra:** 15.451 atividades de refatoração · 12.256 PRs · 14.988 commits · projetos Java open source
-- **Resultado principal:** agentes fazem alterações locais/de consistência; humanos, mudanças de design mais amplas.
-- **Lacuna:** **modelo ≠ agente de programação** — nosso estudo deve diferenciar essas categorias no desenho.
+### F01 — Refatoração agêntica
+- **Título:** *Agentic Refactoring: An Empirical Study of AI Coding Agents*
+- **Autores:** Kosei Horikawa, Hao Li, Yutaro Kashiwa, Bram Adams, Hajimu Iida, Ahmed E. Hassan
+- **Ano:** 2025 · **Veículo:** arXiv preprint
+- **arXiv:** 2511.04824
+- **Tipo:** Empírico retrospectivo · **Agentes:** Codex, Claude Code, Cursor · **Amostra:** 15.451 refatorações, 12.256 PRs, 14.988 commits (Java OSS)
+- **Resultado:** agentes fazem mudanças locais/de consistência; humanos, mudanças de design amplas.
+- **Para nossa pesquisa:** **modelo ≠ agente** — diferenciar categorias no desenho.
 
-### F02 — Código gerado por IA não é reproduzível (ainda)
-- **Autores:** Vangala et al.
-- **Ano:** 2025/2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico
-- **Agentes:** Claude Code, OpenAI Codex, Gemini
-- **Amostra:** 300 projetos gerados a partir de 100 prompts padronizados (Python, JavaScript, Java)
-- **Resultado principal:** apenas 68,3% executaram imediatamente em ambiente limpo; em Java, 44%; expansão média de 13,5× entre dependências declaradas e necessárias.
-- **Lacuna:** executabilidade/reprodutibilidade como dimensão de qualidade — relevante para nosso oráculo.
+### F02 — Repro­du­tibilidade de projetos gerados por agentes
+- **Título:** *AI-Generated Code Is Not Reproducible (Yet): An Empirical Study of Dependency Gaps in LLM-Based Coding Agents*
+- **Autores:** Bhanu Prakash Vangala, Ali Adibifar, Tanu Malik, Ashish Gehani
+- **Ano:** 2025 (v3 2026) · **Veículo:** arXiv preprint
+- **arXiv:** 2512.22387
+- **Tipo:** Empírico · **Agentes:** Claude Code, OpenAI Codex, Gemini · **Amostra:** 300 projetos / 100 prompts (Python, JS, Java)
+- **Resultado:** só **68,3%** executaram imediatamente em ambiente limpo; **Java 44%**; expansão de dependências **13,5×**.
+- **Para nossa pesquisa:** reprodutibilidade/executabilidade como dimensão de qualidade.
 
 ### F03 — Vulnerabilidades introduzidas em interações reais
-- **Autores:** a confirmar
+- **Título:** *Secure coding with AI – from detection to repair*
+- **Autores:** Vladislav Belozerov, Peter J. Barclay, Ashkan Sami (Edinburgh Napier University)
 - **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (interações reais de desenvolvedores)
-- **Modelos:** GPT-4o (entre outros)
-- **Resultado principal:** em um experimento o GPT-4o introduziu 22 vulnerabilidades contra 10 presentes nos prompts originais; em outro, distribuição mais equilibrada.
-- **Lacuna:** separar **erro pré-existente no requisito/prompt** de **erro introduzido pela IA** — controle metodológico importante.
+- **Veículo:** Empirical Software Engineering, vol. 31, art. 93
+- **DOI:** `10.1007/s10664-026-10812-8` · **arXiv:** 2504.20814
+- **Tipo:** Empírico (interações reais, DevGPT; C/C++/C#)
+- **Resultado:** Exp. 1 (GPT-4o): 10 vulnerabilidades nos prompts dos devs vs **22 introduzidas pela IA**; Exp. 2 (2025): distribuição mais equilibrada (25/56 usuário vs 31/56 IA).
+- **Para nossa pesquisa:** separar **erro pré-existente no requisito/prompt** de **erro introduzido pela IA**.
 
-### F04 — PRs aceitos/rejeitados de agentes de IA (mundo real)
-- **Autores:** a confirmar
+### F04 — Onde agentes de IA falham (PRs reais)
+- **Título:** *Where Do AI Coding Agents Fail? An Empirical Study of Failed Agentic Pull Requests in GitHub*
+- **Autores:** Ramtin Ehsani, Sakshi Pathak, Shriya Rawal, Abdullah Al Mujahid, Mia Mohammad Imran, Preetha Chatterjee
 - **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (retrospectivo, GitHub)
-- **Amostra:** **33 mil pull requests** produzidos por agentes de IA, 5 agentes
-- **Análises:** PRs aceitos/rejeitados, mudanças de código, resultados de CI, dinâmica das revisões
-- **Resultado principal:** comportamento dos agentes no mundo real difere do comportamento em benchmarks.
-- **Lacuna:** fonte para entender o comportamento de agentes no mundo real (aliado ao nosso ambiente controlado).
+- **Veículo:** MSR 2026 (Mining Challenge), pp. 807–811
+- **DOI:** `10.1145/3793302.3793579` · **arXiv:** 2601.15195
+- **Tipo:** Empírico retrospectivo · **Amostra:** 33.596 PRs (AIDev-pop), 5 agentes
+- **Resultado:** comportamento real difere de benchmarks; análise de merge/CI/revisão.
+- **Para nossa pesquisa:** contexto de mundo real aliado ao ambiente controlado.
 
-### F05 — "When AI Code Doesn't Stick": reversões de código de agentes
-- **Autores:** a confirmar
+### F05 — Reversões de código de agentes
+- **Título:** *When AI Code Doesn't Stick: An Empirical Study on Reverted Changes Introduced by AI Coding Agents*
+- **Autores:** Issam Oukhay, Mahi Begoug, Moataz Chouchen, Ali Ouni
 - **Ano:** 2026
-- **DOI:** a confirmar
-- **Tipo:** Estudo Empírico (retrospectivo, GitHub)
-- **Amostra:** **33.580 PRs** de agentes com **86.315 commits** (Claude, Copilot, Cursor, Devin, OpenAI Codex)
-- **Resultado principal:** **2,66%** dos PRs continham ao menos um commit de reversão; grandes diferenças entre agentes — **OpenAI Codex 0,7%** vs. **GitHub Copilot 7,6%**.
-- **Lacuna:** **agentes não são equivalentes em confiabilidade** — sustenta a comparação entre agentes no nosso experimento.
+- **Veículo:** MSR 2026 (Mining Challenge), pp. 847–851
+- **DOI:** `10.1145/3793302.3793587`
+- **Tipo:** Empírico retrospectivo · **Amostra:** 33.580 PRs / 86.315 commits (Claude, Copilot, Cursor, Devin, OpenAI Codex)
+- **Resultado:** **2,66%** dos PRs com reversão; **Codex 0,7% vs Copilot 7,6%**; taxonomia com 8 categorias/25 temas.
+- **Para nossa pesquisa:** **agentes não são equivalentes em confiabilidade**.
 
 ---
 
@@ -301,4 +294,13 @@
 | F | Agentes | 5 |
 | **Total** | | **25** |
 
-**Meta da próxima rodada:** consolidar DOIs/autores (campos *a confirmar*) e adicionar estudos sobre **manutenibilidade**, **qualidade não funcional** e **agentes 2025/2026** até 30 artigos.
+## Status dos metadados
+
+| Situação | Qtd. | Itens |
+|---|---|---|
+| DOI de periódico/conferência confirmado | 16 | A01, A02, B01, B03, B04, C01, C03, C04, C05, C06, D01, D04, E01, F03, F04, F05 |
+| DOI arXiv/DataCite (preprint) | 8 | B02, C02, D02, D05, E02, E03, F01, F02 |
+| Relatório institucional (sem DOI) | 1 | D03 (GitHub Blog) |
+| **Total** | **25** | — |
+
+**Próxima rodada:** adicionar ~5 artigos para fechar 30 (prioridades: sistemas completos, qualidade não funcional, agentes).
