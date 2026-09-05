@@ -149,7 +149,7 @@ Cada defeito detectado é registrado com:
 5. Avaliar cada entrega apenas com o **oráculo** e a **matriz de defeitos** (avaliadores cegos quanto ao agente, se possível).
 6. Registrar tudo em planilha de evidências (link a commits/artefatos).
 
-> **D9 (RESOLVIDA 2026-09-05):** ambiente de validação = **Docker Desktop na máquina local** (docker compose sobe PostgreSQL e o deliverable; oráculo roda black-box sobre a porta exposta).
+> **D9 (RESOLVIDA 2026-09-05, REV 2):** ambiente de validação = **PostgreSQL nativo (serviço Windows)** — a máquina de execução é uma VM **sem virtualização aninhada** (`HypervisorPresent=False`), então Docker Desktop não consegue iniciar o engine. Cada deliverable roda via `uvicorn` contra o Postgres nativo; o oráculo é black-box (não depende do backend). Os artefatos Docker exigidos na entrega (compose, Dockerfile, migrações) continuam obrigatórios e validados estruturalmente (`check_structure`/`check_repro`), e serão executados em containers na máquina de produção do experimento.
 
 > Evitar viés: definir fim do experimento e análise **antes** de ver os resultados (pré-registro em repositório privado — para evitar p-hacking).
 
@@ -192,7 +192,7 @@ Cada defeito detectado é registrado com:
 |---|---|
 | 1. Fechar especificação v1.0 | `spec-tarefas-v1.0` (privado) |
 | 2. Construir oráculo + sistema golden | Suíte completa (privado) |
-| 3. Piloto (1 modelo opencode, 1 execução) | Ajuste de protocolo |
+| 3. Piloto (1 modelo opencode, 1 execução) | **CONCLUÍDO** (2026-09-05) — calibração registrada abaixo e no README do repo privado |
 | 4. Execução completa (4×3) | 12 entregas + registros |
 | 5. Classificação e análise | Matriz de defeitos, estatística |
 | 6. Consolidação | Seção de resultados do artigo |
@@ -202,7 +202,7 @@ Cada defeito detectado é registrado com:
 ## 11. Decisões em aberto **[DECIDIR]**
 
 - ~~Lista final de agentes~~ → **D8 RESOLVIDA** (opencode + 4 modelos, seção 2.1).
-- ~~Ambiente de validação~~ → **D9 RESOLVIDA** (Docker Desktop local, seção 7).
+- ~~Ambiente de validação~~ → **D9 RESOLVIDA rev2** (PostgreSQL nativo local; Docker indisponível sem virtualização — seção 7).
 - Detalhamento final da especificação FR/NFR (documento privado).
 - Ferramentas exatas do oráculo (propostas na seção 4; validar licença/custo).
 - Quantidade de executores na dupla classificação (2 propostos).
@@ -210,7 +210,29 @@ Cada defeito detectado é registrado com:
 
 ---
 
-## 12. Referências no projeto
+## 12. Piloto (Fase 3) — registro de calibração [2026-09-05]
+
+**Execução:** 1 modelo (`opencode/nemotron-3-ultra-free`) via opencode, 1 execução, prompt único (PROMPT.md) + spec v1.0 como README. Artefatos no repo privado (`execucoes/`, `results/piloto/`).
+
+**Achados de processo:**
+1. Modelo free é **lento**: >30 min para implementação parcial (skeleton + parte dos testes). Ajuste: execuções em background via `runner/run_agent.ps1`, snapshot antes de validar, orçamento de tempo por execução registrado.
+2. **Validação nativa validada ponta a ponta**: banco PostgreSQL dedicado + venv + `alembic upgrade head` + uvicorn + gating por `/health` + oráculo 81 testes + 4 checagens NFR + manifest por execução.
+3. Deliverable **não executável** é tratado sem abortar: oráculo marcado como não executado e NFR ainda é coletado.
+
+**Defeitos reais detectados na entrega piloto (prova de conceito do oráculo):**
+| Defeito | Classe (mapa) | Detecção |
+|---|---|---|
+| `/auth/register` → 500 (passlib 1.7.4 + bcrypt ≥4.x) | incompatibilidade de dependências (funcional/segurança) | oráculo (auth/negativos) | 
+| `alembic.ini` sem `script_location` | reprodutibilidade (F02) | now `check_repro` (NFR1) |
+| `requirements.txt` sem `pydantic-settings` (importado no app) | executabilidade/requirements incompletos | runner (app não sobe) |
+
+**Ajustes de protocolo incorporados no runner/checks (privado):** oráculo tolerante a app morto; `check_repro` valida `script_location`+`env.py`+`/health` e vira NFR1 real (retornava 0 mesmo com migração quebrada); parser JUnit corrigido (`<testsuite>`); métricas recursivas (`collect_metrics`); uvicorn destacado do processo pai (job em produção).
+
+**Intervenção de calibração (documentada, não faz parte dos dados):** para exercitar o oráculo sobre app que sobe, o snapshot piloto recebeu 2 fixes mínimos (requirements + alembic.ini) → oráculo acusou **15 passed / 18 failed / 48 errors**, confirmando que defeitos funcionais são detectados quando a entrega é executável.
+
+---
+
+## 13. Referências no projeto
 
 - Lacuna e fundamentação: `mapa-da-literatura.md` (P1–P18, C1–C6, G1–G5).
 - RQs/hipóteses: `problema-e-hipoteses.md` (v0.2, consolidado).
