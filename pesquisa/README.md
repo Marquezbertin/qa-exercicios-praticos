@@ -22,7 +22,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Mapa da literatura / análise de lacunas | ✅ v0.1 (provado/controverso/inexplorado/lacuna final) |
 | Problema de pesquisa + RQs + hipóteses | ✅ consolidado (v0.2, ancorado no mapa) |
 | Metodologia experimental | 🔶 v0.1 (proposta; stack definida: Python + FastAPI + PostgreSQL) |
-| Especificação controlada FR/NFR | 🔶 v0.9 (esperando aprovação das decisões da seção 8) |
+| Especificação controlada FR/NFR | ✅ **v1.0 congelada** (aprovada em 2026-09-05; decisões D1–D7 registradas) |
 | Experimento controlado | ⏳ não iniciado |
 | Escrita do artigo | ⏳ não iniciada |
 
@@ -48,7 +48,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Próximos passos
 
-1. **Fechar decisões da metodologia** (seção 11 do protocolo): lista de agentes, detalhamento da especificação, ferramentas do oráculo.
-2. Fase 1 do experimento: fechar especificação v1.0 e construir o **oráculo independente** (artefatos privados, fora do alcance dos agentes).
+1. **Fechar decisões restantes da metodologia**: lista de agentes e ferramentas do oráculo.
+2. Fase 1 do experimento: **construir o oráculo independente + sistema golden** (artefatos **privados**, fora do alcance dos agentes) a partir da especificação v1.0.
 3. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
 4. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.

@@ -1,7 +1,7 @@
 # Especificação Controlada — API de Gerenciamento de Tarefas
 
 **Projeto de pesquisa:** Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de Inteligência Artificial
-**Versão:** v0.9 (proposta para revisão) · **Data:** 2026-09-05 · **Status:** [APROVAR] para virar v1.0 e ser entregue aos agentes
+**Versão:** **v1.0 (CONGELADA)** · **Data:** 2026-09-05 · **Status:** APROVADA pelo autor — documento imutável para o experimento
 
 > Este é o **ÚNICO documento entregue aos agentes** no experimento (desenho G4). O oráculo independente (suíte de testes) é construído a partir desta especificação e **permanece privado**, fora do alcance dos agentes. Requisitos estão numerados (FR/NFR) para permitir rastreabilidade de índice de defectos.
 
@@ -265,19 +265,21 @@ Artefatos que o agente deve produzir (estrutura de referência):
 
 ---
 
-## 8. Decisões desta revisão para confirmar [APROVAR]
+## 8. Decisões aprovadas (registro do congelamento)
 
-| # | Decisão | Proposta | Alternativa |
-|---|---|---|---|
-| D1 | Criação de admin | Via variável de ambiente `ADMIN_EMAIL` (e-mail cadastrado vira admin no registro) | Seed/migração manual |
-| D2 | Formato de erro | `detail` no padrão FastAPI/Pydantic | Formato próprio |
-| D3 | Expiração do token | 60 minutos | Outro valor |
-| D4 | Status válidos | `pending`, `in_progress`, `completed` | Incluir `done` |
-| D5 | Prioridades | `low`, `medium`, `high` | 1–5 numérica |
-| D6 | `due_date` passado | Rejeitar com 422 | Permitir |
-| D7 | Lista admin | Admin vê todas as tarefas (com o dono no objeto) | Admin vê só as próprias |
+Todas aprovadas pelo autor em 2026-09-05. Estes valores são **obrigatórios** na implementação e no oráculo.
 
-> Após [APROVAR], este documento vira **v1.0 imutável** e é usado para (1) construir o oráculo privado e (2) servir de prompt único aos agentes.
+| # | Decisão | Valor congelado |
+|---|---|---|
+| D1 | Criação de admin | Via variável de ambiente `ADMIN_EMAIL` (e-mail cadastrado vira admin no registro) |
+| D2 | Formato de erro | `detail` no padrão FastAPI/Pydantic |
+| D3 | Expiração do token | 60 minutos |
+| D4 | Status válidos | `pending`, `in_progress`, `completed` |
+| D5 | Prioridades | `low`, `medium`, `high` |
+| D6 | `due_date` passado | Rejeitar com 422 |
+| D7 | Lista admin | Admin vê todas as tarefas (com o dono no objeto) |
+
+> **Congelamento:** a partir desta versão o documento é imutável para o experimento. Qualquer alteração exige nova versão (v1.1+, ex.: após calibração do piloto) e revalidação dos artefatos derivados (oráculo).
 
 ---
 
@@ -289,4 +291,4 @@ Artefatos que o agente deve produzir (estrutura de referência):
 
 ---
 
-*Especificação controlada v0.9 — aguardando aprovação do autor (seção 8) para virar v1.0. Referência de desenho: `metodologia-experimental.md`.*
+*Especificação controlada **v1.0 congelada** — aprovada em 2026-09-05. Usado para construir o oráculo privado e servir de prompt único aos agentes. Referência de desenho: `metodologia-experimental.md`.*
