@@ -17,6 +17,8 @@ O site publica o repositório inteiro como um portal navegável:
 
 **No GitHub:** faça `git clone https://github.com/Marquezbertin/qa-exercicios-praticos` e abra localmente.
 
+**📄 Trabalho científico:** a pesquisa em andamento sobre qualidade e defeitos em software gerado por IA fica em `pesquisa/` (revisão bibliográfica, matriz de artigos, problema/hipóteses).
+
 **Como rodar com servidor local (recomendado):**
 ```bash
 cd qa-exercicios-praticos
@@ -30,6 +32,7 @@ python -m http.server 8000
 
 | Pasta | O que tem |
 |---|---|
+| `pesquisa/` | **Projeto de artigo científico** em andamento: revisão bibliográfica, matriz de artigos e rascunho de problema/hipóteses |
 | `sites-para-testar/` | **9 sites simulados** (loja, banco, hotel, delivery, CRM, impostos, saúde, games...) com bugs + roteiros + gabaritos |
 | `encontre-o-bug/codigo/` | Códigos com bugs (6 exercícios: calculadora, banco, carrinho, formulário JS, datas, CPF) |
 | `encontre-o-bug/gabarito/` | Respostas dos exercícios de código |
