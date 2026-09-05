@@ -119,30 +119,30 @@ O objetivo desta revisão é responder:
 | ID | Autor/Ano | Foco | Modelo(s)/Ferramenta | Amostra | Método | Sistema completo? | Testes indep.? | Resultado principal | Para nossa pesquisa |
 |---|---|---|---|---|---|---|---|---|---|
 | A01 | Hou et al. 2024 | SLR LLM+SE | — | 395 artigos | SLR | — | — | 85 tarefas de SE; lacunas | Base do artigo |
-| A02 | IEEE Access 2025 | SLR geração de código | — | 58 estudos | SLR | — | — | Alucinação, vuln., generalização, interpretabilidade | Contexto de limitações |
+| A02 | Umama et al. 2025 | SLR geração de código | — | 58 estudos | SLR | — | — | Alucinação, vuln., generalização, interpretabilidade | Contexto de limitações |
 | B01 | Tambon et al. 2024 | Defeitos | CodeGen, PanGu-Coder, Codex | 333 bugs | Empírico | Não | — | 10 padrões de bugs | Taxonomia de classificação |
 | B02 | Dou et al. 2024 | Defeitos | 3 fechados + 4 open | 140 tarefas | Empírico | Não | — | Bugs mudam c/ benchmark; self-critique +29,2% | Variável futura |
 | B03 | Cotroneo et al. 2025 | Defeitos/vuln/compl. | ChatGPT, DeepSeek, Qwen | >500 mil amostras | Empírico | Não | — | Perfis de defeitos diferentes (ODC/CWE) | Perfil ≠ quantidade |
 | B04 | Ouyang et al. 2025 | Não-determinismo | ChatGPT | 829 problemas | Empírico | Não | — | Mesmo prompt, saídas diferentes | Múltiplas execuções |
 | C01 | Wang et al. 2024 | Testes | — | 102 estudos | Survey | — | — | Testes/reparo são aplicações-chave | Testabilidade |
 | C02 | Beer et al. 2024 | Código + testes | ChatGPT, Copilot | algoritmos Java/Py | Empírico | Não | Sim | Diferenças modelo/linguagem/tempo | Próximo do nosso recorte |
-| C03 | CBSoft (a conf.) | Test smells | GitHub Copilot | testes gerados | Empírico | Não | — | Test smells mesmo em testes válidos | Não confiar em testes da IA |
-| C04 | Defects4J (a conf.) | Geração de testes | vários | Defects4J | Empírico | Não | — | Detecção de bugs muito baixa | Oraculação independente |
-| C05 | 2026 (a conf.) | Métricas de teste | — | repositórios c/ bugs | Replicação | — | — | Coverage/mutation não confiáveis c/ bugs | Não usar coverage isolado |
-| C06 | 2026 (a conf.) | Geração de testes | vários LLMs | 12 métodos Python | Empírico | Não | — | 96,3% branch/57% mut.; omite None, inf, NaN | Testes de corner cases |
+| C03 | Alves et al. 2024 (SBES) | Test smells | GitHub Copilot | testes gerados | Empírico | Não | — | Test smells mesmo em testes válidos | Não confiar em testes da IA |
+| C04 | Yang et al. 2024 (ASE) | Geração de testes | 5 LLMs | Defects4J | Empírico | Não | — | Detecção de bugs limitada (29–60%) | Oraculação independente |
+| C05 | Zhao et al. 2026 (ISSTA) | Métricas de teste | — | repositórios c/ bugs | Replicação | — | — | Coverage/mutation não confiáveis c/ bugs | Não usar coverage isolado |
+| C06 | Walczak et al. 2026 (JSS) | Geração de testes | vários LLMs | 12 métodos Python | Empírico | Não | — | 96,3% branch/57% mut.; omite None, inf, NaN | Testes de corner cases |
 | D01 | Tosi 2024 | Qualidade | 3 engines | 3 problemas | Empírico | Não | Sim | Requer supervisão humana | Base metodológica |
 | D02 | Molison et al. 2025 | Qualidade | LLM vs humano | código SonarQube | Empírico | Não | — | IA às vezes melhor; estrutura pior em tarefas complexas | Neutralidade |
-| D03 | GitHub (a conf.) | Qualidade | Copilot | 202 devs | Experimento | Sim | Sim | Grupo IA passou mais testes p/ endpoints | Evidência favorável |
+| D03 | GitHub Customer Research 2024 | Qualidade | Copilot | 202 devs | Experimento | Sim | Sim | Grupo IA passou mais testes p/ endpoints | Evidência favorável |
 | D04 | Sun et al. 2026 | Qualid. não funcional | 3 LLMs | 109 artigos + exp. | Mixed | — | — | Não-funcional subavaliada; ISO/IEC 25010 | Adotar 25010 |
-| D05 | Debt AI Boom 2026 | Dívida técnica | 5 assistentes | 304.362 commits | Empírico | Não | — | 89,1% code smells; 24,2% persistem | Manutenibilidade |
+| D05 | Liu et al. 2026 | Dívida técnica | 5 assistentes | 304.362 commits | Empírico | Não | — | 89,1% code smells; 24,2% persistem | Manutenibilidade |
 | E01 | Fu et al. 2025 | Segurança | Copilot, CodeWhisperer, Codeium | 733 snippets | Empírico | Não | — | 29,5% Py / 24,2% JS vulneráveis; 43 CWE | Baseline de segurança |
 | E02 | Morkonda et al. 2026 | Segurança | 7 LLMs | código gerado | Empírico | Não | — | Todos geraram vuln. alta/crítica | Severidade |
-| E03 | Aldosari & Aldawsari 2026 | Segurança + prompt | 5 LLMs | código gerado | Empírico | Não | — | Prompt muda distribuição, não densidade | Prompt não basta |
+| E03 | Kharma et al. 2026 | Segurança + prompt | 5 LLMs | código gerado | Empírico | Não | — | Prompt muda distribuição, não densidade | Prompt não basta |
 | F01 | Horikawa et al. 2025 | Agentes | Codex, Claude Code, Cursor | 15.451 refat. | Empírico | não (refat.) | — | Agentes locais; humanos de design | Modelo ≠ agente |
-| F02 | AI Not Reproducible (a conf.) | Reproducibilidade | Claude Code, Codex, Gemini | 300 projetos | Empírico | **Sim** | — | Só 68,3% executam imediato; Java 44%; 13,5× deps | Executabilidade |
-| F03 | 2026 (a conf.) | Vulnerabilidades | GPT-4o | interações reais | Empírico | Sim | — | IA introduziu 22 vulns vs 10 no prompt | Erro do requisito vs IA |
-| F04 | 2026 (a conf.) | PRs de agentes | 5 agentes | 33 mil PRs | Empírico | não (reais) | — | Mundo real difere de benchmark | Comportamento de PRs |
-| F05 | When AI Code Doesn't Stick 2026 | Reversões | Claude/Copilot/Cursor/Devin/Codex | 33.580 PRs | Empírico | não (reais) | — | 2,66% c/ reversão; Codex 0,7% vs Copilot 7,6% | Confiabilidade desigual |
+| F02 | Vangala et al. 2025/2026 | Reproducibilidade | Claude Code, Codex, Gemini | 300 projetos | Empírico | **Sim** | — | Só 68,3% executam imediato; Java 44%; 13,5× deps | Executabilidade |
+| F03 | Belozerov et al. 2026 (EMSE) | Vulnerabilidades | GPT-4o | interações reais | Empírico | Sim | — | IA introduziu 22 vulns vs 10 no prompt | Erro do requisito vs IA |
+| F04 | Ehsani et al. 2026 (MSR) | PRs de agentes | 5 agentes | 33 mil PRs | Empírico | não (reais) | — | Mundo real difere de benchmark | Comportamento de PRs |
+| F05 | Oukhay et al. 2026 (MSR) | Reversões | Claude/Copilot/Cursor/Devin/Codex | 33.580 PRs | Empírico | não (reais) | — | 2,66% c/ reversão; Codex 0,7% vs Copilot 7,6% | Confiabilidade desigual |
 
 ---
 
@@ -164,12 +164,11 @@ O campo já provou que a IA gera software funcional, mas com **perfil de defeito
 
 ## 9. Próximos passos
 
-1. Consolidar a matriz em **25–30 artigos** atualizada (25 hoje); priorizar confirmação de DOIs e de autores pendentes.
-2. Confirmar **DOIs/links** (campos marcados *a confirmar*).
-3. Análise quantitativa da matriz **concluída (v1)** (`analise-quantitativa.md`): 8% geram sistema completo; 12% usam oráculo independente; 0% combinam sistema completo + defeitos + segurança; 0% executam o desenho integral.
-4. Montar o **mapa da literatura** (provado/controverso/inexplorado).
-5. Fechar problema, RQs (RQ1–RQ8) e hipóteses (ver `problema-e-hipoteses.md`).
-6. Definir metodologia experimental e criar o oráculo independente.
+1. Matriz consolidada em **25 artigos** com DOIs/metadados verificados (16 periódico/conferência, 8 arXiv/preprint, 1 relatório institucional).
+2. Análise quantitativa da matriz **concluída (v1)** (`analise-quantitativa.md`): 8% geram sistema completo; 12% usam oráculo independente; 0% combinam sistema completo + defeitos + segurança; 0% executam o desenho integral.
+3. **Mapa da literatura concluído** (`mapa-da-literatura.md`): provado / controverso / inexplorado / lacuna final.
+4. Fechar problema, RQs (RQ1–RQ8) e hipóteses (ver `problema-e-hipoteses.md`).
+5. Definir metodologia experimental e criar o oráculo independente.
 
 ---
 

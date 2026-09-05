@@ -12,15 +12,15 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Estado atual
 
-**Fase 1 — Revisão bibliográfica (em andamento).** Busca concluída; matriz consolidada com **25 artigos**, DOIs e metadados verificados (16 com DOI de periódico/conferência, 8 arXiv/preprint, 1 relatório institucional sem DOI).
+**Fase 1 — Revisão bibliográfica (em andamento).** Busca concluída; matriz consolidada com **25 artigos**, DOIs e metadados verificados (16 com DOI de periódico/conferência, 8 arXiv/preprint, 1 relatório institucional sem DOI); análise quantitativa v1 e **mapa da literatura + lacuna final** prontos.
 
 | Etapa | Status |
 |---|---|
 | Revisão bibliográfica — Parte 1 | ✅ base concluída (v0.3) |
 | Matriz de artigos (25–30) | ✅ 25 registrados, DOIs/metadados consolidados |
 | Análise quantitativa da matriz | ✅ v1 (frequências e cruzamentos) |
-| Mapa da literatura / análise de lacunas | 🔶 em construção |
-| Problema de pesquisa + RQs + hipóteses | 🔶 rascunho salvo |
+| Mapa da literatura / análise de lacunas | ✅ v0.1 (provado/controverso/inexplorado/lacuna final) |
+| Problema de pesquisa + RQs + hipóteses | 🔶 rascunho salvo (consolidar com base no mapa) |
 | Metodologia experimental | ⏳ não iniciada |
 | Experimento controlado | ⏳ não iniciado |
 | Escrita do artigo | ⏳ não iniciada |
@@ -32,6 +32,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `README.md` | Este guia do projeto de pesquisa |
 | `revisao-bibliografica.md` | Documento principal da Parte 1 (método, síntese, lacunas) |
 | `matriz-de-artigos.md` | Matriz detalhada com as fichas completas dos artigos (A–F) |
+| `mapa-da-literatura.md` | Mapa: o que foi provado, o que é controvertido, o que é inexplorado e a lacuna final |
 | `analise-quantitativa.md` | Análise quantitativa da matriz (frequências e cruzamentos que sustentam a lacuna) |
 | `problema-e-hipoteses.md` | Rascunho: problema, perguntas de pesquisa e hipóteses |
 
@@ -44,8 +45,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Próximos passos
 
-1. Construir o **mapa da literatura** (o que já foi provado, o que é controverso, o que é lacuna) a partir da matriz consolidada.
-2. Fechar problema de pesquisa + RQs + hipóteses com fundamentação.
-3. Definir e documentar a metodologia experimental (requisitos controlados, mesmos prompts, múltiplas execuções, oráculo independente).
-4. Definir a contribuição/confirmação do trabalho (metodologia, evidências, discussão) junto aos orientadores.
-5. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
+1. Consolidar **problema + RQs + hipóteses** com base no mapa da literatura (transformar `problema-e-hipoteses.md` de rascunho em consolidado).
+2. Definir e documentar a metodologia experimental (requisitos controlados, mesmos prompts, múltiplas execuções, oráculo independente, ISO/IEC 25010).
+3. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
+4. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
