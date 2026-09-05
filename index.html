@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA Exercícios Práticos</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    header { background: linear-gradient(135deg, #0f172a, #0ea5e9); padding: 48px 20px; text-align: center; }
+    header h1 { font-size: 2.2rem; margin-bottom: 12px; }
+    header p { color: #cbd5e1; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+    main { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+    .section-title { color: #f8fafc; margin: 34px 0 16px; font-size: 1.3rem; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+    .card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+      padding: 18px; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: #38bdf8; }
+    .card h2 { font-size: 1.05rem; margin-bottom: 6px; color: #38bdf8; }
+    .card .categoria { font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .card p { color: #cbd5e1; font-size: 0.85rem; line-height: 1.5; flex: 1; }
+    .card .botoes { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 7px 12px; border-radius: 8px; text-decoration: none;
+      font-size: 0.8rem; font-weight: 600; text-align: center; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-abrir { background: #0ea5e9; color: white; }
+    .btn-ver { background: #1e293b; border: 1px solid #38bdf8; color: #38bdf8; }
+    .btn-gabarito { background: #059669; color: white; }
+    .badge { display: inline-block; background: #059669; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 6px; }
+    .dica { background: #1e293b; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 8px; margin: 20px 0 0; color: #fbbf24; font-size: 0.9rem; line-height: 1.5; }
+    footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Portal QA Exercícios Práticos</h1>
+    <p>Tudo em um só lugar: sites com bugs para testar, exercícios de código, simulados, entrevistas, SQL, API, técnicas de teste e templates. Boa prática de QA!</p>
+  </header>
+
+  <main>
+    <div class="dica">
+      <strong>Como usar:</strong> comece pelos <strong>Sistemas Web</strong> testando na prática. Depois faça os <strong>Exercícios de Código</strong> (rode os .py no Python), responda os <strong>Simulados</strong> e confira os <strong>Templates</strong> para documentar como um QA profissional.
+    </div>
+
+    <h2 class="section-title">Sistemas Web para Testar <span class="badge">9 sites com bugs</span></h2>
+    <div class="grid">
+      <div class="card">
+        <div class="categoria">Loop Store</div>
+        <h2>Hub de Sites Simulados</h2>
+        <p>Loja virtual, internet banking, hotel, cadastro/login, delivery, CRM, impostos, agenda médica e games. Cada um tem roteiro de teste e gabarito de bugs.</p>
+        <div class="botoes">
+          <a class="btn btn-abrir" href="sites-para-testar/index.html">Abrir Hub de Sites</a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Encontre o Bug - Exercícios de Código <span class="badge">6 exercícios Python</span></h2>
+    <div class="grid">
+      <div class="card">
+        <div class="categoria">exercicio-01</div>
+        <h2>Calculadora</h2>
+        <p>Soma, subtração, multiplicação e divisão com casos-limite (por zero, negativos, decimais).</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=encontre-o-bug/codigo/exercicio-01-calculadora.py">Ver Código</a>
+          <a class="btn btn-gabarito" href="ver.html?arquivo=encontre-o-bug/gabarito/exercicio-01-gabarito.md">Gabarito</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">exercicio-02</div>
+        <h2>Banco</h2>
+        <p>Saque, depósito e transferência com regras de saldo, limites e taxas.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=encontre-o-bug/codigo/exercicio-02-banco.py">Ver Código</a>
+          <a class="btn btn-gabarito" href="ver.html?arquivo=encontre-o-bug/gabarito/exercicio-02-gabarito.md">Gabarito</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">exercicio-03</div>
+        <h2>Carrinho de Compras</h2>
+        <p>Desconto progressivo, frete e total da compra: teste valores-limite e arredondamentos.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=encontre-o-bug/codigo/exercicio-03-carrinho.py">Ver Código</a>
+          <a class="btn btn-gabarito" href="ver.html?arquivo=encontre-o-bug/gabarito/exercicio-03-gabarito.md">Gabarito</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">exercicio-04</div>
+        <h2>Formulário com Validação JS</h2>
+        <p>Formulário HTML com validação de e-mail, telefone, idade e regex. Teste no navegador e no DevTools.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=encontre-o-bug/codigo/exercicio-04-formulario.html">Ver Código</a>
+          <a class="btn btn-gabarito" href="ver.html?arquivo=encontre-o-bug/gabarito/exercicio-04-gabarito.md">Gabarito</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">exercicio-05</div>
+        <h2>Gerenciador de Eventos e Datas</h2>
+        <p>Status de eventos, deadlines e datas limite: execute o .py e observe a falha no Teste 10.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=encontre-o-bug/codigo/exercicio-05-datas.py">Ver Código</a>
+          <a class="btn btn-gabarito" href="ver.html?arquivo=encontre-o-bug/gabarito/exercicio-05-gabarito.md">Gabarito</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">exercicio-06</div>
+        <h2>Validador de CPF</h2>
+        <p>Validação de CPF com dígitos verificadores: CPFs válidos conhecidos retornam False.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=encontre-o-bug/codigo/exercicio-06-cpf.py">Ver Código</a>
+          <a class="btn btn-gabarito" href="ver.html?arquivo=encontre-o-bug/gabarito/exercicio-06-gabarito.md">Gabarito</a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Teoria e Exercícios Teóricos</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="categoria">perguntas-respostas</div>
+        <h2>Perguntas de Entrevista QA</h2>
+        <p>Roteiro clássico de entrevista para QA: conceitos, casos de teste, o que fazer em cenários práticos.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=perguntas-respostas/perguntas-entrevista-QA.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">simulados</div>
+        <h2>Simulado 01 - Fundamentos de QA</h2>
+        <p>20 questões objetivas de fundamentos: níveis de teste, técnicas, ciclo de vida e métricas.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=simulados/simulado-01-fundamentos.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">simulados</div>
+        <h2>Simulado 02 - API, SQL e Segurança</h2>
+        <p>Questões de testes de API (REST), consultas SQL e segurança aplicadas a QA.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=simulados/simulado-02-api-sql-seguranca.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">tecnicas-de-teste</div>
+        <h2>Técnicas de Teste</h2>
+        <p>Exercícios de particionamento de equivalência, análise de valor-limite e tabelas de decisão.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=tecnicas-de-teste/exercicios-tecnicas-de-teste.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">api-testing</div>
+        <h2>Testes de API (REST)</h2>
+        <p>Exercícios de criação de casos para endpoints, métodos HTTP, códigos de status e validação de JSON.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=api-testing/exercicios-de-api.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">sql-para-qa</div>
+        <h2>SQL para QA</h2>
+        <p>Exercícios de SELECT, JOIN, GROUP BY e manipulação de dados para validar bancos.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=sql-para-qa/exercicios-sql.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">casos-de-teste</div>
+        <h2>Escrever Casos de Teste</h2>
+        <p>Prática de transformar requisitos em casos de teste bem estruturados: pré-condições, passos e resultados esperados.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=casos-de-teste/exercicios-escrever-casos.md">Ver Conteúdo</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">simulacoes</div>
+        <h2>Simulações Role-Play</h2>
+        <p>Cenários de entrevista e do dia a dia: reunião de bug triage, pareamento com dev, apresentação de resultados.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=simulacoes/cenarios-role-play.md">Ver Conteúdo</a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Modelos e Templates <span class="badge">5 templates prontos</span></h2>
+    <div class="grid">
+      <div class="card">
+        <div class="categoria">modelos-templates</div>
+        <h2>Report de Bug</h2>
+        <p>Template profissional: título, severidade, passos de reprodução, esperado vs obtido e evidências.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=modelos-templates/bug-report.md">Ver Template</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">modelos-templates</div>
+        <h2>Caso de Teste</h2>
+        <p>Template de caso de teste com ID, pré-condições, passos, dados e resultado esperado.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=modelos-templates/test-case.md">Ver Template</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">modelos-templates</div>
+        <h2>Plano de Testes</h2>
+        <p>Estrutura de um test plan: escopo, riscos, cronograma, ambientes e critérios de entrada/saída.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=modelos-templates/test-plan.md">Ver Template</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">modelos-templates</div>
+        <h2>Checklist Smoke e Aceite</h2>
+        <p>Checklist rápido de smoke test e critérios de aceite para entrega de versões.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=modelos-templates/checklist-smoke-e-aceite.md">Ver Template</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="categoria">modelos-templates</div>
+        <h2>Relatório de Testes</h2>
+        <p>Template de relatório final: resumo executivo, métricas, defeitos abertos e recomendação.</p>
+        <div class="botoes">
+          <a class="btn btn-ver" href="ver.html?arquivo=modelos-templates/relatorio-teste.md">Ver Template</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Portal QA Exercícios Práticos · Bugs são intencionais para fins de estudo · Repositório no GitHub: github.com/Marquezbertin/qa-exercicios-praticos
+  </footer>
+</body>
+</html>

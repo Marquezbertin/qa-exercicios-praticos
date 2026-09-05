@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizador - QA Exercícios Práticos</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    header { background: linear-gradient(135deg, #1e293b, #0ea5e9); padding: 24px 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    header .voltar { color: #7dd3fc; font-size: 0.9rem; text-decoration: none; }
+    header .voltar:hover { text-decoration: underline; }
+    header h1 { font-size: 1.5rem; margin-top: 8px; word-break: break-all; }
+    header p { color: #cbd5e1; font-size: 0.85rem; margin-top: 4px; }
+    main { max-width: 1000px; margin: 0 auto; padding: 24px 20px; }
+    .barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+    .barra .info { color: #94a3b8; font-size: 0.85rem; }
+    .btn {
+      display: inline-block; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+      font-size: 0.85rem; font-weight: 600; text-decoration: none; text-align: center;
+    }
+    .btn-copiar { background: #0ea5e9; color: white; }
+    .btn-copiar:hover { opacity: 0.85; }
+    .btn-github { background: #1e293b; border: 1px solid #38bdf8; color: #38bdf8; }
+    .btn-github:hover { opacity: 0.85; }
+    pre {
+      background: #1e293b; border: 1px solid #334155; border-radius: 10px;
+      padding: 18px; overflow-x: auto; font-size: 0.85rem; line-height: 1.55;
+      font-family: Consolas, 'Courier New', monospace; white-space: pre-wrap; word-break: break-word;
+    }
+    .erro { background: #7f1d1d; border: 1px solid #b91c1c; padding: 16px; border-radius: 8px; color: #fecaca; line-height: 1.6; }
+    .dica { background: #1e293b; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; color: #fbbf24; font-size: 0.85rem; line-height: 1.5; }
+    footer { text-align: center; padding: 24px; color: #64748b; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a class="voltar" href="./">← Voltar ao portal</a>
+      <h1 id="titulo">Visualizador</h1>
+      <p id="desc">Carregando arquivo...</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="dica">Este arquivo é exibido na versão original (texto/código). Dica: em arquivos Markdown, role até o fim para ver todo o conteúdo.</div>
+    <div class="barra">
+      <span class="info" id="info"></span>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-copiar" id="copiar">Copiar conteúdo</button>
+        <a class="btn btn-github" id="github" href="#" target="_blank" rel="noopener">Ver no GitHub ↗</a>
+      </div>
+    </div>
+    <pre id="conteudo">Carregando...</pre>
+    <div class="erro" id="erro" style="display:none;"></div>
+  </main>
+
+  <footer>
+    Portal QA Exercícios Práticos · Conteúdo lido diretamente do repositório.
+  </footer>
+
+  <script>
+    (function () {
+      var origem = 'https://github.com/Marquezbertin/qa-exercicios-praticos/blob/main/';
+      var qs = new URLSearchParams(window.location.search);
+      var arquivo = (qs.get('arquivo') || '').replace(/^\/+/, '');
+
+      var titulo = document.getElementById('titulo');
+      var desc = document.getElementById('desc');
+      var pre = document.getElementById('conteudo');
+      var erro = document.getElementById('erro');
+      var info = document.getElementById('info');
+      var github = document.getElementById('github');
+
+      if (!arquivo) {
+        erro.style.display = 'block';
+        erro.textContent = 'Nenhum arquivo informado. Use o link: ver.html?arquivo=nome/do/arquivo.md';
+        pre.style.display = 'none';
+        titulo.textContent = 'Visualizador';
+        desc.textContent = 'Parâmetro "arquivo" ausente.';
+        return;
+      }
+
+      titulo.textContent = arquivo.split('/').pop();
+      desc.textContent = 'Repositório: ' + arquivo;
+      github.href = origem + arquivo;
+
+      fetch(arquivo)
+        .then(function (r) {
+          if (!r.ok) throw new Error('Não foi possível carregar o arquivo (HTTP ' + r.status + ').');
+          return r.text();
+        })
+        .then(function (texto) {
+          var linhas = texto.split('\n').length;
+          var bytes = new Blob([texto]).size;
+          info.textContent = linhas + ' linhas · ' + (bytes / 1024).toFixed(1) + ' KB';
+          pre.textContent = texto;
+          document.getElementById('copiar').addEventListener('click', function () {
+            navigator.clipboard.writeText(texto).then(function () {
+              var b = document.getElementById('copiar');
+              b.textContent = 'Copiado!';
+              setTimeout(function () { b.textContent = 'Copiar conteúdo'; }, 1500);
+            });
+          });
+        })
+        .catch(function (e) {
+          pre.style.display = 'none';
+          erro.style.display = 'block';
+          erro.innerHTML = '<strong>' + e.message + '</strong><br><br>' +
+            'Se estiver abrindo pelo navegador local (file://), o carregamento é bloqueado por segurança. ' +
+            'Use a versão publicada no GitHub Pages ou rode um servidor local (ex.: "python -m http.server"). ' +
+            'Você também pode visualizar o arquivo diretamente no GitHub pelo botão acima.';
+        });
+    })();
+  </script>
+</body>
+</html>

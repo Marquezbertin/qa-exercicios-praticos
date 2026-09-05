@@ -8,13 +8,21 @@ Repositório de **prática para QA** (Quality Assurance): sites web simulados co
 
 ## 🚀 Comece por aqui
 
-1. **Abra o hub dos sites simulados:** `sites-para-testar/index.html`
-   - É um portal navegável com 9 sistemas de empresas fictícias, cada um com bugs escondidos.
-   - Cada sistema tem um **roteiro de teste** (o que testar) e um **gabarito de bugs** (para conferir depois).
-2. **Escolha um sistema**, abra o site numa aba, e atue como QA:
-   - Teste os fluxos (feliz, negativo, bordas).
-   - Use o roteiro e anote cada falha no `modelos-templates/bug-report.md`.
-   - Ao terminar, confira com o gabarito.
+**⭐ Online (GitHub Pages):** https://marquezbertin.github.io/qa-exercicios-praticos/
+
+O site publica o repositório inteiro como um portal navegável:
+- **Portal principal:** `index.html` - hub com todos os exercícios, simulados e templates.
+- **Sites simulados:** `sites-para-testar/` - 9 sistemas de empresas fictícias com bugs.
+- **Visualizador:** qualquer arquivo Markdown/código é exibido na web via `ver.html?arquivo=<caminho>`.
+
+**No GitHub:** faça `git clone https://github.com/Marquezbertin/qa-exercicios-praticos` e abra localmente.
+
+**Como rodar com servidor local (recomendado):**
+```bash
+cd qa-exercicios-praticos
+python -m http.server 8000
+# abra http://localhost:8000/
+```
 
 ---
 
@@ -68,13 +76,6 @@ Repositório de **prática para QA** (Quality Assurance): sites web simulados co
 - Um navegador moderno (Chrome/Edge/Firefox) -- os sites são 100% estáticos (`file://` ou servidor local).
 - Python 3 (para os exercícios de código e `api-testing`).
 - Opcional: Postman/Insomnia, ferramenta SQL, DevTools.
-
-**Como rodar com servidor local (recomendado):**
-```bash
-cd qa-exercicios-praticos
-python -m http.server 8000
-# abra http://localhost:8000/sites-para-testar/
-```
 
 ---
 
