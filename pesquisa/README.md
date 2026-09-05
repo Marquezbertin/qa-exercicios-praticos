@@ -22,6 +22,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Mapa da literatura / análise de lacunas | ✅ v0.1 (provado/controverso/inexplorado/lacuna final) |
 | Problema de pesquisa + RQs + hipóteses | ✅ consolidado (v0.2, ancorado no mapa) |
 | Metodologia experimental | 🔶 v0.1 (proposta; stack definida: Python + FastAPI + PostgreSQL) |
+| Especificação controlada FR/NFR | 🔶 v0.9 (esperando aprovação das decisões da seção 8) |
 | Experimento controlado | ⏳ não iniciado |
 | Escrita do artigo | ⏳ não iniciada |
 
@@ -36,6 +37,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `analise-quantitativa.md` | Análise quantitativa da matriz (frequências e cruzamentos que sustentam a lacuna) |
 | `problema-e-hipoteses.md` | Problema, perguntas de pesquisa e hipóteses (consolidado) |
 | `metodologia-experimental.md` | Protocolo do experimento controlado (oráculo independente, stack, métricas, estatística) |
+| `especificacao-tarefas-v1.0.md` | Especificação controlada FR/NFR (documento entregue aos agentes; oráculo é privado) |
 
 ## Convenções
 
