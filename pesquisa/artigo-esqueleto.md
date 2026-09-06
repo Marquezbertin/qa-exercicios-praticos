@@ -1,9 +1,9 @@
 # ARTIGO CIENTÍFICO — Esqueleto (estrutura integrada)
 
-> **Estado:** ESQUELETO v0.1 — estrutura e rastreabilidade dos conteúdos. Redação das seções pendente.
-> **Status das decisões:** formato de publicação (periódico/conferência) e pré-registro formal **ainda não decididos**; subseção do laboratório (Discussão 5.2) **confirmada** como material complementar não-evidenciário.
+> **Estado:** ESQUELETO v0.2 — **manuscrito completo redigido em** `artigo-manuscrito-v0.1.md` (2026-09-06). Este esqueleto continua servindo de mapa de rastreabilidade e de log de pendências.
+> **Status das decisões:** formato de publicação (periódico/conferência) **ainda não decidido** (aguarda orientador); pré-registro formal **criado** no repo privado (`qa-experimento-oraculo/pre-registro.md`); subseção do laboratório (Discussão 5.2) **confirmada** como material complementar não-evidenciário.
 > **Formato:** estrutura genérica IMRaD (adaptável ao veículo escolhido).
-> Este arquivo mapeia **onde** cada conteúdo já produzido entra; não substitui os documentos-fonte.
+> Este arquivo mapeia **onde** cada conteúdo já produzido entra; não substitui os documentos-fonte nem o manuscrito.
 
 ---
 
@@ -143,15 +143,18 @@
 
 ## Backlog de pendências não-textuais
 
-| Pendência | Tipo |
-|---|---|
-| Decidir formato/periódico/conferência e padrão de citação | Decisão com orientadores |
-| Pré-registro formal (repo privado) se o veículo exigir | Decisão + ação |
-| Confirmar DOI de [F02] e [F05] | Verificação |
-| Decidir / confirmar amostra final (n=12 ok) e se haverá extensão (células ≥5) | Decisão |
-| Gerar figuras (densidade, perfis, heatmap, bootabilidade, κ) | Ação de produção |
-| Montar seção 5.6 RQ6/H3 (matriz 2×2 agente vs oráculo) a partir dos dados privados | Ação de análise |
-| Checar redação da seção 5.2 para não vazar "evidência cruzada" (limite de não-evidenciário) | Revisão |
+| Pendência | Tipo | Status |
+|---|---|---|
+| Decidir formato/periódico/conferência e padrão de citação | Decisão com orientadores | Pendente — dossiê pronto (`dossie-veiculo-publicacao.md`) |
+| Pré-registro formal (repo privado) se o veículo exigir | Decisão + ação | **Feito** (privado) — pendente ajuste ao veículo |
+| Confirmar DOI de [F02] e [F05] | Verificação | **Feito** (2026-09-06) |
+| Decidir / confirmar amostra final (n=12 ok) e se haverá extensão (células ≥5) | Decisão | Pendente — definir com orientador |
+| Gerar figuras (densidade, perfis, heatmap, bootabilidade, κ) | Ação de produção | **Feito** — `figuras/fig1–5.png`, script `gerar_figuras.py` |
+| Montar seção RQ6/H3 (matriz 2×2 agente vs oráculo) | Ação de análise | **Feito** — metodologia §13.7 + manuscrito §4.5 |
+| Checar redação da seção 5.2 para não vazar "evidência cruzada" | Revisão | Pendente — ressalva incluída no manuscrito §5.2 |
+| Depósito em pré-print (arXiv/OsfTechRxiv) | Ação | Pendente — manuscrito v0.1 pronto |
+| Revisão de pares interna + ajuste ao modelo de citação do veículo | Ação | Pendente — após decisão de veículo/orientador |
+| Idioma (português p/ SBES × inglês p/ EMSE) | Decisão | Pendente — manuscrito em pt, adaptável |
 
 ---
 
