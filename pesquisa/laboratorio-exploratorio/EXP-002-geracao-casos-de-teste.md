@@ -1,8 +1,8 @@
 # EXP-002 — Laboratório Exploratório de Modelos de IA
 ## Geração de casos de teste a partir de requisitos
 
-**Status:** Concluído
-**Natureza:** Experimento exploratório
+**Status:** Concluído  
+**Natureza:** Experimento exploratório  
 **Data:** 2026-09-06
 
 ## 1. Objetivo
@@ -111,21 +111,20 @@ Um defeito só é considerado coberto quando o caso proposto contém entradas e 
 
 ## 8. Resultado — Oreate AI
 
-32 casos de teste.
+**32 casos de teste.**
 
 | Defeito | Cobertura |
 |---|---|
 | D1 | ❌ |
 | D2 | ✅ |
-| D3 | ⚠️ Parcial/fragilizada pela interface |
+| D3 | ⚠️ |
 | D4 | ✅ |
 | D5 | ✅ |
 | D6 | ✅ |
 
-**Cobertura clara: 4/6 = 66,7%**, mantendo D3 separado por causa da interface de precificação.
+**Cobertura clara:** 4/6 = **66,7%**, mantendo D3 separado por causa da interface de precificação.
 
 Pontos relevantes:
-
 - forte cobertura de fronteiras, efeitos colaterais, múltiplos itens e combinações;
 - não criou teste específico para quantidade fracionária positiva, embora R2 exija quantidade inteira;
 - iniciou a resposta identificando bugs antes dos testes, representando desvio parcial da tarefa;
@@ -133,18 +132,18 @@ Pontos relevantes:
 
 ## 9. Resultado — Claude AI
 
-32 casos de teste.
+**32 casos de teste.**
 
 | Defeito | Cobertura |
 |---|---|
 | D1 | ✅ |
 | D2 | ✅ |
-| D3 | ⚠️ Parcial/fragilizada pela interface |
+| D3 | ⚠️ |
 | D4 | ✅ |
 | D5 | ✅ |
 | D6 | ✅ |
 
-**Cobertura clara: 5/6 = 83,3%**, mantendo D3 separado.
+**Cobertura clara:** 5/6 = **83,3%**, mantendo D3 separado.
 
 Claude identificou explicitamente a ambiguidade de precificação e criou teste específico para `quantity = 2.5`, traduzindo diretamente a exigência de inteiro em uma condição verificável. Também apresentou forte cobertura de fronteiras, atomicidade, cupom, frete VIP e combinações.
 
@@ -154,18 +153,18 @@ Claude também discutiu bugs/divergências antes da estratégia de testes, embor
 
 ## 10. Resultado — Gemini
 
-14 casos de teste.
+**14 casos de teste.**
 
 | Defeito | Cobertura |
 |---|---|
 | D1 | ❌ |
 | D2 | ✅ |
-| D3 | ⚠️ Parcial/fragilizada pela interface |
+| D3 | ⚠️ |
 | D4 | ✅ |
 | D5 | ✅ |
 | D6 | ✅ |
 
-**Cobertura clara: 4/6 = 66,7%**, mantendo D3 separado.
+**Cobertura clara:** 4/6 = **66,7%**, mantendo D3 separado.
 
 Gemini produziu menos da metade dos casos de Oreate e Claude, mas cobriu os principais comportamentos e fronteiras críticas: R$100 para SAVE10 e R$200 para frete grátis. Também criou teste específico para atomicidade.
 
@@ -206,17 +205,17 @@ D3 foi mantido como cobertura parcial porque a função não apresenta um mecani
 
 O resultado mais relevante não é a quantidade de testes, mas a diferença entre:
 
-> identificar um requisito/defeito
+> **identificar um requisito/defeito**
 
 e
 
-> transformá-lo em um caso de teste capaz de revelar o defeito.
+> **transformá-lo em um caso de teste capaz de revelar o defeito.**
 
 D1 é o exemplo mais claro. O requisito exige quantidade inteira. Oreate e Gemini não criaram um teste específico para uma quantidade positiva fracionária, enquanto Claude criou `quantity=2.5`.
 
 Isso sugere uma hipótese exploratória:
 
-> Modelos podem apresentar desempenho diferente entre reconhecimento de condições defeituosas e tradução dessas condições em testes verificáveis.
+> **Modelos podem apresentar desempenho diferente entre reconhecimento de condições defeituosas e tradução dessas condições em testes verificáveis.**
 
 Essa hipótese não deve ser tratada como conclusão generalizável.
 
@@ -228,7 +227,7 @@ Mesmo assim, a diferença de quantidade não produziu uma diferença proporciona
 
 Isso reforça que quantidade de casos não é métrica suficiente. Devem ser considerados cobertura, relevância, executabilidade, especificidade e redundância.
 
-## 15. Comportamento de desvio da tarefa
+## 15. Desvio da tarefa
 
 Os três modelos apresentaram algum grau de análise de defeitos antes da elaboração dos testes.
 
@@ -250,7 +249,7 @@ Esse comportamento pode ser útil profissionalmente, mas representa desvio parci
 
 ## 17. Conclusão exploratória
 
-No cenário avaliado, **Claude apresentou a maior cobertura clara, com 5 dos 6 defeitos**.
+No cenário avaliado, **Claude apresentou a maior cobertura clara**, com 5 dos 6 defeitos.
 
 Oreate e Gemini cobriram claramente 4 dos 6.
 
@@ -266,7 +265,7 @@ Ele funciona como laboratório exploratório para investigar comportamento de mo
 
 A pesquisa formal permanece baseada no protocolo:
 
-> "Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de Inteligência Artificial"
+> **“Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de Inteligência Artificial”**
 
 com sistemas completos, execuções independentes, oráculo externo e matriz de defeitos.
 
@@ -277,7 +276,6 @@ com sistemas completos, execuções independentes, oráculo externo e matriz de 
 Investigar se fornecer apenas requisitos, sem revelar previamente a existência de defeitos, permite aos modelos gerar testes capazes de revelar sistematicamente diferentes categorias de falhas.
 
 Possíveis condições futuras:
-
 - testes gerados espontaneamente;
 - testes derivados requisito por requisito;
 - testes orientados por técnicas explícitas de QA;
