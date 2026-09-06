@@ -101,10 +101,10 @@
 | 5.2 Qualidade funcional (RQ1) | pass rates: lightning/e3=1 (32F+48E); mimo/e2 e e3=12 (21F+48E) | metodologia §13.1, results privados |
 | 5.3 Defeitos e densidade (RQ2/H1; RQ3/H2) | 12 defeitos; densidades 1,36/0,93/0,92/0,55; perfis por agente; χ² p=0,041 V=0,85; Fisher ultra p=0,010 | metodologia §13.1–13.2 |
 | 5.4 Severidade (RQ4) | 100% Blocker/Critical (8 Blocker/4 Critical) | metodologia §13.1 |
-| 5.5 Padrões reincidentes | dependência ausente 5×; passlib+bcrypt 3–4×; alembic 2×; versão fantasma 1× | metodologia §13.3 |
-| 5.6 Testabilidade (RQ6/H3) | testes do agente vs oráculo (matriz 2×2 por defeito) — pendente consolidar da análise privada | results privados (analise_estatistica.md) |
+| 5.5 Padrões reincidentes | dependência ausente 4 (+1 piloto); passlib+bcrypt 3 (+1 piloto); alembic 1 (+1 piloto); versão fantasma 1× — nas 12 | metodologia §13.3 |
+| 5.6 Testabilidade (RQ6/H3) | testes do agente ≠ oráculo: 0/12 (0/18 da matriz) vs 4/4 alcançáveis; Fisher marginal extremo → tendência forte, não significância | metodologia §13.7 |
 | 5.7 Concordância e reprodutibilidade (RQ7) | κ 0,54 categoria / 0,91 severidade; executabilidade 3/12; variabilidade RQ8 qualitativa | metodologia §13.4–13.5 |
-| 5.8 Qualidade global (RQ5/H4) | funcional vs NFR divergentes; índice único colapsaria dimensões | metodologia §13.7 |
+| 5.8 Qualidade global (RQ5/H4) | funcional vs NFR divergentes; índice único colapsaria dimensões | metodologia §13.8 (leitura) |
 
 - **Backlog:** gerar tabelas/figuras (barras densidade; heatmap defeito×agente; gráfico de perfis; matriz de confusão κ; funnel bootabilidade).
 

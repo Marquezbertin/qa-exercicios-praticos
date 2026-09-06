@@ -314,7 +314,7 @@ Nenhuma das 12 entregas passou 100% do oráculo; nenhuma ficou **Major/Minor** �
 
 - **H1 (densidade)**: descritivamente, lightning tem maior densidade (1,36/KLOC) — insuficiente para rejeitar/aceitar com este n.
 - **H2 (perfil)**: ultra com concentração forte em `incomplete_generation` (p=0,010 Fisher) é o ponto mais sustentável; demais modelos sem perfil claro nesta amostra.
-- **H4 (funcional ≠ qualidade global)**: o funcional (oráculo) e os NFR divergem — entregas que **sobem** ainda falham 66–80 dos 81 testes por defeitos de auth/DB; entregas que **não sobem** passam nos NFR estáticos. Índice único colapsaria essas dimensões distintas.
+- **H4 (funcional ≠ qualidade global)**: o funcional (oráculo) e os NFR divergem — entregas que **sobem** ainda falham 69–80 dos 81 testes por defeitos de auth/DB; entregas que **não sobem** passam nos NFR estáticos. Índice único colapsaria essas dimensões distintas.
 - **Padrões de defeito são transferíveis entre modelos "free"** (passlib/bcrypt, dependências ausentes): há um "vale comum" de qualidade para modelos gratuitos deste pipeline no momento da coleta.
 
 ---

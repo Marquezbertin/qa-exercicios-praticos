@@ -46,7 +46,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 - **3/12 bootáveis** (lightning/e3, mimo/e2, mimo/e3) — nenhuma delivery passou 100% do oráculo (81 testes).
 - **12 defeitos** Tambon, 100% Blocker/Critical; densidade lightning 1,36 > ultra 0,93 ≈ mimo 0,92 > ling 0,55 /KLOC.
 - **Perfil**: ultra = `incomplete_generation` concentrado (Fisher p=0,010); demais sem perfil dominante.
-- **Padrões reincidentes**: dependência ausente (5×), passlib+bcrypt→500 (3–4×), misconfig alembic, versão fantasma.
+- **Padrões reincidentes**: dependência ausente (4; +1 piloto), passlib+bcrypt→500 (3; +1 piloto), misconfig alembic (1; +1 piloto), versão fantasma (1).
 - **κ**: categoria 0,54 (moderado) · severidade 0,91 (quase perfeito).
 - χ² agente×categoria p=0,041 (V=0,85) — **informativo, não conclusivo** (células <5 no n=12).
 - Leitura honesta e limitações detalhadas na **seção 13** da metodologia.

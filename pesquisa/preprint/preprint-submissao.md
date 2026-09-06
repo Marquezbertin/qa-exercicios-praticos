@@ -58,7 +58,7 @@ Condensamos a revisão em grupos temáticos; fichas completas com DOI encontram-
 
 ### 3.1 Posição metodológica, neutralidade e pré-registro
 
-Experimento **controlado, prospectivo e reproduzível** (diferentemente de estudos retrospectivos como [D05, F04, F05]). As hipóteses, RQs, plano de análise, critérios de exclusão e o princípio de neutralidade foram fixados **antes** da coleta e consolidados como pré-registro em repositório privado, com âncoras temporais verificáveis no histórico de *git* (a seção de resultados foi adicionada separadamente). **Neutralidade (C1):** o experimento não parte de "IA é ruim"; se os dados mostrarem IA igual ou melhor em alguma dimensão, isso é resultado, não limitação.
+Experimento **controlado, prospectivo e reproduzível** (diferentemente de estudos retrospectivos como [D05, F04, F05]). As hipóteses, RQs, plano de análise, critérios de exclusão e o princípio de neutralidade foram fixados **antes** da coleta (documentos de problema-e-hipóteses e metodologia commitados previamente no repositório de pesquisa) e consolidados posteriormente como um pré-registro **formalizado retrospectivamente** com âncoras temporais verificáveis no histórico de *git* (a seção de resultados foi adicionada em um commit separado). **Neutralidade (C1):** o experimento não parte de "IA é ruim"; se os dados mostrarem IA igual ou melhor em alguma dimensão, isso é resultado, não limitação.
 
 ### 3.2 Desenho experimental
 
@@ -177,11 +177,11 @@ Todos os 12 defeitos foram **Blocker (8) ou Critical (4)**; nenhum Major/Minor (
 
 ### 4.4 Padrões reincidentes
 
-| Padrão | Ocorrências (12) | Exemplos |
+| Padrão | Ocorrências (nas 12) | Exemplos |
 |---|---|---|
-| Dependência ausente (`pydantic-settings`/`email-validator`) | 5 | ultra e1/e3, mimo e1 |
-| *passlib* 1.7.4 + *bcrypt* ≥4.4 → 500 em `/auth/register` | 3 (4 com piloto) | lightning e3, mimo e2/e3 |
-| Misconfig de reprodução (alembic sem `script_location`) | 2 | ultra e2 |
+| Dependência ausente (`pydantic-settings`/`email-validator`) | 4 (+1 no piloto) | ultra e1/e3, mimo e1 |
+| *passlib* 1.7.4 + *bcrypt* ≥4.4 → 500 em `/auth/register` | 3 (+1 no piloto) | lightning e3, mimo e2/e3 |
+| Misconfig de reprodução (alembic sem `script_location`) | 1 (+1 no piloto) | ultra e2 |
 | Versão "fantasma" (`pydantic==2.8.4` inexistente) | 1 | lightning e1 |
 
 Esses padrões são **transferíveis entre modelos "free"** do mesmo pipeline, sugerindo um "vale comum" de qualidade no momento da coleta.
@@ -208,7 +208,7 @@ Onde foi mensurável (mimo), o *pass rate* foi **estável** nas duas execuções
 
 ### 4.8 Qualidade global — funcional ≠ não funcional (RQ5/H4)
 
-Há divergência entre dimensões: entregas que **sobem** ainda falham em 66–80 dos 81 testes (defeitos de *auth*/DB); entregas que **não sobem** podem passar nos NFR estáticos (estrutura/reprodutibilidade estrutural). Um índice único colapsaria dimensões distintas — sustenta, descritivamente, H4.
+Há divergência entre dimensões: entregas que **sobem** ainda falham em 69–80 dos 81 testes (defeitos de *auth*/DB); entregas que **não sobem** podem passar nos NFR estáticos (estrutura/reprodutibilidade estrutural). Um índice único colapsaria dimensões distintas — sustenta, descritivamente, H4.
 
 ---
 
