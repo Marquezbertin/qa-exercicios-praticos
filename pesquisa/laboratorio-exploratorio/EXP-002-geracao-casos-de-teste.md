@@ -1,14 +1,17 @@
-# EXP-002 — Geração de casos de teste a partir de requisitos
+# EXP-002 — Laboratório Exploratório de Modelos de IA
+## Geração de casos de teste a partir de requisitos
 
-**Status:** Concluído · **Natureza:** Experimento exploratório · **Data:** 2026-09-06
-
-> Pertence ao laboratório exploratório (`README.md`). **Não** constitui evidência direta do experimento formal da pesquisa principal (sistemas completos gerados por agentes).
+**Status:** Concluído
+**Natureza:** Experimento exploratório
+**Data:** 2026-09-06
 
 ## 1. Objetivo
 
 Avaliar como diferentes modelos de IA projetam casos de teste a partir dos mesmos requisitos funcionais e da mesma implementação Python.
 
-Observados: cobertura de defeitos, requisitos, fronteiras, entradas inválidas, efeitos colaterais, especificidade, executabilidade, redundância, ambiguidades e eventual desvio da tarefa.
+Foram observados: cobertura de defeitos, requisitos, fronteiras, entradas inválidas, efeitos colaterais, especificidade, executabilidade, redundância, ambiguidades e eventual desvio da tarefa.
+
+**Importante:** este experimento pertence ao laboratório exploratório e não constitui evidência direta do experimento formal da pesquisa principal sobre software completo gerado por agentes de IA.
 
 ## 2. Pergunta exploratória
 
@@ -20,11 +23,19 @@ Questão derivada:
 
 ## 3. Modelos avaliados
 
-Oreate AI · Claude AI · Gemini — mesmo contexto, mesmo prompt.
+1. Oreate AI
+2. Claude AI
+3. Gemini
+
+Todos receberam o mesmo contexto e o mesmo prompt.
 
 ## 4. Tarefa
 
-Atuação como profissionais experientes de QA e engenharia de software: criar estratégia de testes para `create_order`. Cada caso com nome, objetivo, dados de entrada, resultado esperado e requisito validado. Considerar casos positivos, negativos, fronteiras, entradas inválidas, efeitos colaterais e combinações de regras. Instruídos a **não implementar** os testes.
+Os modelos deveriam atuar como profissionais experientes de QA e engenharia de software e criar uma estratégia de testes para `create_order`.
+
+Cada caso deveria conter nome, objetivo, dados de entrada, resultado esperado e requisito validado. Também deveriam ser considerados casos positivos, negativos, fronteiras, entradas inválidas, efeitos colaterais e combinações de regras.
+
+Os modelos foram instruídos a não implementar os testes.
 
 ## 5. Requisitos utilizados
 
@@ -94,65 +105,75 @@ def create_order(user, items, inventory, coupon=None):
 | D5 | VIP recebe frete de R$20 em vez de frete grátis | R7 |
 | D6 | Frete grátis usa `> 200` em vez de `>= 200` | R8 |
 
-**Critério de cobertura:** um defeito só é considerado coberto quando o caso proposto contém entradas e expectativa capazes de revelar o defeito na implementação apresentada. Quantidade de testes, isoladamente, não determina qualidade.
+### Critério de cobertura
 
-## 8. Resultados por modelo
+Um defeito só é considerado coberto quando o caso proposto contém entradas e expectativa capazes de revelar o defeito na implementação apresentada. Quantidade de testes, isoladamente, não determina qualidade.
 
-### Oreate AI — 32 casos
+## 8. Resultado — Oreate AI
+
+32 casos de teste.
 
 | Defeito | Cobertura |
 |---|---|
 | D1 | ❌ |
 | D2 | ✅ |
-| D3 | ⚠️ |
+| D3 | ⚠️ Parcial/fragilizada pela interface |
 | D4 | ✅ |
 | D5 | ✅ |
 | D6 | ✅ |
 
-**Cobertura clara: 4/6 (66,7%)** — D3 separado (interface de precificação). Pontos:
+**Cobertura clara: 4/6 = 66,7%**, mantendo D3 separado por causa da interface de precificação.
+
+Pontos relevantes:
 
 - forte cobertura de fronteiras, efeitos colaterais, múltiplos itens e combinações;
-- não criou teste específico para quantidade fracionária positiva (embora R2 exija inteiro);
-- iniciou a resposta identificando bugs antes dos testes (desvio parcial da tarefa);
-- vários casos usam subtotal/preço hipotéticos não representados diretamente na função.
+- não criou teste específico para quantidade fracionária positiva, embora R2 exija quantidade inteira;
+- iniciou a resposta identificando bugs antes dos testes, representando desvio parcial da tarefa;
+- vários casos usam subtotal/preço hipotéticos que não estão diretamente representados na interface da função.
 
-### Claude AI — 32 casos
+## 9. Resultado — Claude AI
+
+32 casos de teste.
 
 | Defeito | Cobertura |
 |---|---|
 | D1 | ✅ |
 | D2 | ✅ |
-| D3 | ⚠️ |
+| D3 | ⚠️ Parcial/fragilizada pela interface |
 | D4 | ✅ |
 | D5 | ✅ |
 | D6 | ✅ |
 
-**Cobertura clara: 5/6 (83,3%)** — D3 separado. Pontos:
+**Cobertura clara: 5/6 = 83,3%**, mantendo D3 separado.
 
-- identificou explicitamente a ambiguidade de precificação e criou teste específico para `quantity = 2.5` (tradução direta da exigência de inteiro);
-- forte cobertura de fronteiras, atomicidade, cupom, frete VIP e combinações;
-- limitação: vários casos adicionam um campo `price` inexistente na assinatura — conceitualmente adequados, mas nem todos diretamente executáveis contra o código sem resolver a precificação;
-- discutiu bugs/divergências antes da estratégia de testes (desvio parcial da tarefa).
+Claude identificou explicitamente a ambiguidade de precificação e criou teste específico para `quantity = 2.5`, traduzindo diretamente a exigência de inteiro em uma condição verificável. Também apresentou forte cobertura de fronteiras, atomicidade, cupom, frete VIP e combinações.
 
-### Gemini — 14 casos
+Limitação importante: vários casos adicionam um campo `price` aos dados, embora esse campo não exista na assinatura fornecida nem seja utilizado pela implementação. Portanto, são conceitualmente adequados, mas alguns não são diretamente executáveis contra o código sem resolver a questão da precificação.
+
+Claude também discutiu bugs/divergências antes da estratégia de testes, embora a tarefa pedisse apenas o projeto dos testes.
+
+## 10. Resultado — Gemini
+
+14 casos de teste.
 
 | Defeito | Cobertura |
 |---|---|
 | D1 | ❌ |
 | D2 | ✅ |
-| D3 | ⚠️ |
+| D3 | ⚠️ Parcial/fragilizada pela interface |
 | D4 | ✅ |
 | D5 | ✅ |
 | D6 | ✅ |
 
-**Cobertura clara: 4/6 (66,7%)** — D3 separado. Pontos:
+**Cobertura clara: 4/6 = 66,7%**, mantendo D3 separado.
 
-- menos da metade dos casos de Oreate/Claude, mas cobriu os principais comportamentos e fronteiras críticas (R$100 SAVE10, R$200 frete grátis);
-- criou teste específico para atomicidade;
-- não criou teste para quantidade fracionária positiva; cobriu zero/negativa apenas;
-- iniciou a resposta identificando bugs críticos antes da estratégia de testes.
+Gemini produziu menos da metade dos casos de Oreate e Claude, mas cobriu os principais comportamentos e fronteiras críticas: R$100 para SAVE10 e R$200 para frete grátis. Também criou teste específico para atomicidade.
 
-## 9. Matriz comparativa
+Não criou teste específico para quantidade fracionária positiva. Assim como Oreate, cobriu quantidade zero/negativa, mas não a condição de tipo inteiro.
+
+Também iniciou a resposta identificando bugs críticos antes da estratégia de testes.
+
+## 11. Matriz comparativa
 
 | Critério | Oreate | Claude | Gemini |
 |---|---:|---:|---:|
@@ -171,7 +192,7 @@ def create_order(user, items, inventory, coupon=None):
 | Especificidade | Boa | **Muito boa** | Boa |
 | Economia de casos | Baixa | Baixa | **Alta** |
 
-## 10. Resultado quantitativo principal
+## 12. Resultado quantitativo principal
 
 | Modelo | Defeitos claramente cobertos | Cobertura |
 |---|---:|---:|
@@ -179,44 +200,95 @@ def create_order(user, items, inventory, coupon=None):
 | Claude | **5/6** | **83,3%** |
 | Gemini | 4/6 | 66,7% |
 
-D3 mantido como cobertura parcial: a função não apresenta mecanismo claro de preço unitário; cobertura plena exigiria premissa externa à interface fornecida.
+D3 foi mantido como cobertura parcial porque a função não apresenta um mecanismo claro de preço unitário. Contá-lo como cobertura plena exigiria uma premissa externa à interface fornecida.
 
-## 11. Principal achado exploratório
+## 13. Principal achado exploratório
 
-O resultado mais relevante é a diferença entre **identificar um requisito/defeito** e **transformá-lo em um caso de teste capaz de revelá-lo**.
+O resultado mais relevante não é a quantidade de testes, mas a diferença entre:
 
-D1 é o exemplo mais claro: o requisito exige quantidade inteira; Oreate e Gemini não criaram teste específico para quantidade fracionária positiva, enquanto Claude criou `quantity=2.5`.
+> identificar um requisito/defeito
 
-Hipótese exploratória (não generalizável):
+e
+
+> transformá-lo em um caso de teste capaz de revelar o defeito.
+
+D1 é o exemplo mais claro. O requisito exige quantidade inteira. Oreate e Gemini não criaram um teste específico para uma quantidade positiva fracionária, enquanto Claude criou `quantity=2.5`.
+
+Isso sugere uma hipótese exploratória:
 
 > Modelos podem apresentar desempenho diferente entre reconhecimento de condições defeituosas e tradução dessas condições em testes verificáveis.
 
-## 12. Quantidade versus qualidade
+Essa hipótese não deve ser tratada como conclusão generalizável.
 
-Oreate e Claude: 32 casos; Gemini: 14. A diferença de quantidade não produziu diferença proporcional de cobertura (Gemini igualou a cobertura clara de Oreate com menos casos). Quantidade de casos **não** é métrica suficiente: considerar cobertura, relevância, executabilidade, especificidade e redundância.
+## 14. Quantidade versus qualidade
 
-## 13. Desvio da tarefa
+Oreate e Claude produziram 32 casos cada; Gemini produziu 14.
 
-Os três modelos apresentaram análise de defeitos antes da elaboração dos testes — útil profissionalmente, mas desvio parcial da instrução experimental. Comportamento candidato a investigação em experimentos posteriores.
+Mesmo assim, a diferença de quantidade não produziu uma diferença proporcional de cobertura. Gemini atingiu a mesma cobertura clara de Oreate com menos casos.
 
-## 14. Limitações
+Isso reforça que quantidade de casos não é métrica suficiente. Devem ser considerados cobertura, relevância, executabilidade, especificidade e redundância.
 
-1. Apenas três modelos avaliados.
-2. Experimento exploratório.
-3. Nenhuma execução automatizada dos casos propostos.
-4. Ambiguidade importante de precificação na função.
-5. Alguns modelos introduziram premissas inexistentes na assinatura.
+## 15. Comportamento de desvio da tarefa
+
+Os três modelos apresentaram algum grau de análise de defeitos antes da elaboração dos testes.
+
+Esse comportamento pode ser útil profissionalmente, mas representa desvio parcial da instrução experimental de produzir somente casos de teste.
+
+É um comportamento que pode ser investigado em experimentos posteriores.
+
+## 16. Limitações
+
+1. Apenas três modelos foram avaliados.
+2. O experimento é exploratório.
+3. Não houve execução automatizada dos casos propostos.
+4. A função possui ambiguidade importante relacionada à precificação.
+5. Alguns modelos introduziram premissas não existentes na assinatura.
 6. Quantidade de casos não representa diretamente qualidade.
-7. Conjunto pequeno e deliberadamente conhecido de defeitos.
-8. Resultados dependem do prompt.
-9. D3 mantido como cobertura parcial.
+7. O problema contém um conjunto pequeno e deliberadamente conhecido de defeitos.
+8. Os resultados dependem do prompt.
+9. D3 foi mantido como cobertura parcial.
 
-## 15. Conclusão exploratória
+## 17. Conclusão exploratória
 
-No cenário avaliado, **Claude apresentou a maior cobertura clara (5/6)**; Oreate e Gemini cobriram claramente 4/6. Não é possível concluir que Claude seja globalmente melhor para QA — o resultado vale somente para cenário, prompt, requisitos e implementação deste experimento. O achado mais relevante é a diferença entre **detecção de defeitos e geração de testes para detectar defeitos**, especialmente na exigência de quantidade inteira.
+No cenário avaliado, **Claude apresentou a maior cobertura clara, com 5 dos 6 defeitos**.
 
-## 16. Próximo experimento sugerido — EXP-003
+Oreate e Gemini cobriram claramente 4 dos 6.
 
-**Geração de testes orientada à detecção de defeitos**: fornecer apenas requisitos (sem revelar a existência de defeitos) e avaliar se os modelos geram testes capazes de revelar sistematicamente categorias de falhas.
+Não é possível concluir que Claude seja globalmente um modelo melhor para QA. O resultado é válido somente para o cenário, prompt, requisitos e implementação deste experimento.
 
-Condições futuras possíveis: testes espontâneos; testes derivados requisito por requisito; testes orientados por técnicas explícitas de QA; testes gerados após análise de risco.
+O achado mais relevante para a continuidade do laboratório é a diferença entre **detecção de defeitos e geração de testes para detectar defeitos**, especialmente no requisito de quantidade inteira.
+
+## 18. Relação com a pesquisa formal
+
+Este experimento não deve ser utilizado como evidência direta da qualidade dos sistemas completos gerados por agentes na pesquisa principal.
+
+Ele funciona como laboratório exploratório para investigar comportamento de modelos, raciocínio sobre requisitos, geração de testes, fronteiras, efeitos colaterais e diferenças entre modelos.
+
+A pesquisa formal permanece baseada no protocolo:
+
+> "Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de Inteligência Artificial"
+
+com sistemas completos, execuções independentes, oráculo externo e matriz de defeitos.
+
+## 19. Próximo experimento sugerido
+
+### EXP-003 — Geração de testes orientada à detecção de defeitos
+
+Investigar se fornecer apenas requisitos, sem revelar previamente a existência de defeitos, permite aos modelos gerar testes capazes de revelar sistematicamente diferentes categorias de falhas.
+
+Possíveis condições futuras:
+
+- testes gerados espontaneamente;
+- testes derivados requisito por requisito;
+- testes orientados por técnicas explícitas de QA;
+- testes gerados após análise de risco.
+
+## 20. Preservação dos dados brutos
+
+As respostas originais dos modelos devem ser preservadas sem edição como dados primários do laboratório.
+
+- Oreate AI — resposta original utilizada na análise.
+- Claude AI — resposta original utilizada na análise.
+- Gemini — resposta original utilizada na análise.
+
+Qualquer normalização, correção ou interpretação deve ocorrer somente na camada de análise.
