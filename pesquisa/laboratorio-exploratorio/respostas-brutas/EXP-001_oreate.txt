@@ -1,0 +1,171 @@
+=== TRANSCRIPT BRUTO — EXP-001 Oreate (não editado) ===
+=== Fonte: conversa original no Oreate (colado pelo autor) ===
+
+Você é um profissional experiente de QA e engenharia de software. Analise o código Python abaixo considerando os requisitos funcionais apresentados. Sua tarefa é identificar todos os defeitos que podem fazer o sistema apresentar um comportamento diferente do especificado. Para cada defeito encontrado: 1. Explique claramente qual é o problema. 2. Indique exatamente onde ele ocorre. 3. Explique em qual situação o defeito pode acontecer. 4. Dê um exemplo de entrada que demonstre o problema. 5. Explique qual seria o comportamento esperado. Não faça sugestões de melhoria de código que não estejam relacionadas a uma violação dos requisitos. Não reescreva o código inteiro. Concentre-se na identificação dos defeitos. ### Requisitos 1. O pedido só pode ser criado para um usuário cujo status seja "active". 2. Cada item do pedido deve possuir uma quantidade inteira maior que zero. 3. O estoque de cada produto deve ser suficiente para atender à quantidade solicitada. Se houver exatamente a quantidade solicitada em estoque, a compra deve ser permitida. 4. O cupom "SAVE10" concede 10% de desconto quando o subtotal do pedido for maior ou igual a R$ 100,00. 5. O estoque só deve ser alterado depois que todos os itens do pedido forem validados com sucesso. 6. O valor final do pedido deve ser: subtotal - desconto + frete. 7. Clientes VIP não pagam frete. 8. Clientes não VIP pagam R$ 20,00 de frete, exceto quando o subtotal for maior ou igual a R$ 200,00. ### Código def create_order(user, items, inventory, coupon=None): if user["status"] != "active": raise ValueError("Usuário inativo") subtotal = 0 for item in items: product_id = item["product_id"] quantity = item["quantity"] if quantity <= 0: raise ValueError("Quantidade inválida") if inventory[product_id] < quantity: raise ValueError("Estoque insuficiente") inventory[product_id] -= quantity subtotal += inventory[product_id] * quantity discount = 0 if coupon == "SAVE10" and subtotal > 100: discount = subtotal * 0.10 if user.get("vip"): shipping = 20 elif subtotal > 200: shipping = 0 else: shipping = 20 total = subtotal - discount + shipping return { "subtotal": round(subtotal, 2), "discount": round(discount, 2), "shipping": round(shipping, 2), "total": round(total, 2) }
+
+=== RESPOSTA DO MODELO ===
+
+Análise de Defeitos — create_order
+
+Após análise criteriosa do código frente aos requisitos, identifiquei 6 defeitos:
+
+Defeito 1 — Falta de verificação de quantidade inteira
+Problema: O código verifica apenas quantity <= 0, mas não verifica se a quantidade é um número inteiro. Quantidades como 1.5 ou 0.3 são aceitas.
+
+Onde: Linha if quantity <= 0: dentro do loop.
+
+Quando acontece: Sempre que um item possuir quantidade não inteira (float).
+
+Exemplo de entrada:
+
+items = [{"product_id": "P1", "quantity": 1.5}]
+
+Esperado: Deveria lançar ValueError, pois o requisito 2 exige "quantidade inteira maior que zero".
+Obtido: O pedido é criado normalmente com quantity = 1.5.
+
+Defeito 2 — Estoque alterado antes da validação completa de todos os itens
+Problema: O estoque é decrementado dentro do loop, item a item. Se um item posterior falhar na validação, o estoque dos itens já processados já foi reduzido — violando o requisito 5.
+
+Onde: Linha inventory[product_id] -= quantity dentro do loop for item in items.
+
+Quando acontece: Quando há múltiplos itens e pelo menos um item posterior falha na validação (quantidade inválida ou estoque insuficiente).
+
+Exemplo de entrada:
+
+inventory = {"P1": 5, "P2": 1}
+items = [
+    {"product_id": "P1", "quantity": 3},
+    {"product_id": "P2", "quantity": 2}  # estoque insuficiente
+]
+
+Esperado: Estoque de P1 permanece 5 (nenhuma alteração, pois a validação falhou para P2).
+Obtido: Estoque de P1 é reduzido para 2, e depois o ValueError é lançado para P2 — o estoque ficou corrompido.
+
+Defeito 3 — Subtotal calculado com valor de estoque já decrementado
+Problema: O código faz inventory[product_id] -= quantity antes de calcular o subtotal com subtotal += inventory[product_id] * quantity. Assim, a multiplicação usa o valor de estoque restante (após a compra), não o valor original. Mesmo que inventory[product_id] representasse o preço unitário, o decremento corrompe esse valor antes da multiplicação.
+
+Onde: Linhas inventory[product_id] -= quantity seguida de subtotal += inventory[product_id] * quantity, dentro do loop.
+
+Quando acontece: Sempre, para qualquer pedido com pelo menos um item.
+
+Exemplo de entrada:
+
+inventory = {"P1": 10}  # preço unitário = 10
+items = [{"product_id": "P1", "quantity": 3}]
+
+Esperado: Subtotal = 10 × 3 = R$ 30,00.
+Obtido: Após decremento, inventory["P1"] = 7 → Subtotal = 7 × 3 = R$ 21,00.
+
+Defeito 4 — Condição do cupom SAVE10 usa > em vez de >=
+Problema: O requisito 4 diz que o desconto se aplica quando o subtotal for maior ou igual a R$ 100,00. O código usa subtotal > 100, excluindo o caso de igualdade.
+
+Onde: Linha if coupon == "SAVE10" and subtotal > 100:.
+
+Quando acontece: Quando o subtotal é exatamente R$ 100,00 e o cupom "SAVE10" é utilizado.
+
+Exemplo de entrada:
+
+# Supondo subtotal calculado corretamente = 100.00
+coupon = "SAVE10"
+
+Esperado: Desconto de R$ 10,00 (10% de 100).
+Obtido: Desconto de R$ 0,00 — cupom não é aplicado.
+
+Defeito 5 — Cliente VIP paga frete de R
+20
+,
+00
+e
+m
+v
+e
+z
+d
+e
+R
+20,00emvezdeR$ 0,00
+[nota de preservacao: '20,00emvezdeR$ 0,00' reproduz artefato de copiar/colar da conversa original; provavel 'R$ 20,00 em vez de R$ 0,00']
+Problema: O requisito 7 diz que clientes VIP não pagam frete (R$ 0,00). O código atribui shipping = 20 para clientes VIP.
+
+Onde: Linha if user.get("vip"): shipping = 20.
+
+Quando acontece: Sempre que o usuário é VIP.
+
+Exemplo de entrada:
+
+user = {"status": "active", "vip": True}
+
+Esperado: shipping = 0.
+Obtido: shipping = 20.
+
+Defeito 6 — Isenção de frete para não-VIP usa > em vez de >=
+Problema: O requisito 8 diz que clientes não VIP pagam R
+20
+,
+00
+d
+e
+f
+r
+e
+t
+e
+,
+∗
+∗
+e
+x
+c
+e
+t
+o
+q
+u
+a
+n
+d
+o
+o
+s
+u
+b
+t
+o
+t
+a
+l
+f
+o
+r
+m
+a
+i
+o
+r
+o
+u
+i
+g
+u
+a
+l
+a
+R
+20,00defrete,∗∗excetoquandoosubtotalformaiorouigualaR$ 200,00**. O código usa subtotal > 200, excluindo o caso de igualdade.
+[nota de preservacao: '20,00defrete,∗∗excetoquandoosubtotalformaiorouigualaR$ 200,00**' reproduz artefato de copiar/colar da conversa original; provavel 'R$ 20,00 de frete, ** exceto quando o subtotal for maior ou igual a R$ 200,00 **']
+
+Onde: Linha elif subtotal > 200: shipping = 0.
+
+Quando acontece: Quando o cliente não é VIP e o subtotal é exatamente R$ 200,00.
+
+Exemplo de entrada:
+
+# Supondo subtotal calculado corretamente = 200.00
+user = {"status": "active", "vip": False}
+
+Esperado: shipping = 0.
+Obtido: shipping = 20.
+
+Gerar um plano de testes unitários para cobrir os defeitos
+
+Propor a correção estrutural para a validação atômica do estoque
