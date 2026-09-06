@@ -12,7 +12,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Estado atual
 
-**Fase 1 — Revisão bibliográfica (em andamento).** Busca concluída; matriz consolidada com **25 artigos**, DOIs e metadados verificados (16 com DOI de periódico/conferência, 8 arXiv/preprint, 1 relatório institucional sem DOI); análise quantitativa v1 e **mapa da literatura + lacuna final** prontos.
+**Fase 2 — Experimento controlado CONCLUÍDO (2026-09-06).** Oráculo independente (81 testes, privado), sistema golden, piloto e batch completo **4 modelos × 3 execuções = 12 entregas** validados. Resultados: **3/12 bootáveis**, 12 defeitos classificados (taxonomia Tambon, dupla classificação), concordo inter-avaliador κ=0,54 (categoria, moderado) e κ=0,91 (severidade, quase perfeito), análise estatística disponível na seção 13 da metodologia.
 
 | Etapa | Status |
 |---|---|
@@ -21,10 +21,10 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Análise quantitativa da matriz | ✅ v1 (frequências e cruzamentos) |
 | Mapa da literatura / análise de lacunas | ✅ v0.1 (provado/controverso/inexplorado/lacuna final) |
 | Problema de pesquisa + RQs + hipóteses | ✅ consolidado (v0.2, ancorado no mapa) |
-| Metodologia experimental | 🔶 v0.1 (proposta; stack definida: Python + FastAPI + PostgreSQL) |
+| Metodologia experimental | ✅ v0.2 executado; resultados na seção 13 |
 | Especificação controlada FR/NFR | ✅ **v1.0 congelada** (aprovada em 2026-09-05; decisões D1–D7 registradas) |
-| Experimento controlado | ⏳ não iniciado |
-| Escrita do artigo | ⏳ não iniciada |
+| Experimento controlado | ✅ **CONCLUÍDO** (piloto + batch 4×3 + classificação + análise estatística) |
+| Escrita do artigo | ⏳ não iniciada (seção de resultados disponível para consolidação) |
 
 ## Estrutura desta pasta
 
@@ -36,8 +36,19 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `mapa-da-literatura.md` | Mapa: o que foi provado, o que é controvertido, o que é inexplorado e a lacuna final |
 | `analise-quantitativa.md` | Análise quantitativa da matriz (frequências e cruzamentos que sustentam a lacuna) |
 | `problema-e-hipoteses.md` | Problema, perguntas de pesquisa e hipóteses (consolidado) |
-| `metodologia-experimental.md` | Protocolo do experimento controlado (oráculo independente, stack, métricas, estatística) |
+| `metodologia-experimental.md` | Protocolo do experimento controlado (oráculo independente, stack, métricas, estatística) **+ resultados da execução completa** (seção 13) |
 | `especificacao-tarefas-v1.0.md` | Especificação controlada FR/NFR (documento entregue aos agentes; oráculo é privado) |
+
+## Resultados-resumo (Fase 2 — repo privado tem evidências completas)
+
+- **12 execuções** (4 modelos opencode × 3), 2 pilotos excluídos; free-tier.
+- **3/12 bootáveis** (lightning/e3, mimo/e2, mimo/e3) — nenhuma delivery passou 100% do oráculo (81 testes).
+- **12 defeitos** Tambon, 100% Blocker/Critical; densidade lightning 1,36 > ultra 0,93 ≈ mimo 0,92 > ling 0,55 /KLOC.
+- **Perfil**: ultra = `incomplete_generation` concentrado (Fisher p=0,010); demais sem perfil dominante.
+- **Padrões reincidentes**: dependência ausente (5×), passlib+bcrypt→500 (3–4×), misconfig alembic, versão fantasma.
+- **κ**: categoria 0,54 (moderado) · severidade 0,91 (quase perfeito).
+- χ² agente×categoria p=0,041 (V=0,85) — **informativo, não conclusivo** (células <5 no n=12).
+- Leitura honesta e limitações detalhadas na **seção 13** da metodologia.
 
 ## Convenções
 
@@ -48,7 +59,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 ## Próximos passos
 
-1. **Fechar decisões restantes da metodologia**: lista de agentes e ferramentas do oráculo.
-2. Fase 1 do experimento: **construir o oráculo independente + sistema golden** (artefatos **privados**, fora do alcance dos agentes) a partir da especificação v1.0.
-3. Definir a contribuição/confirmação do trabalho (evidências, metodologia, discussão) junto aos orientadores.
-4. Expandir a matriz para 25–30+ (busca sistemática contínua), se necessário para um SLR formal.
+1. **Consolidar a seção de resultados no artigo** (base: seção 13 da metodologia + análises privadas).
+2. Decidir com orientadores o formato de publicação (periódico/conferência) e a formalização do pré-registro.
+3. Se necessário, estender a amostra (mais execuções/execução em Docker na máquina de produção) para elevar o poder estatístico (células esperadas ≥5 para o χ²).
+4. Manter a busca sistemática contínua se um SLR formal for exigido.

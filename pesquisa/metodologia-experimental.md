@@ -1,7 +1,7 @@
 # Metodologia Experimental — Protocolo
 
 **Projeto de pesquisa:** Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de Inteligência Artificial
-**Versão:** v0.1 (proposta para validação) · **Data:** 2026-09-05 · **Status:** RASCUNHO DE PROTOCOLO — decisões finais em aberto marcadas como **[DECIDIR]**
+**Versão:** v0.2 (Fases 1–5 concluídas) · **Data:** 2026-09-06 · **Status:** PROTOCOLO EXECUTADO — resultados analisados (seção 13); consolidação do artigo em andamento
 
 > Decisões já tomadas com o autor: **stack = Python + FastAPI + PostgreSQL**. O protocolo segue os princípios do `problema-e-hipoteses.md` (mesmo requisito, mesmo prompt, ≥3 execuções, oráculo independente, ISO/IEC 25010). A lacuna preenchida é a combinação integral G1–G5 (0% na literatura, `mapa-da-literatura.md`).
 
@@ -193,9 +193,9 @@ Cada defeito detectado é registrado com:
 | 1. Fechar especificação v1.0 | `spec-tarefas-v1.0` (privado) |
 | 2. Construir oráculo + sistema golden | Suíte completa (privado) |
 | 3. Piloto (1 modelo opencode, 1 execução) | **CONCLUÍDO** (2026-09-05) — calibração registrada abaixo e no README do repo privado |
-| 4. Execução completa (4×3) | 12 entregas + registros |
-| 5. Classificação e análise | Matriz de defeitos, estatística |
-| 6. Consolidação | Seção de resultados do artigo |
+| 4. Execução completa (4×3) | **CONCLUÍDO** (2026-09-06) — 12 entregas + registros (seção 13) |
+| 5. Classificação e análise | **CONCLUÍDO** (2026-09-06) — matriz 18 itens, κ inte-avaliador, análise estatística (seção 13) |
+| 6. Consolidação | Seção de resultados do artigo (em andamento) |
 
 ---
 
@@ -205,8 +205,8 @@ Cada defeito detectado é registrado com:
 - ~~Ambiente de validação~~ → **D9 RESOLVIDA rev2** (PostgreSQL nativo local; Docker indisponível sem virtualização — seção 7).
 - Detalhamento final da especificação FR/NFR (documento privado).
 - Ferramentas exatas do oráculo (propostas na seção 4; validar licença/custo).
-- Quantidade de executores na dupla classificação (2 propostos).
-- Pré-registro formal (ex.: lista de hipóteses + datas) em repositório privado.
+- Quantidade de executores na dupla classificação → **RESOLVIDA (2 executores; κ = 0,54 categoria / 0,91 severidade, seção 13.4)**.
+- Pré-registro formal (ex.: lista de hipóteses + datas) em repositório privado — feito informalmente no repo privado; formalização pendente se o artigo exigir.
 
 ---
 
@@ -232,13 +232,81 @@ Cada defeito detectado é registrado com:
 
 ---
 
-## 13. Referências no projeto
+## 13. Resultados da execução completa (Fases 4–5) [2026-09-06]
+
+Execução em **12 entregas completas (4 agentes × 3 execuções)** pelo opencode com os modelos da seção 2.1, oráculo independente de 81 testes (privado), NFR e matriz de defeitos (dupla classificação). Pilotos de calibração (seção 12) **excluídos** da análise. Registros brutos, manifestos e evidências no repositório privado (`results/`, `execucoes/_snapshots/`).
+
+### 13.1 Resumo quantitativo
+
+| Dimensão | Resultado |
+|---|---|
+| Entregas bootáveis (oráculo executou) | **3/12** (lightning/e3, mimo/e2, mimo/e3) |
+| Pass rate do oráculo (81 testes) | lightning/e3: 1 (32F+48E); mimo/e2 e e3: 12 (21F+48E) |
+| Defeitos classificados (Tambon) | **12** (+2 NFR não-bug; 2 achados de infraestrutura excluídos) |
+| Severidade | 100% Blocker ou Critical (8 Blocker / 4 Critical); nenhum Major/Minor nos defeitos |
+| Densidade (defeitos/KLOC) | lightning 1,36 · ultra 0,93 · mimo 0,92 · ling 0,55 |
+
+### 13.2 Perfis de defeitos por agente (RQ3/H2)
+
+| Agente | Categorias Tambon | Leitura |
+|---|---|---|
+| ultra | `incomplete_generation` ×4 | 100% dos defeitos = geração incompleta (dependências/config ausentes); Fisher vs demais **p=0,010** |
+| lightning | `hallucinated_object`, `non_prompted_consideration`, `silly_mistake`, `wrong_attribute` | Sem perfil dominante (1 de cada) |
+| ling | `wrong_input_type` ×1 | Poucos defeitos porém Blocker (async/sync driver) |
+| mimo | `silly_mistake` ×2, `incomplete_generation` ×1 | Tentou mais ~dependências, errou em versionamento |
+
+- χ² agente×categoria: χ²=25,7, df=15, **p=0,041**, V de Cramér=0,85 — **informativo, não conclusivo** (células esperadas <5; exigência do protocolo §8 não atendida com esta amostra).
+- Fisher exato pontual (categoria dominante vs demais): ultra `incomplete_generation` p=0,010; ling p=0,083; mimo p=0,127; lightning sem categoria dominante (empate).
+
+### 13.3 Padrões reincidentes (achado mais forte)
+
+| Padrão | Ocorrências entre as 12 | Exemplos |
+|---|---|---|
+| **Dependência ausente** (`pydantic-settings`/`email-validator`) | 5 (4 Tambon + piloto) | ultra e1/e3, mimo e1 |
+| **passlib 1.7.4 + bcrypt ≥4.4 → `/auth/register` 500** | 3 (4 com piloto FIX2) | lightning e3, mimo e2/e3 |
+| **Misconfig de reprodução** (alembic sem `script_location`) | 2 (1 + piloto) | ultra e2 |
+| **Versão fantasma** (`pydantic==2.8.4` inexistente) | 1 | lightning e1 |
+
+Nenhuma das 12 entregas passou 100% do oráculo; nenhuma ficou **Major/Minor** — os defeitos detectados são todos bloqueadores ou críticos. Isso deve ser lido com o viés de detecção (10/12 entregas nem subiram; se o deliverable não sobe, o defeito é automaticamente Blocker).
+
+### 13.4 Concordância inter-avaliador (dupla classificação, §5)
+
+- **κ de Cohen (categoria Tambon) = 0,54** — concordância moderada (6 divergências, concentradas em defeitos de integração de dependências com múltiplas classes plausíveis).
+- **κ de Cohen (severidade) = 0,91** — quase perfeita (17/18).
+- Divergências resolvidas em reunião com registro por item (arquivo `matriz_defeitos.csv` do repo privado).
+
+### 13.5 Variabilidade entre execuções (RQ8)
+
+- mimo: pass rate 0,15 nas 2 executáveis — **estável**.
+- lightning: 1 execução executável (0,01) — variação não mensurável.
+- ultra e ling: nenhuma execução bootável → ausência de sinal funcional; a variabilidade observada é qualitativa (os 3 defeitos do ultra são todos a mesma classe).
+
+### 13.6 Limitações e ameaças observadas durante a execução
+
+1. **n pequeno e células esperadas <5**: χ² apenas informativo; H1/H2 sustentam tendências, não conclusões.
+2. **3/12 bootáveis**: a dimensão funcional (oráculo) avaliou apenas 3 entregas; a maioria dos dados é de "deliverable não sobe" — viés de severidade Blocker.
+3. **Ambiente sem Docker**: validação foi *native* (D9 rev2); entregas somente-configuradas-para-docker (ex.: host `db`) foram marcadas como defeito de portabilidade — atenção para não confundir "defeito" com "suposição de ambiente".
+4. **Free-tier**: 1 execução degenerada (1º tool-call rejeitado, 18 s) e 1 validação perdida por disco cheio — ambos **excluídos** dos defeitos (infra).
+5. **Classificação não é automática**: κ categoria moderado; reportar as resoluções ao discutir H2/RQ3.
+6. **Severidade sobre defeitos detectados** somente — não há como medir defeitos que teriam sido descobertos (não-bootáveis nunca exercitam funcionalidade).
+
+### 13.7 Leitura para o artigo
+
+- **H1 (densidade)**: descritivamente, lightning tem maior densidade (1,36/KLOC) — insuficiente para rejeitar/aceitar com este n.
+- **H2 (perfil)**: ultra com concentração forte em `incomplete_generation` (p=0,010 Fisher) é o ponto mais sustentável; demais modelos sem perfil claro nesta amostra.
+- **H4 (funcional ≠ qualidade global)**: o funcional (oráculo) e os NFR divergem — entregas que **sobem** ainda falham 66–80 dos 81 testes por defeitos de auth/DB; entregas que **não sobem** passam nos NFR estáticos. Índice único colapsaria essas dimensões distintas.
+- **Padrões de defeito são transferíveis entre modelos "free"** (passlib/bcrypt, dependências ausentes): há um "vale comum" de qualidade para modelos gratuitos deste pipeline no momento da coleta.
+
+---
+
+## 14. Referências no projeto
 
 - Lacuna e fundamentação: `mapa-da-literatura.md` (P1–P18, C1–C6, G1–G5).
+- Resultados completos da Fase 2 (repo privado): `results/analise_estatistica.md`, `results/kappa_interavaliador.md`, `results/matriz_defeitos.csv`, `results/summary.json`.
 - RQs/hipóteses: `problema-e-hipoteses.md` (v0.2, consolidado).
 - Números que sustentam o desenho: `analise-quantitativa.md`.
 - Fichas com DOI: `matriz-de-artigos.md`.
 
 ---
 
-*Protocolo de trabalho v0.1 — validar com o autor antes de iniciar a Fase 1 (fechamento da especificação).*
+*Protocolo de trabalho v0.2 — executado (piloto, batch 4×3, classificação e análise). Próximo passo: consolidação da Seção 6 (resultados do artigo).*
