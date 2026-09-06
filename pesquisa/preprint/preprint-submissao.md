@@ -97,7 +97,7 @@ Suíte **independente da IA geradora**, privada e imutável durante a coleta, va
 
 Regras: não revisado pelo agente; não exposto em prompt; cobre todos os FR/NFR; **coverage é reportado mas não tratado como evidência de qualidade** ([C05]); vale a detecção real de defeitos. A suíte tem **81 testes** e é exclusivamente *black-box* em relação ao backend.
 
-**Ambiente de validação (D9).** A máquina de execução é uma VM **sem virtualização aninhada**; por isso a validação foi **nativa** (PostgreSQL nativo + venv + `alembic upgrade head` + uvicorn + gating por `/health`). Artefatos Docker exigidos na entrega continuam obrigatórios e são validados estruturalmente; serão executados em contêineres na máquina de produção. Essa condicionante é reportada como limitação (§7).
+**Ambiente de validação (D9).** A máquina de execução é uma VM **sem virtualização aninhada**; por isso a validação foi **nativa** (PostgreSQL nativo + venv + `alembic upgrade head` + uvicorn + gating por `/health`). Artefatos Docker exigidos na entrega continuam obrigatórios e são validados estruturalmente; serão executados em contêineres na máquina de produção. Essa condicionante é reportada como limitação (§5.3).
 
 ### 3.5 Matriz de defeitos e classificação
 
