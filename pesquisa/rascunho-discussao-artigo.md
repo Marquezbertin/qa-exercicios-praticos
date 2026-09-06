@@ -60,11 +60,11 @@ No cenário controlado desta pesquisa, agentes de modelos "free" em modo agente 
 - [C04] YANG, L.; YANG, C.; GAO, S.; WANG, W. et al. *On the Evaluation of Large Language Models in Unit Test Generation*. ASE 2024. DOI: `10.1145/3691620.3695529`.
 - [C05] ZHAO, J.; ZHOU, S.; COHEN, E. *Do Coverage and Mutation Scores of LLM-Generated Test Suites Correlate with Their Effectiveness? (Replicability Study)*. ISSTA 2026. DOI: `10.1145/3832093`.
 - [C06] WALCZAK, J.; TOMALAK, P.; LASKOWSKI, A. *Impact of code context and prompting strategies on automated unit test generation with modern general-purpose large language models*. Journal of Systems and Software, v. 237, art. 112834, 2026. DOI: `10.1016/j.jss.2026.112834`.
-- [F02] VANGALA, S. et al. *AI-Generated Code Is Not Reproducible (Yet)*. 2025/2026.
-- [F05] OUKHAY, A. et al. *When AI Code Doesn't Stick*. MSR 2026.
+- [F02] VANGALA, B. P.; ADIBIFAR, A.; GEHANI, A.; MALIK, T. *AI-Generated Code Is Not Reproducible (Yet): An Empirical Study of Dependency Gaps in LLM-Based Coding Agents*. arXiv:2512.22387, 2025/2026. DOI: `10.48550/arXiv.2512.22387`. Apresentado em RAI 2025 workshop e na executiva da AAAI 2026.
+- [F05] OUKHAY, I.; BEGOUG, M.; CHOUCHEN, M.; OUNI, A. *When AI Code Doesn't Stick: An Empirical Study on Reverted Changes Introduced by AI Coding Agents*. In: Proc. of the 23rd Intl. Conference on Mining Software Repositories (MSR 2026), pp. 847–851. ACM, 2026. DOI: `10.1145/3793302.3793587`.
 
-> IDs de referência seguem a codificação da matriz (`matriz-de-artigos.md`) e da revisão bibliográfica (`revisao-bibliografica.md`). Confirmar DOI/metadados de [F02] e [F05] na consolidação final do artigo.
+> IDs de referência seguem a codificação da matriz (`matriz-de-artigos.md`) e da revisão bibliográfica (`revisao-bibliografica.md`). DOIs de [F02] e [F05] confirmados via Crossref/DataCite em 2026-09-06.
 
 ---
 
-*Rascunho v0.2 — 2026-09-06. Subseção 5.2 confirmada para o artigo (decisão do autor); citações P8–P10/taxonomia Tambon inseridas. Revisar com orientadores e verificar DOI de [F02]/[F05].*
+*Rascunho v0.3 — 2026-09-06. Subseção 5.2 confirmada para o artigo; citações P8–P10/taxonomia Tambon inseridas; DOIs de [F02] e [F05] resolvidos.*

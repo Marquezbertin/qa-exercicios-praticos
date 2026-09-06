@@ -243,9 +243,9 @@
 
 ### F02 — Repro­du­tibilidade de projetos gerados por agentes
 - **Título:** *AI-Generated Code Is Not Reproducible (Yet): An Empirical Study of Dependency Gaps in LLM-Based Coding Agents*
-- **Autores:** Bhanu Prakash Vangala, Ali Adibifar, Tanu Malik, Ashish Gehani
-- **Ano:** 2025 (v3 2026) · **Veículo:** arXiv preprint
-- **arXiv:** 2512.22387
+- **Autores:** Bhanu Prakash Vangala, Ali Adibifar, Ashish Gehani, Tanu Malik
+- **Ano:** 2025 (v3 2026) · **Veículo:** arXiv preprint (RAI 2025 workshop; apresentado na executiva AAAI 2026)
+- **arXiv:** 2512.22387 · **DOI:** `10.48550/arXiv.2512.22387`
 - **Tipo:** Empírico · **Agentes:** Claude Code, OpenAI Codex, Gemini · **Amostra:** 300 projetos / 100 prompts (Python, JS, Java)
 - **Resultado:** só **68,3%** executaram imediatamente em ambiente limpo; **Java 44%**; expansão de dependências **13,5×**.
 - **Para nossa pesquisa:** reprodutibilidade/executabilidade como dimensão de qualidade.
