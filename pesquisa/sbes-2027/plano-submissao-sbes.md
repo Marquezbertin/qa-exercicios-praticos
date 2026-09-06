@@ -57,8 +57,8 @@ Estrutura recomendada para o SBES (IMRaD condensado a partir do manuscrito v0.1)
 ## 4. Checklist até o prazo (~abr/2027)
 
 - [ ] **Confirmar chamada SBES 2027** (link do CBSoft 2027) — início 2027 (ativo: autor, com lembrete)
-- [ ] Baixar template CBSoft 2027 (`acmart` adaptado) e preparar ambiente LaTeX/Overleaf
-- [ ] Gerar **rascunho SBES-10p** (seção 3) a partir do manuscrito + figuras
+- [x] Gerar **rascunho SBES-10p** (EN) e **arquivo `.tex` acmart anonimizado** pronto para Overleaf — `artigo-sbes-2027-draft-en.md` + `artigo-sbes-2027.tex` (figuras em `pesquisa/figuras/`)
+- [ ] **Compilar no Overleaf** com o template acmart do CBSoft 2027; embutir figuras; conferir **contagem de páginas ≤10+2** e ajustar tamanho de figs/tabelas se estourar
 - [ ] Redação em EN (reuso do `artigo-manuscrito-en-v0.1.md`); revisão de linguagem
 - [ ] **Pacote de artefatos anônimo** (anonymous.4open.science): figs 1–5, `gerar_figuras.py`, README, LICENSE (CC-BY-4.0), sumários agregados — sem dados brutos
 - [ ] Checagem de anonimização (nomes, "nós", github, Zenodo, ORCID, DOI do preprint)
