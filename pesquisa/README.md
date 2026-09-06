@@ -38,6 +38,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `problema-e-hipoteses.md` | Problema, perguntas de pesquisa e hipóteses (consolidado) |
 | `metodologia-experimental.md` | Protocolo do experimento controlado (oráculo independente, stack, métricas, estatística) **+ resultados da execução completa** (seção 13) |
 | `especificacao-tarefas-v1.0.md` | Especificação controlada FR/NFR (documento entregue aos agentes; oráculo é privado) |
+| `laboratorio-exploratorio/` | Estudos exploratórios de comportamento de chat-LLMs em tarefas de QA (NÃO é evidência da pesquisa formal) — EXP-001 (detecção de defeitos) e EXP-002 (geração de casos de teste) |
 
 ## Resultados-resumo (Fase 2 — repo privado tem evidências completas)
 
