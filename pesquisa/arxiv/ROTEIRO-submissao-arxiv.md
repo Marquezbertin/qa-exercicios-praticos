@@ -1,0 +1,97 @@
+# Roteiro de Submissão — arXiv (cs.SE)
+
+> **Objetivo:** publicar a versão completa em EN do estudo no arXiv, categoria **cs.SE** (Software Engineering).
+> **Manuscrito-fonte:** `artigo-manuscrito-en-v0.1.md` (versão completa IMRaD, EN) → compilado em `artigo-arxiv-csse.tex`.
+> **Status:** PREPARADO (fatos verificados em 2026-09). Falta: submissão do autor (endosso + upload).
+
+---
+
+## 1. Política atual (verificada — mudou em jan/2026)
+
+1. **Endosso (blog arXiv, 21/jan/2026; piloto em Matemática dez/2025, estendido a todas as categorias):**
+   - E-mail institucional **NÃO basta mais sozinho** para novos submitters.
+   - **Caminho 1 (automático):** e-mail institucional de instituição acadêmica/ pesquisa **E** autoria (claim) de um artigo já aceito no arXiv no *endorsement domain* do destino.
+   - **Caminho 2 (endosso pessoal):** endosso de um autor estabelecido no arXiv no mesmo *endorsement domain*.
+   - *Endorser* qualificado: autor com nº suficiente de papers no domínio, submetidos entre **3 meses e 5 anos** atrás, registrado como autor (claim). Endosso **não é peer review** — valida adequação tópica.
+2. **Inglês integral (a partir de 11/fev/2026):** toda submissão precisa da versão completa em EN (não só abstract). Tradução automática é aceita se fiel. → Nosso manuscrito é **EN original**: satisfeito.
+3. **Surveys/posicionamento em cs (out/2025):** revisões da literatura e position papers em CS exigem **peer review prévio documentado**. → O estudo NÃO é survey nem position paper (é experimento empírico): **não se aplica**.
+4. **Sem anonimato:** arXiv exige título+authorship (não aceita submissões anônimas). → **NÃO** se pode postar o `artigo-sbes-2027` anônimo; a versão arXiv é com nome do autor (`artigo-arxiv-csse.tex`).
+
+## 2. Domínio de endosso do cs.SE
+
+- Dados oficiais: "a maioria das grandes áreas é um endorsement domain; exceção: física (por classe)". O arquivo `cs.*` como um todo é **um domínio de endosso** (o domínio "cs"), cobrindo `cs.SE`, `cs.LG`, `cs.SE` etc. Fontes: info.arxiv.org/help/endorsement.html; blog arXiv 21/01/2026.
+- Implicação prática: um endosso emitido por autor ativo em qualquer categoria `cs` da lista funciona para `cs.SE`.
+
+## 3. Situação do autor (avaliação honesta)
+
+| Requisito | Autor? |
+|---|---|
+| E-mail institucional reconhecido (Path 1) | Possível (instituições de pós-graduação), mas **insuficiente sozinho** |
+| Autoria prévia em paper aceito no arXiv cs (Path 1) | **NÃO** há → **Path 1 inviável** |
+| Endosso pessoal de autor `cs` ativo (Path 2) | **Necessário** → único caminho viável |
+
+**Conclusão:** o autor precisa de **endosso pessoal (Path 2)** de um autor ativo em `cs` (ideal: conhecido/colega da área de SE; alternativamente, um autor de um dos papers citados na referências).
+
+## 4. Fluxo para obter o endosso (Path 2)
+
+1. Criar conta em arXiv.org (login com e-mail; cadastrar perfis/ORCID).
+2. Iniciar submissão → escolher **Primary: cs.SE**.
+3. Se exigir endosso, o arXiv envia por e-mail um **link de solicitação de endosso** (com código de 6 caracteres) para repassar ao potencial endorser.
+4. Achar endorser: na página de um artigo cs recente (e.g., `arXiv:2407.06153`, `arXiv:2512.22387`, `arXiv:2511.04824`), clicar em **"Which authors of this paper are endorsers?"** (rodapé do abstract) para confirmar elegibilidade; e-mail do autor disponível no "Submission history".
+5. Enviar ao endorser: o link de endosso + opcionalmente ORCID e/ou cópia do manuscrito. **Não** disparar em massa nem repetir para o mesmo autor.
+6. 1 endosso positivo por categoria basta. A submissão sai do *hold* automaticamente.
+7. Moderação posterior (separada do endosso): checagem de escopo/formato — não é peer review.
+
+> Se o autor conhecer alguém da área SE/ESEM/SBES que publique no arXiv em `cs`, esse é o endorser ideal.
+
+## 5. Submissão (formatos)
+
+- Formato preferido e recomendado: **LaTeX (source)** — arXiv compila com TeX Live próprio; PDF gerado a partir do source (PDF de pdfLaTeX compilado localmente não é aceito para TeX submissions).
+- Incluir no pacote (zip/tar): `.tex` principal, `figuras/` (5 PNGs), e **arquivos `.sty`/`.cls` customizados** (nenhum — usamos classes padrão). Usamos `thebibliography` inline → **não depende de BibTeX/Bib file server-side**.
+- Imagens: se PDFLaTeX, todas as figuras em `.pdf`, `.jpg` ou `.png`. (Temos PNGs.)
+- Nomes de arquivo **case-sensitive** (arXiv); no source os includes devem casar exatamente.
+- **Data availability:** arXiv exige que links de código/dados resolvam para repositório público → our availability aponta para o registro Zenodo público (DOI `10.5281/zenodo.22551156`) e o repositório público do estudo.
+- Não incluir arquivos "sobrando" (nada de `.aux`, `.log`, `.out`, backup, templates de conferência).
+
+## 6. Formulário de metadados (sugestão de preenchimento)
+
+| Campo | Valor sugerido |
+|---|---|
+| **Title** | `Empirical Evaluation of Quality and Defects in Software Generated by AI Agents: A Comparative Study under Controlled Requirements` |
+| **Authors** | `Bruno Bertin Marquez` (Independent Researcher; ORCID 0009-0005-3546-8302) |
+| **Abstract** | Colar **verbatim** do `.tex` (abstract completo, EN) |
+| **Primary category** | `cs.SE — Software Engineering` |
+| **Comments** (recomendado) | `Preprint of the full manuscript. Previously deposited (CC-BY-4.0) at Zenodo: DOI 10.5281/zenodo.22551156. Version for the SBES Research Track (2027 cycle) is a condensed, anonymous adaptation.` |
+| **ACM-class** (opcional) | `D.2.4 Software/Program Verification; D.2.8 Metrics; D.2.9 Management` |
+| **License** | `arXiv.org perpetual, non-exclusive license, CC BY 4.0` (alinhada ao Zenodo; verificar política do EMSE/SBES, mas preprints CC-BY são aceitos) |
+| **Journal-ref / DOI** | Deixar vazios (preenche-se depois, se aprovado em SBES/EMSE, via *Journal-ref*/*DOI* sem criar versão nova) |
+
+## 7. Checklist
+
+- [ ] Obter endosso (Path 2) — iniciar submissão → link → endorser ativo em `cs`
+- [ ] Revisar e compilar `artigo-arxiv-csse.tex` localmente (ou Overleaf) e no arXiv (compilação server-side OK)
+- [ ] Empacotar: `.tex` + `figuras/` (5 PNGs) → `arXiv.zip`
+- [ ] Preencher formulário com os metadados da seção 6 (abstract verbatim)
+- [ ] Confirmar **EN integral** (sem versão não-inglesa necessária) e **não** é survey/position paper
+- [ ] Verificar links públicos (Zenodo DOI) no texto resolvem
+- [ ] Submeter; acompanhar a moderação; pegar o ID arXiv (~24h) e registrar DOI/README
+- [ ] Quando SBES/EMSE publicar: adicionar **Journal-ref** e **DOI** na submissão arXiv (não cria nova versão)
+
+## 8. Decisão de sequência (item em aberto — escolha do autor)
+
+O Zenodo (público, com nome do autor, DOI) já está publicado há 2026-09. O `artigo-arxiv-csse.tex` é a **mesma** pesquisa em EN integral, com nome do autor — portanto acrescenta exposição mínima à já existente. Duas opções:
+
+- **A — Postar agora:** visibilidade/timestamp; paralelo ao ciclo SBES 2027. A dupla-anonimização do SBES já é mitigada (Zenodo público); arXiv não muda a exposição. *(Permitido por SBES, preprint aprovado.)*
+- **B — Postar após decisão do SBES (~mid/late 2027):** caixa de risco de anonimato em zero; arXiv passa a versão-referência da publicação.
+
+> Recomendação: se o autor quer o máximo isolamento para a revisão dupla-anônima do SBES, **Opção B**; se prioriza visibilidade imediata do preprint integral, **Opção A** (risco residual baixo, pois o Zenodo já expõe a autoria).
+
+## 9. Fontes verificadas (2026-09)
+
+- arXiv blog — *Attention Authors: updated endorsement policy* (2026-01-21).
+- info.arxiv.org/help/endorsement.html (endosso; domínios; fluxes Path 1/2).
+- info.arxiv.org/help/submit/index.html e submit_tex.html (formatos; figures; package).
+- info.arxiv.org/help/policies/format_requirements.html (sem anônimo; títulos/autores; typography 10–14pt; margens 1in).
+- info.arxiv.org/help/prep.html (metadados: Abstract, Comments, ACM-class, Journal-ref, DOI).
+- arXiv blog — *Updated Practice for Review Articles and Position Papers in arXiv CS* (2025-10-31).
+- CASRAI — arXiv Endorsement System (2026-09) (exemplos de domínios; observação: exemplo cs.LG×cs.CR diverge da nota oficial do blog — domínio do `cs` tratado como um todo conforme o texto oficial do arXiv).
