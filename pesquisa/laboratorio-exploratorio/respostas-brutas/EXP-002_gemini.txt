@@ -1,0 +1,384 @@
+=== TRANSCRIPT BRUTO — EXP-002 Gemini (não editado) ===
+=== Fonte: conversa original no Gemini (colado pelo autor) ===
+
+Você é um profissional experiente de QA e engenharia de software.
+
+Considere os requisitos e a implementação Python abaixo.
+
+Sua tarefa é criar uma estratégia de testes para verificar se a função create_order está funcionando corretamente de acordo com os requisitos.
+
+Crie casos de teste suficientes para verificar os diferentes comportamentos da função.
+
+Para cada caso de teste informe:
+
+Nome do teste.
+
+Objetivo.
+
+Dados de entrada.
+
+Resultado esperado.
+
+Qual requisito está sendo validado.
+
+Considere também:
+
+casos positivos;
+
+casos negativos;
+
+valores de fronteira;
+
+entradas inválidas;
+
+situações que possam produzir efeitos colaterais;
+
+diferentes combinações de regras.
+
+Não implemente os testes. Apenas projete os casos de teste.
+
+Não informe apenas testes genéricos. Os casos devem ser suficientemente específicos para que outra pessoa consiga implementá-los posteriormente.
+
+Requisitos
+
+O pedido só pode ser criado para um usuário cujo status seja "active".
+
+Cada item do pedido deve possuir uma quantidade inteira maior que zero.
+
+O estoque de cada produto deve ser suficiente para atender à quantidade solicitada. Se houver exatamente a quantidade solicitada em estoque, a compra deve ser permitida.
+
+O cupom "SAVE10" concede 10% de desconto quando o subtotal do pedido for maior ou igual a R$ 100,00.
+
+O estoque só deve ser alterado depois que todos os itens do pedido forem validados com sucesso.
+
+O valor final do pedido deve ser:
+
+subtotal - desconto + frete
+
+Clientes VIP não pagam frete.
+
+Clientes não VIP pagam R$ 20,00 de frete, exceto quando o subtotal for maior ou igual a R$ 200,00.
+
+Código
+
+def create_order(user, items, inventory, coupon=None):
+
+if user["status"] != "active":
+raise ValueError("Usuário inativo")
+
+subtotal = 0
+
+for item in items:
+product_id = item["product_id"]
+quantity = item["quantity"]
+
+if quantity <= 0:
+raise ValueError("Quantidade inválida")
+
+if inventory[product_id] < quantity:
+raise ValueError("Estoque insuficiente")
+
+inventory[product_id] -= quantity
+
+subtotal += inventory[product_id] * quantity
+
+discount = 0
+
+if coupon == "SAVE10" and subtotal > 100:
+discount = subtotal * 0.10
+
+if user.get("vip"):
+shipping = 20
+elif subtotal > 200:
+shipping = 0
+else:
+shipping = 20
+
+total = subtotal - discount + shipping
+
+return {
+"subtotal": round(subtotal, 2),
+"discount": round(discount, 2),
+"shipping": round(shipping, 2),
+"total": round(total, 2)
+}
+
+=== RESPOSTA DO MODELO ===
+
+Antes de apresentar os casos de teste, vale destacar como especialista em QA: a implementação atual possui bugs críticos de regra de negócio (ex: calcula o subtotal multiplicando a quantidade pelo estoque restante e cobra frete do cliente VIP).
+
+A estratégia de testes abaixo foi desenhada considerando os Requisitos definidos (comportamento esperado de negócio). Alguns destes testes falharão na implementação atual até que o código seja corrigido.
+
+Estratégia de Testes: create_order
+
+1. Casos Positivos e Regras de Negócio Básicas
+
+Teste 01: Criar pedido com sucesso para cliente não VIP (subtotal < R$ 100)
+Objetivo: Garantir a criação do pedido correto sem desconto e com frete padrão.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 2}]
+
+inventory: {"p1": 10}
+
+price_map (se houvesse) / Preço implícito do produto
+
+Resultado Esperado:
+
+Subtotal: R$ 50.00 | Desconto: R$ 0.00 | Frete: R$ 20.00 | Total: R$ 70.00
+
+Estoque final de p1: 8
+
+Requisito Validado: Requisitos 1, 5, 6, 8.
+
+Teste 02: Pedido com desconto SAVE10 aplicado com sucesso (Subtotal > R$ 100)
+Objetivo: Validar se o cupom SAVE10 concede 10% de desconto corretamente quando subtotal > 100.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 3}] (supondo preço unitário R$ 50,00 -> subtotal R$ 150,00)
+
+inventory: {"p1": 5}
+
+coupon: "SAVE10"
+
+Resultado Esperado:
+
+Subtotal: R$ 150.00 | Desconto: R$ 15.00 (10%) | Frete: R$ 20.00 | Total: R$ 155.00
+
+Requisito Validado: Requisito 4, 6.
+
+Teste 03: Isenção de frete para cliente VIP
+Objetivo: Verificar se cliente VIP possui frete grátis independentemente do subtotal.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": True}
+
+items: [{"product_id": "p1", "quantity": 1}] (subtotal R$ 50,00)
+
+inventory: {"p1": 10}
+
+Resultado Esperado:
+
+Subtotal: R$ 50.00 | Desconto: R$ 0.00 | Frete: R$ 0.00 | Total: R$ 50.00
+
+Requisito Validado: Requisito 7.
+
+2. Valores de Fronteira (Boundary Value Analysis)
+
+Teste 04: Cupom SAVE10 no valor exato da receita (Subtotal = R$ 100,00)
+Objetivo: Validar o limite exato de R$ 100,00 para elegibilidade do cupom SAVE10 (maior ou igual a R$ 100).
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 2}] (preço unitário R$ 50,00 -> subtotal R$ 100,00)
+
+inventory: {"p1": 5}
+
+coupon: "SAVE10"
+
+Resultado Esperado:
+
+Subtotal: R$ 100.00 | Desconto: R$ 10.00 | Frete: R$ 20.00 | Total: R$ 110.00
+
+Requisito Validado: Requisito 4.
+
+Teste 05: Cupom SAVE10 imediatamente abaixo do limite (Subtotal = R$ 99,99)
+Objetivo: Validar que o cupom NÃO é aplicado para subtotal estritamente menor que R$ 100,00.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 1}] (subtotal R$ 99,99)
+
+inventory: {"p1": 5}
+
+coupon: "SAVE10"
+
+Resultado Esperado:
+
+Subtotal: R$ 99.99 | Desconto: R$ 0.00 | Frete: R$ 20.00 | Total: R$ 119.99
+
+Requisito Validado: Requisito 4.
+
+Teste 06: Frete grátis por subtotal no valor exato da regra (Subtotal = R$ 200,00) para Não-VIP
+Objetivo: Validar a regra de frete grátis para não-VIP no limite exato de R$ 200,00.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 4}] (preço unitário R$ 50,00 -> subtotal R$ 200,00)
+
+inventory: {"p1": 10}
+
+Resultado Esperado:
+
+Subtotal: R$ 200.00 | Desconto: R$ 0.00 | Frete: R$ 0.00 | Total: R$ 200.00
+
+Requisito Validado: Requisito 8.
+
+Teste 07: Frete para Não-VIP com subtotal imediatamente abaixo (Subtotal = R$ 199,99)
+Objetivo: Confirmar cobrança de frete para não-VIP com subtotal R$ 199,99.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 1}] (subtotal R$ 199,99)
+
+inventory: {"p1": 5}
+
+Resultado Esperado:
+
+Subtotal: R$ 199.99 | Desconto: R$ 0.00 | Frete: R$ 20.00 | Total: R$ 219.99
+
+Requisito Validado: Requisito 8.
+
+Teste 08: Compra utilizando a quantidade exata em estoque
+Objetivo: Validar compra quando quantidade solicitada == quantidade em estoque.
+
+Dados de Entrada:
+
+user: {"status": "active"}
+
+items: [{"product_id": "p1", "quantity": 5}]
+
+inventory: {"p1": 5}
+
+Resultado Esperado:
+
+Pedido gerado com sucesso.
+
+Estoque final de p1: 0
+
+Requisito Validado: Requisito 3.
+
+3. Casos Negativos e Exceções
+
+Teste 09: Tentativa de compra por usuário inativo
+Objetivo: Impedir a criação do pedido para usuários com status diferente de "active".
+
+Dados de Entrada:
+
+user: {"status": "inactive", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 1}]
+
+inventory: {"p1": 10}
+
+Resultado Esperado:
+
+Lançamento de exceção ValueError com a mensagem "Usuário inativo".
+
+Requisito Validado: Requisito 1.
+
+Teste 10: Item com quantidade zero ou negativa
+Objetivo: Impedir itens com quantidades menores ou iguais a zero.
+
+Dados de Entrada:
+
+user: {"status": "active"}
+
+items: [{"product_id": "p1", "quantity": 0}]
+
+inventory: {"p1": 10}
+
+Resultado Esperado:
+
+Lançamento de exceção ValueError com a mensagem "Quantidade inválida".
+
+Requisito Validado: Requisito 2.
+
+Teste 11: Estoque insuficiente para atender o item
+Objetivo: Rejeitar pedidos que solicitem quantidade superior ao estoque disponível.
+
+Dados de Entrada:
+
+user: {"status": "active"}
+
+items: [{"product_id": "p1", "quantity": 6}]
+
+inventory: {"p1": 5}
+
+Resultado Esperado:
+
+Lançamento de exceção ValueError com a mensagem "Estoque insuficiente".
+
+Requisito Validado: Requisito 3.
+
+4. Efeitos Colaterais e Atomicidade do Estoque
+
+Teste 12: Atomicidade do estoque no caso de falha no segundo item
+Objetivo: Garantir que NENHUM item tenha seu estoque alterado se houver falha de validação em qualquer item da lista (Requisito de alteração após validação completa).
+
+Dados de Entrada:
+
+user: {"status": "active"}
+
+items: [{"product_id": "p1", "quantity": 2}, {"product_id": "p2", "quantity": 10}]
+
+inventory: {"p1": 5, "p2": 3} (p1 possui estoque, p2 NÃO possui estoque suficiente)
+
+Resultado Esperado:
+
+Exceção ValueError("Estoque insuficiente") lançada.
+
+O estoque de p1 deve permanecer em 5 (não pode sofrer rollback parcial nem ter sido alterado antecipadamente).
+
+Requisito Validado: Requisito 5.
+
+5. Combinação de Regras
+
+Teste 13: Combinação de Cliente VIP + Cupom SAVE10 + Subtotal > R$ 200
+Objetivo: Garantir a aplicação harmonizada de todas as regras acumuladas.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": True}
+
+items: [{"product_id": "p1", "quantity": 5}] (subtotal R$ 250,00)
+
+inventory: {"p1": 10}
+
+coupon: "SAVE10"
+
+Resultado Esperado:
+
+Subtotal: R$ 250.00
+
+Desconto: R$ 25.00 (10%)
+
+Frete: R$ 0.00 (devido ao VIP)
+
+Total: R$ 225.00
+
+Requisito Validado: Requisitos 4, 6, 7.
+
+Teste 14: Cupom inválido ou desconhecido
+Objetivo: Verificar se cupons inexistentes ou grafados incorretamente são ignorados sem quebrar o fluxo.
+
+Dados de Entrada:
+
+user: {"status": "active", "vip": False}
+
+items: [{"product_id": "p1", "quantity": 3}] (subtotal R$ 150,00)
+
+inventory: {"p1": 5}
+
+coupon: "INVALID10"
+
+Resultado Esperado:
+
+Subtotal: R$ 150.00 | Desconto: R$ 0.00 | Frete: R$ 20.00 | Total: R$ 170.00
+
+Requisito Validado: Requisito 4.
