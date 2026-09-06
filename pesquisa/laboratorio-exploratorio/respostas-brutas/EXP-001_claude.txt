@@ -1,0 +1,130 @@
+=== TRANSCRIPT BRUTO — EXP-001 Claude (não editado) ===
+=== Fonte: conversa original no Claude (colado pelo autor) ===
+
+Mensagem recolhida
+Pensou por 37s
+
+Análise de Defeitos
+
+Defeito 1 — Falta de validação de que a quantidade é um número inteiro
+Problema: O código valida apenas se a quantidade é maior que zero, mas não verifica se ela é um valor inteiro, como exige o requisito 2 ("quantidade inteira maior que zero").
+
+Onde ocorre:
+
+if quantity <= 0:
+    raise ValueError("Quantidade inválida")
+
+Quando acontece: Sempre que um item tiver quantity como um número fracionário positivo (float não inteiro).
+
+Exemplo de entrada:
+
+items = [{"product_id": "p1", "quantity": 2.5}]
+
+Esse item passa pela validação sem erro, pois 2.5 <= 0 é falso.
+
+Comportamento esperado: O sistema deveria rejeitar quantidades não inteiras (ex.: 2.5), levantando erro de validação, já que o requisito exige explicitamente "quantidade inteira".
+
+Defeito 2 — Estoque é decrementado antes de validar todos os itens do pedido
+Problema: O requisito 5 exige que o estoque só seja alterado depois que todos os itens forem validados com sucesso. O código, porém, decrementa o estoque dentro do próprio laço de validação, item a item.
+
+Onde ocorre:
+
+for item in items:
+    ...
+    if inventory[product_id] < quantity:
+        raise ValueError("Estoque insuficiente")
+    inventory[product_id] -= quantity   # <-- alteração ocorre durante a validação
+    ...
+
+Quando acontece: Sempre que um pedido tiver múltiplos itens e algum item posterior na lista falhar na validação (quantidade inválida ou estoque insuficiente), depois que itens anteriores já tiverem sido validados.
+
+Exemplo de entrada:
+
+inventory = {"p1": 5, "p2": 1}
+items = [
+    {"product_id": "p1", "quantity": 3},
+    {"product_id": "p2", "quantity": 10},  # estoque insuficiente
+]
+
+O item p1 tem seu estoque decrementado (inventory["p1"] vira 2) antes de se descobrir que p2 é inválido. A exceção é lançada, mas o estoque de p1 já foi alterado indevidamente.
+
+Comportamento esperado: Nenhuma alteração de estoque deveria ocorrer até que todos os itens do pedido tenham sido validados com sucesso (quantidade e disponibilidade). Somente após essa validação completa é que os decrementos devem ser aplicados.
+
+Defeito 3 — Cálculo do subtotal usa o estoque (já decrementado) em vez do valor/preço do item
+Problema: O subtotal deveria refletir o valor monetário dos itens do pedido, mas o código o calcula multiplicando a quantidade em estoque restante pela quantidade comprada — não há nenhuma referência ao preço do produto. Além disso, esse cálculo usa o valor de inventory[product_id] após o decremento, tornando o resultado dependente e incoerente com a quantidade realmente vendida.
+
+Onde ocorre:
+
+inventory[product_id] -= quantity
+subtotal += inventory[product_id] * quantity
+
+Quando acontece: Em qualquer pedido, mas o problema fica mais evidente quando a quantidade comprada esgota o estoque do produto.
+
+Exemplo de entrada:
+
+inventory = {"p1": 5}
+items = [{"product_id": "p1", "quantity": 5}]
+
+Após o decremento, inventory["p1"] vira 0, e o subtotal calculado é 0 * 5 = 0, mesmo que o cliente tenha comprado 5 unidades. O valor do pedido fica zerado independentemente do preço real do produto.
+
+Comportamento esperado: O subtotal deveria ser calculado a partir do valor/preço de cada item (ex.: preco_unitario * quantidade), e não a partir da quantidade restante em estoque. O cálculo também não deveria depender da ordem de execução (decremento antes do somatório).
+
+Defeito 4 — Condição do cupom SAVE10 usa > em vez de >=
+Problema: O requisito 4 diz que o desconto deve ser concedido quando o subtotal for maior ou igual a R$ 100,00. O código usa comparação estritamente maior (>), excluindo o caso de igualdade.
+
+Onde ocorre:
+
+if coupon == "SAVE10" and subtotal > 100:
+    discount = subtotal * 0.10
+
+Quando acontece: Sempre que o subtotal for exatamente R$ 100,00.
+
+Exemplo de entrada:
+
+subtotal = 100.00
+coupon = "SAVE10"
+
+Nesse caso subtotal > 100 é falso, então discount permanece 0.
+
+Comportamento esperado: Com subtotal igual a R$ 100,00 e cupom "SAVE10", o desconto de 10% deveria ser aplicado (discount = 10.00).
+
+Defeito 5 — Frete para clientes VIP está invertido (cobra R$ 20 em vez de ser gratuito)
+Problema: O requisito 7 estabelece que clientes VIP não pagam frete. O código faz exatamente o oposto: atribui shipping = 20 quando o usuário é VIP.
+
+Onde ocorre:
+
+if user.get("vip"):
+    shipping = 20
+
+Quando acontece: Sempre que user["vip"] for verdadeiro (True), independentemente do subtotal.
+
+Exemplo de entrada:
+
+user = {"status": "active", "vip": True}
+
+O resultado será shipping = 20, quando deveria ser shipping = 0.
+
+Comportamento esperado: Para qualquer cliente VIP, o frete deve ser sempre R$ 0,00, independentemente do valor do subtotal.
+
+Defeito 6 — Condição de frete grátis para não-VIP usa > em vez de >=
+Problema: O requisito 8 diz que clientes não VIP pagam R$ 20,00 de frete, exceto quando o subtotal for maior ou igual a R$ 200,00. O código usa subtotal > 200, excluindo o caso de igualdade a 200.
+
+Onde ocorre:
+
+elif subtotal > 200:
+    shipping = 0
+else:
+    shipping = 20
+
+Quando acontece: Sempre que um cliente não VIP tiver subtotal exatamente igual a R$ 200,00.
+
+Exemplo de entrada:
+
+user = {"status": "active", "vip": False}
+# cenário hipotético em que subtotal = 200.00
+
+Como 200 > 200 é falso, o código cai no else e cobra shipping = 20, quando deveria ser 0.
+
+Comportamento esperado: Para subtotal igual ou superior a R$ 200,00 (cliente não VIP), o frete deveria ser R$ 0,00.
+
+O Claude trabalha diretamente com sua base de código

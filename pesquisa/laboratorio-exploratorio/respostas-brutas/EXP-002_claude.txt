@@ -1,0 +1,319 @@
+=== TRANSCRIPT BRUTO — EXP-002 Claude (não editado) ===
+=== Fonte: conversa original no Claude (colado pelo autor) ===
+
+Mensagem recolhida
+Pensou por 1m 24s
+
+Estratégia de Testes — create_order
+
+Antes dos casos de teste, um alerta de QA importante:
+
+Observações e premissas
+
+Ambiguidade de precificação: os requisitos não definem explicitamente como o subtotal de cada item deve ser calculado (não há um campo de preço claro nos parâmetros da função). O código atual usa os valores de inventory (aparentemente contagem de estoque) após decrementá-los como se fossem preço unitário — isso é um indício forte de bug de design. Para os testes abaixo, assumo que deveria existir um valor unitário (preço) associado a cada item, calculado antes de qualquer alteração no estoque, e explicito os valores de subtotal esperados em cada caso. Esse ponto precisa ser esclarecido com o time de produto antes da automação dos testes.
+
+Ao revisar os requisitos, identifiquei possíveis divergências entre requisito e implementação (uso de > em vez de >= nos requisitos 4 e 8, lógica de frete VIP invertida no requisito 7, e atualização de estoque item a item em vez de ao final, contrariando o requisito 5). Os casos de teste abaixo são desenhados a partir dos requisitos, não do código — portanto, alguns devem falhar na implementação atual, o que é o comportamento esperado de um bom conjunto de testes de regressão/aceitação.
+
+A. Validação de status do usuário (Requisito 1)
+
+A1 — Usuário ativo cria pedido com sucesso
+
+Objetivo: confirmar que um usuário com status "active" consegue criar um pedido válido.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":2,"price":10.0}], inventory={"P1":10}, coupon=None
+Resultado esperado: pedido criado sem exceção; retorno contém subtotal=20.0.
+Requisito: 1
+
+A2 — Usuário inativo é rejeitado
+
+Objetivo: garantir que pedidos não sejam criados para usuários com status diferente de "active".
+Entrada: user={"status":"inactive"}, items=[{"product_id":"P1","quantity":1,"price":10.0}], inventory={"P1":10}
+Resultado esperado: ValueError lançado; inventory["P1"] permanece 10 (não deve haver efeito colateral).
+Requisito: 1
+
+A3 — Status com outros valores (ex.: "pending", "blocked", "suspended")
+
+Objetivo: garantir que qualquer status diferente de "active" seja rejeitado, não apenas "inactive".
+Entrada: user={"status":"pending"}, items e inventory válidos.
+Resultado esperado: ValueError lançado.
+Requisito: 1
+
+A4 — Status ausente no dicionário do usuário
+
+Objetivo: verificar comportamento com entrada malformada (robustez/entrada inválida).
+Entrada: user={"vip":False} (sem chave "status"), items e inventory válidos.
+Resultado esperado: erro tratado de forma controlada (KeyError documentado ou ValueError de validação, conforme decisão de design) — não deve mutar inventory.
+Requisito: 1 (validação de entrada)
+
+B. Validação de quantidade (Requisito 2)
+
+B1 — Quantidade válida mínima (fronteira, quantity=1)
+
+Objetivo: confirmar que o menor valor positivo válido é aceito.
+Entrada: items=[{"product_id":"P1","quantity":1,"price":10.0}], inventory={"P1":5}
+Resultado esperado: pedido criado com sucesso; inventory["P1"] reduzido para 4.
+Requisito: 2
+
+B2 — Quantidade igual a zero (fronteira)
+
+Objetivo: garantir rejeição de quantidade zero.
+Entrada: items=[{"product_id":"P1","quantity":0,"price":10.0}], inventory={"P1":5}
+Resultado esperado: ValueError lançado; inventory["P1"] inalterado.
+Requisito: 2
+
+B3 — Quantidade negativa
+
+Objetivo: garantir rejeição de valores negativos.
+Entrada: items=[{"product_id":"P1","quantity":-3,"price":10.0}], inventory={"P1":5}
+Resultado esperado: ValueError lançado.
+Requisito: 2
+
+B4 — Quantidade não inteira (float positivo, ex.: 2.5)
+
+Objetivo: validar exigência explícita do requisito de que a quantidade seja inteira.
+Entrada: items=[{"product_id":"P1","quantity":2.5,"price":10.0}], inventory={"P1":5}
+Resultado esperado: ValueError (ou TypeError) lançado — quantidade fracionária não deve ser aceita mesmo sendo positiva.
+Requisito: 2
+
+B5 — Quantidade como string numérica ("2")
+
+Objetivo: validar robustez contra tipos incorretos.
+Entrada: items=[{"product_id":"P1","quantity":"2","price":10.0}], inventory={"P1":5}
+Resultado esperado: erro de validação de tipo, não deve ser silenciosamente aceito nem causar comparação incorreta.
+Requisito: 2
+
+C. Validação de estoque (Requisito 3)
+
+C1 — Estoque exatamente igual à quantidade solicitada (fronteira crítica)
+
+Objetivo: confirmar que a compra é permitida quando estoque == quantidade.
+Entrada: items=[{"product_id":"P1","quantity":5,"price":10.0}], inventory={"P1":5}
+Resultado esperado: pedido criado com sucesso; inventory["P1"] resultante 0.
+Requisito: 3
+
+C2 — Estoque uma unidade abaixo do necessário (fronteira)
+
+Objetivo: garantir rejeição quando falta exatamente 1 unidade.
+Entrada: items=[{"product_id":"P1","quantity":5,"price":10.0}], inventory={"P1":4}
+Resultado esperado: ValueError (estoque insuficiente); inventory["P1"] permanece 4.
+Requisito: 3
+
+C3 — Estoque maior que a quantidade solicitada (caso positivo comum)
+
+Objetivo: validar caminho feliz padrão.
+Entrada: items=[{"product_id":"P1","quantity":3,"price":10.0}], inventory={"P1":100}
+Resultado esperado: sucesso; inventory["P1"] resultante 97.
+Requisito: 3
+
+C4 — Produto inexistente no inventário
+
+Objetivo: garantir tratamento de erro claro para product_id não cadastrado, em vez de exceção não tratada (KeyError cru).
+Entrada: items=[{"product_id":"P999","quantity":1,"price":10.0}], inventory={"P1":10}
+Resultado esperado: erro de negócio tratado (ex.: "Produto não encontrado"), sem alterar inventory.
+Requisito: 3 (validação de entrada relacionada a estoque)
+
+D. Estoque só deve ser alterado após validação de todos os itens (Requisito 5 — efeitos colaterais)
+
+D1 — Falha no segundo item não deve alterar estoque do primeiro (rollback/atomicidade)
+
+Objetivo: garantir que, se qualquer item do pedido falhar na validação, nenhum item já processado tenha seu estoque alterado.
+Entrada: items=[{"product_id":"P1","quantity":2,"price":10.0}, {"product_id":"P2","quantity":100,"price":5.0}], inventory={"P1":10, "P2":3} (P2 tem estoque insuficiente)
+Resultado esperado: ValueError lançado; inventory["P1"] permanece 10 (não deve ter sido decrementado por causa da falha no item seguinte); inventory["P2"] permanece 3.
+Requisito: 5
+
+D2 — Falha por quantidade inválida no segundo item não deve afetar o primeiro
+
+Objetivo: mesmo cenário de D1, mas o motivo da falha é quantidade inválida em vez de estoque insuficiente.
+Entrada: items=[{"product_id":"P1","quantity":2,"price":10.0}, {"product_id":"P2","quantity":0,"price":5.0}], inventory={"P1":10, "P2":10}
+Resultado esperado: ValueError; inventory["P1"] permanece 10.
+Requisito: 5
+
+D3 — Todos os itens válidos: estoque de todos os produtos é atualizado corretamente
+
+Objetivo: validar que, no caminho feliz com múltiplos itens, todos os decrementos ocorrem corretamente.
+Entrada: items=[{"product_id":"P1","quantity":2,"price":10.0}, {"product_id":"P2","quantity":3,"price":5.0}], inventory={"P1":10, "P2":10}
+Resultado esperado: sucesso; inventory["P1"]==8, inventory["P2"]==7.
+Requisito: 5, 3
+
+E. Cupom de desconto SAVE10 (Requisito 4)
+
+E1 — Subtotal exatamente R$100,00 com cupom SAVE10 (fronteira "maior ou igual")
+
+Objetivo: validar que o desconto é concedido quando o subtotal é igual a R$100,00 (requisito diz "maior ou igual").
+Entrada: items=[{"product_id":"P1","quantity":10,"price":10.0}] (subtotal = 100.00), inventory={"P1":20}, coupon="SAVE10"
+Resultado esperado: discount == 10.00; subtotal == 100.00.
+Requisito: 4
+
+E2 — Subtotal abaixo de R$100,00 com cupom SAVE10 (fronteira inferior)
+
+Objetivo: garantir que o desconto não é aplicado abaixo do limite.
+Entrada: items=[{"product_id":"P1","quantity":9,"price":10.0}] (subtotal = 90.00), inventory={"P1":20}, coupon="SAVE10"
+Resultado esperado: discount == 0.00.
+Requisito: 4
+
+E3 — Subtotal acima de R$100,00 com cupom SAVE10
+
+Objetivo: validar aplicação do desconto no caminho feliz comum.
+Entrada: items=[{"product_id":"P1","quantity":15,"price":10.0}] (subtotal = 150.00), inventory={"P1":20}, coupon="SAVE10"
+Resultado esperado: discount == 15.00.
+Requisito: 4
+
+E4 — Cupom desconhecido/inválido
+
+Objetivo: garantir que somente "SAVE10" concede desconto.
+Entrada: items=[{"product_id":"P1","quantity":20,"price":10.0}] (subtotal = 200.00), inventory={"P1":30}, coupon="SAVE20"
+Resultado esperado: discount == 0.00.
+Requisito: 4
+
+E5 — Sem cupom (coupon=None)
+
+Objetivo: caso padrão sem cupom informado.
+Entrada: items=[{"product_id":"P1","quantity":20,"price":10.0}] (subtotal = 200.00), inventory={"P1":30}, coupon=None
+Resultado esperado: discount == 0.00.
+Requisito: 4
+
+E6 — Cupom com variação de caixa ("save10" minúsculo)
+
+Objetivo: validar sensibilidade a maiúsculas/minúsculas (regra de negócio implícita).
+Entrada: items=[{"product_id":"P1","quantity":15,"price":10.0}], inventory={"P1":20}, coupon="save10"
+Resultado esperado: a definir com o PO se deve ou não aplicar desconto; teste documenta a decisão esperada (ex.: discount == 0.00 se a comparação for case-sensitive).
+Requisito: 4 (regra de negócio a esclarecer)
+
+F. Frete — clientes VIP e não VIP (Requisitos 7 e 8)
+
+F1 — Cliente VIP não paga frete, independentemente do subtotal (subtotal alto)
+
+Objetivo: validar isenção de frete para VIP.
+Entrada: user={"status":"active","vip":True}, items=[{"product_id":"P1","quantity":30,"price":10.0}] (subtotal=300), inventory={"P1":50}
+Resultado esperado: shipping == 0.00.
+Requisito: 7
+
+F2 — Cliente VIP com subtotal baixo também não paga frete
+
+Objetivo: garantir que a isenção de frete do VIP não depende do valor do subtotal (diferindo da regra de não-VIP).
+Entrada: user={"status":"active","vip":True}, items=[{"product_id":"P1","quantity":1,"price":5.0}] (subtotal=5.00), inventory={"P1":10}
+Resultado esperado: shipping == 0.00.
+Requisito: 7
+
+F3 — Cliente não-VIP com subtotal abaixo de R$200,00 paga frete fixo
+
+Objetivo: validar cobrança de R$20,00 de frete para não-VIP com subtotal insuficiente para frete grátis.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":15,"price":10.0}] (subtotal=150.00), inventory={"P1":20}
+Resultado esperado: shipping == 20.00.
+Requisito: 8
+
+F4 — Cliente não-VIP com subtotal exatamente R$200,00 (fronteira "maior ou igual")
+
+Objetivo: validar que o frete é gratuito quando o subtotal é igual a R$200,00.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":20,"price":10.0}] (subtotal=200.00), inventory={"P1":30}
+Resultado esperado: shipping == 0.00.
+Requisito: 8
+
+F5 — Cliente não-VIP com subtotal acima de R$200,00
+
+Objetivo: caso comum de frete grátis por valor alto de compra.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":25,"price":10.0}] (subtotal=250.00), inventory={"P1":30}
+Resultado esperado: shipping == 0.00.
+Requisito: 8
+
+F6 — Cliente não-VIP com subtotal mínimo (um centavo abaixo de R$200,00, fronteira fina)
+
+Objetivo: validar precisão da fronteira (R$199,99 ainda deve cobrar frete).
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":1,"price":199.99}], inventory={"P1":5}
+Resultado esperado: shipping == 20.00.
+Requisito: 8
+
+F7 — Usuário sem a chave "vip" definida
+
+Objetivo: garantir que a ausência do campo seja tratada como não-VIP (comportamento default seguro).
+Entrada: user={"status":"active"} (sem chave "vip"), items=[{"product_id":"P1","quantity":10,"price":10.0}] (subtotal=100.00), inventory={"P1":20}
+Resultado esperado: shipping == 20.00 (tratado como não-VIP).
+Requisito: 8
+
+G. Cálculo do valor final (Requisito 6)
+
+G1 — Fórmula total = subtotal - desconto + frete (sem desconto, com frete)
+
+Objetivo: validar a fórmula básica em cenário simples.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":15,"price":10.0}] (subtotal=150.00), inventory={"P1":20}, coupon=None
+Resultado esperado: subtotal=150.00, discount=0.00, shipping=20.00, total=170.00.
+Requisito: 6, 8
+
+G2 — Fórmula com desconto e frete grátis simultâneos
+
+Objetivo: validar a fórmula quando múltiplas regras influenciam o total.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":25,"price":10.0}] (subtotal=250.00), inventory={"P1":30}, coupon="SAVE10"
+Resultado esperado: subtotal=250.00, discount=25.00, shipping=0.00, total=225.00.
+Requisito: 6, 4, 8
+
+G3 — Arredondamento de valores decimais
+
+Objetivo: garantir que o resultado é corretamente arredondado para 2 casas decimais em cenários com dízimas.
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":3,"price":33.333}] (subtotal=99.999), inventory={"P1":10}, coupon=None
+Resultado esperado: subtotal == 100.00 (arredondado), demais campos coerentes com o valor arredondado.
+Requisito: 6
+
+H. Combinações de regras
+
+H1 — VIP + cupom SAVE10 + subtotal acima do limite (todas as regras favoráveis ao cliente)
+
+Objetivo: validar que desconto e isenção de frete são aplicados simultaneamente, sem interferência mútua.
+Entrada: user={"status":"active","vip":True}, items=[{"product_id":"P1","quantity":20,"price":10.0}] (subtotal=200.00), inventory={"P1":30}, coupon="SAVE10"
+Resultado esperado: discount=20.00, shipping=0.00, total=180.00.
+Requisito: 4, 6, 7
+
+H2 — Não-VIP, subtotal exatamente nas duas fronteiras (100 e 200) ao mesmo tempo
+
+Objetivo: cenário de fronteira dupla — subtotal = R$200,00 ativa tanto o desconto (limite 100) quanto o frete grátis (limite 200).
+Entrada: user={"status":"active","vip":False}, items=[{"product_id":"P1","quantity":20,"price":10.0}] (subtotal=200.00), inventory={"P1":30}, coupon="SAVE10"
+Resultado esperado: discount=20.00, shipping=0.00, total=180.00.
+Requisito: 4, 8, 6
+
+H3 — Pedido com múltiplos produtos diferentes, desconto calculado sobre o subtotal agregado
+
+Objetivo: confirmar que o desconto de 10% é avaliado sobre a soma de todos os itens, não item a item.
+Entrada: items=[{"product_id":"P1","quantity":5,"price":10.0}, {"product_id":"P2","quantity":5,"price":10.0}] (subtotal agregado=100.00), inventory={"P1":10,"P2":10}, coupon="SAVE10", user={"status":"active","vip":False}
+Resultado esperado: discount=10.00 (aplicado sobre os R$100,00 totais, mesmo que nenhum item isoladamente atinja o limite).
+Requisito: 4
+
+I. Entradas inválidas / robustez adicional
+
+I1 — Lista de itens vazia
+
+Objetivo: definir e validar o comportamento para pedido sem itens.
+Entrada: items=[], user={"status":"active","vip":False}, inventory={}, coupon=None
+Resultado esperado: a definir com o PO — ex.: pedido criado com subtotal=0.00, shipping=20.00, total=20.00, sem erro; ou rejeição explícita de pedido vazio. O comportamento deve ser explicitado como requisito antes da automação.
+Requisito: 2, 6 (caso não coberto explicitamente — gap de requisito)
+
+I2 — Item sem a chave "quantity"
+
+Objetivo: garantir tratamento de erro claro para item malformado.
+Entrada: items=[{"product_id":"P1"}], inventory={"P1":10}
+Resultado esperado: erro de validação tratado (não deve propagar KeyError genérico sem contexto).
+Requisito: 2
+
+I3 — Cupom com tipo inválido (não string, ex.: número)
+
+Objetivo: robustez contra tipo incorreto no parâmetro coupon.
+Entrada: coupon=10, demais parâmetros válidos com subtotal >= 100.
+Resultado esperado: nenhum desconto aplicado (comparação com "SAVE10" falha) e sem exceção não tratada.
+Requisito: 4
+
+I4 — inventory com valor negativo pré-existente (dado inconsistente vindo de fora)
+
+Objetivo: validar comportamento defensivo diante de dado de estoque já corrompido.
+Entrada: items=[{"product_id":"P1","quantity":1,"price":10.0}], inventory={"P1":-5}
+Resultado esperado: ValueError (estoque insuficiente), já que -5 < 1.
+Requisito: 3
+
+I5 — Não mutação do parâmetro items de entrada
+
+Objetivo: garantir que a função não modifica a lista/dicionários de items recebidos (efeito colateral indesejado sobre a entrada do chamador).
+Entrada: items=[{"product_id":"P1","quantity":2,"price":10.0}], inventory={"P1":10}
+Resultado esperado: após a chamada, o conteúdo de items permanece idêntico ao original (comparar antes/depois).
+Requisito: efeito colateral (não mapeado a requisito funcional explícito, mas relevante para qualidade)
+
+Esse conjunto cobre: caminho feliz por requisito, fronteiras exatas (100, 200, estoque igual à quantidade, quantidade=1 e 0), negativos/tipos inválidos, efeitos colaterais (estoque só após validação total, imutabilidade de items), e combinações de regras (VIP+cupom, fronteiras duplas). Recomendo que os casos D1, D2, E1, F1/F2 e F4 sejam tratados como prioridade alta na primeira rodada de execução, pois é onde há maior risco de divergência entre requisito e implementação atual.
+
+Escreva uma mensagem…
+
+Claude é uma IA e pode cometer erros. Verifique sempre as respostas.
