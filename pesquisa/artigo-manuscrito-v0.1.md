@@ -1,11 +1,13 @@
 # Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de Inteligência Artificial: Um Estudo Comparativo sob Requisitos Controlados
 
+**Autor:** Bruno Bertin Marquez · ORCID: [`0009-0005-3546-8302`](https://orcid.org/0009-0005-3546-8302) · Pesquisador independente — Pós-graduado em Gestão da Qualidade de Software; Pós-graduando em Engenharia de Requisitos.
+
 ---
 
 > **Estado:** MANUSCRITO v0.1 (rascunho completo IMRaD).
 > **Idioma:** português (adaptável a inglês — EMSE).
 > **Objetivo atual:** versão íntegra para depósito como pré-print e posterior orientação/submissão.
-> **Decisão pendente (orientador):** veículo alvo — o texto segue estrutura genérica compatível com SBES/EMSE.
+> **Decisão pendente (autor):** veículo alvo — o texto segue estrutura genérica compatível com SBES/EMSE.
 
 ---
 
@@ -297,4 +299,4 @@ No cenário controlado, agentes de modelos "free" em modo agente produziram sist
 
 ---
 
-*Manuscrito v0.1 — 2026-09-06. Gerado a partir dos artefatos de pesquisa (problema-e-hipoteses, metodologia-experimental §13, rascunho-discussao, matriz-de-artigos). Pendências antes da submissão: revisão de pares interna, ajuste ao modelo de citação do veículo, verificação final das figuras e das referências, decisão de idioma/veículo com orientador.*
+*Manuscrito v0.1 — 2026-09-06. Autor: Bruno Bertin Marquez (ORCID 0009-0005-3546-8302), pesquisador independente. Gerado a partir dos artefatos de pesquisa (problema-e-hipoteses, metodologia-experimental §13, rascunho-discussao, matriz-de-artigos). Pendências antes da submissão: ajuste ao modelo de citação do veículo, verificação final das figuras e das referências, decisão de idioma/veículo pelo autor (validação crítica opcional).*

@@ -57,7 +57,7 @@ software gerado por IA; agentes de código; qualidade de software; defeitos; or�
 `CC-BY 4.0` (atribuição; ampla reutilização). Alternativa: `CC-BY-SA 4.0`.
 
 ### Autores
-- [SEU NOME] (autor único) — e-mail de conta; ORCID se tiver.
+- Bruno Bertin Marquez (autor único) — ORCID: `0009-0005-3546-8302` (`https://orcid.org/0009-0005-3546-8302`); e-mail da conta OSF.
 
 ---
 

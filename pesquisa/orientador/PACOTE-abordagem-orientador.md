@@ -1,7 +1,7 @@
-# Pacote de Abordagem ao Orientador — Apresentação do Experimento Controlado
+# Pacote de Validação Crítica (Opcional) — Pesquisador Independente
 
-> **Finalidade:** apoiar a primeira reunião de validação/colaboração com um orientador (o autor ainda **não tem orientador formal**) e, a partir dela, obter **anuência institucional** e decisões de veículo/idioma/formato antes de qualquer submissão em veículo *peer-reviewed*.
-> **Preparado em:** 2026-09-06. Estado dos artefatos após a revisão interna (commit `2befdaa`) e com versão em inglês (commit `d726c43`).
+> **Finalidade:** apoiar uma **reunião de validação crítica** (opcional) do experimento com um professor/pesquisador da área. **Decisão de pesquisa:** o autor conduz o estudo como **pesquisador independente** (ORCID `0009-0005-3546-8302`) e **não depende de orientador formal** para escrever nem publicar. Um professor/pesquisador é bem-vindo como **revisor crítico** e, se houver contribuição efetiva, como **coautor** ou suporte a afiliação/endosso (ex.: arXiv cs.SE).
+> **Preparado em:** 2026-09-06. Artefatos após a revisão interna (commit `2befdaa`), versão em inglês (commit `d726c43`) e identidade de autor com ORCID incluída.
 > **Material de apoio central:** `dossie-veiculo-publicacao.md` (comparativo de veículos e itens de decisão, §4).
 
 ---
@@ -36,20 +36,20 @@
 
 **Limitações declaradas (leitura honesta).** n=12 com células esperadas <5 (χ² apenas informativo); 3/12 funcionalmente avaliáveis (viés Blocker por não-bootabilidade); validação **nativa sem Docker**; modelos free no momento da coleta; um único sistema-alvo/stack (sem generalização). **Neutralidade (C1):** se os dados mostrassem IA igual ou melhor, seria resultado, não limitação.
 
-**O que pedimos ao orientador.**
+**O que pedimos na validação (revisão crítica — opcional).**
 1. Validação do desenho experimental e da honestidade das limitações.
-2. Decisão de **veículo, idioma e formato** (tabela na §4).
-3. **Anuência/viés institucional** para submissão *peer-reviewed* e orientação para o pré-print.
+2. Voto de apoio na decisão de **veículo, idioma e formato** (tabela na §4).
+3. Verificação das **regras de afiliação/autor** do veículo escolhido (importante para submissão) e opinião sobre o **momento do pré-print OSF**.
 4. Opinião sobre **ampliar a amostra** antes da submissão ou publicar com n=12.
 
 ---
 
-## 3. Roteiro de conversa (sugestão de agenda)
+## 3. Roteiro de conversa (reunião de validação crítica — opcional)
 
 1. **5 min — visão geral.** Apresentar o one-pager (§2), sem detalhes estatísticos exaustivos.
 2. **10–15 min — desenho e honestidade.** Percorrer §§3 e 5 do manuscrito (desenho, oráculo, limitações). Pedir críticas explícitas ao poder estatístico e à operacionalização da RQ6/H3.
 3. **10 min — mesa redonda de decisões** com base no dossiê (§4 abaixo): veículo, idioma, formato, pré-registro.
-4. **5 min — ética e autoria.** Anuência institucional + composição de autoria/coautoria (evitar surpresa na submissão).
+4. **5 min — ética e autoria.** Possibilidade de parceria (coautoria/afiliação/endosso arXiv) — deixar explícito ANTES de qualquer submissão.
 5. **5 min — próximos passos e cronograma** (SBES 2027 ~abr/2027; EMSE rolling; depósito OSF).
 
 > **Dica:** levar também os *commits* relevantes do repositório público (manuscrito, método, figuras) como demonstrativo de reprodutibilidade — é o ponto forte do estudo perante SBES/EMSE.
@@ -70,21 +70,24 @@
 
 ## 5. Aspectos éticos e de autoria
 
-- **Anuência institucional:** submeter em veículo *peer-reviewed* geralmente exige vinculação/afiliação. Como o autor ainda não tem orientador formal, **definir afiliação/anuência antes de qualquer submissão** (pré-print OSF pode preceder, por não ter revisão).
-- **Autoria/coautoria:** deixar explícitas as contribuições do orientador eventual (CRediT) antes da submissão para evitar discussões posteriores.
-- **Pré-registro privado:** contém âncoras de decisão e detalhes do oráculo; compartilhar **sob demanda** no contexto de avaliação/parceria; o pré-print público usa a **versão limpa** (sem bloco interno de trabalho).
+- **Pesquisador independente:** escrever e ser autor **não exige** orientador nem doutorado (regras de autoria de revistas/congressos não exigem titulação do primeiro autor; podem exigir vínculo/afiliação de um autor — verificar por veículo). O pre-print OSF não exige afiliação.
+- **Anuência institucional:** submeter em veículo *peer-reviewed* pode exigir vinculação/afiliação; se um professor/pesquisador aderir como autor/afiliado, formalizar a contribuição (CRediT) **antes** da submissão.
+- **Autoria/coautoria:** deixar explícitas as contribuições de qualquer coautor eventual antes da primeira submissão para evitar discussões posteriores.
+- **Pre-registro privado:** contém âncoras de decisão e detalhes do oráculo; compartilhar **sob demanda** no contexto de avaliação/parceria; o pre-print público usa a **versão limpa** (sem bloco interno de trabalho).
 - **Oráculo e dados brutos:** não expor em material público; disponibilizar para artefato/replicação apenas em contexto de submissão ou parceria.
+- **Identidade acadêmica (ORCID):** usar `0009-0005-3546-8302` nos metadados de submissão/pre-print; recomenda-se completar o perfil com as pós-graduações, afiliação "Pesquisador independente", palavras-chave e, depois, o DOI do pre-print.
 - **Neutralidade:** estudo sem patrocínio industrial; declaração de ausência de conflitos na submissão.
 
 ---
 
-## 6. Próximos passos após a reunião
+## 6. Próximos passos (independente de reunião com professor)
 
-1. Confirmar **veículo e idioma** → ajustar modelo de citações e limites de páginas.
-2. Decidir **ampliação da amostra** → atualizar pré-registro (n=24/36, Docker em produção) e refazer figuras.
-3. Definir **momento do depósito OSF** (pré-print) e executar via `ROTEIRO-submissao-osf.md` (passo manuais, login do autor).
-4. Montar cronograma: SBES 2027 (prazo ~abr/2027) e/ou EMSE (rolling), com meta de envio coerente com a decisão da reunião.
+1. **Depositar o pré-print no OSF** (executável já, sem depender de orientador) via `ROTEIRO-submissao-osf.md` — metadados com ORCID prontos.
+2. Confirmar **veículo e idioma** com base no dossiê (a reunião de validação crítica é opcional; se houver, ajuda a decidir) → ajustar modelo de citações e limites de páginas.
+3. Decidir **ampliação da amostra** → atualizar pré-registro (n=24/36, Docker em produção) e refazer figuras.
+4. Se houver parceria/coautoria: registrar contribuições (CRediT) e usar eventual endosso para o **arXiv cs.SE** com a versão em inglês.
+5. Montar cronograma: SBES 2027 (prazo ~abr/2027) e/ou EMSE (rolling).
 
 ---
 
-*Pacote v0.1 — 2026-09-06. Consolida manuscrito (PT/EN), dossiê de veículos, pré-print OSF e os itens de decisão; não substitui a decisão do orientador.*
+*Pacote v0.2 — 2026-09-06. Reframing: pesquisador independente; validação crítica opcional. Consolida manuscrito (PT/EN), dossiê de veículos, pré-print OSF e itens de decisão; não substitui a decisão de veículo nem a consulta às regras do periódico/evento.*
