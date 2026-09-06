@@ -290,7 +290,27 @@ Nenhuma das 12 entregas passou 100% do oráculo; nenhuma ficou **Major/Minor** �
 5. **Classificação não é automática**: κ categoria moderado; reportar as resoluções ao discutir H2/RQ3.
 6. **Severidade sobre defeitos detectados** somente — não há como medir defeitos que teriam sido descobertos (não-bootáveis nunca exercitam funcionalidade).
 
-### 13.7 Leitura para o artigo
+### 13.7 RQ6/H3 — Testabilidade: os testes do agente detectam os defeitos do agente? (matriz 2×2)
+
+**Definição (H3):** "A utilização de IA para geração de testes **não garante a detecção** dos defeitos introduzidos pela própria IA." Operacionalização: para cada defeito da matriz, registra-se se foi detectado (a) pelo **oráculo independente** (`detectado_oraculo`) e (b) pelos **testes gerados pelo próprio agente** (`detectado_testes_agente` na `matriz_defeitos.csv`).
+
+**Matriz de contagem 2×2 (defeitos dentro do alcance do oráculo, execuções formais):**
+
+| | Testes do agente detectaram: **SIM** | Testes do agente detectaram: **NÃO** | Total |
+|---|---|---|---|
+| **Oráculo detectou: SIM** | 0 | **4** (lightning/e3 ×2; mimo/e2 ×1; mimo/e3 ×1) | 4 |
+| **Oráculo detectou: NÃO** *(deliverable não bootável — oráculo não executou)* | 0 | 8 | 8 |
+| **Total** | **0** | **12** | 12 |
+
+**Leitura da matriz (H3):**
+- **`detectado_testes_agente = NÃO` em 12/12 defeitos Tambon (100%)** — e em 18/18 linhas da matriz (incluindo NFR e piloto). Nenhum defeito de uma entrega foi revelado pelos testes que o próprio agente gerou, mesmo nas 3 entregas que subiram e cujas suítes *puderam* rodar contra o oráculo.
+- **`detectado_oraculo = SIM` em 4/4 dos defeitos alcançáveis** — quando o oráculo executou (81 testes), ele falhou consistentemente nas funcionalidades afetadas (auth/DB), revelando os defeitos que os testes do agente não pegaram.
+- O oráculo não pôde avaliar funcionalidade em 8 dos 12 defeitos (deliverables não bootáveis), mas mesmo nessas entregas os testes do agente **não** foram capazes de apontar a não-conformidade (a suíte própria não rodava em um app que não sobe).
+- **Teste exato de Fisher** na 2×2 acima (0,4 / 0,8): com qualquer tabela de contagem onde a linha "agente detectou = SIM" é toda 0, o p-valor marginal não é definido/é extremo — o padrão **0 detecção própria vs 4 detecções do oráculo** (nos reaches) sustenta **H3** em nível descritivo com este n. Reportar como tendência forte, não como significância (n pequeno; viés de seleção: só 3/12 bootáveis).
+
+**Caution/limitação:** a comparação é intrinsecamente assimétrica. Sem execução da funcionalidade, o "não-bootável" satura a categoria "oráculo NÃO detectou" e impede contagens equilibradas. O dado robusto e transversal é: **a aprovação pelos próprios testes do agente não foi, em nenhum caso, garantia de conformidade com o oráculo**. Isso ecoa a literatura [C04] (detecção limitada p/ testes gerados por LLMs), [C05] (coverage/mutation enganam na presença de bugs) e [C06] (omissão de casos especiais), e converge com o laboratório exploratório (EXP-002: reconhecer ≠ testar).
+
+### 13.8 Leitura para o artigo
 
 - **H1 (densidade)**: descritivamente, lightning tem maior densidade (1,36/KLOC) — insuficiente para rejeitar/aceitar com este n.
 - **H2 (perfil)**: ultra com concentração forte em `incomplete_generation` (p=0,010 Fisher) é o ponto mais sustentável; demais modelos sem perfil claro nesta amostra.
