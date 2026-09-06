@@ -32,16 +32,17 @@ Os dados do laboratório **não** entram na matriz de defeitos nem nas estatíst
 |---|---|---|---|
 | EXP-001 | Identificação de defeitos em código a partir de requisitos | Concluído | Oreate 6/6, Claude 6/6, Gemini 5/6 |
 | EXP-002 | Geração de casos de teste a partir de requisitos | Concluído | Claude 5/6, Oreate 4/6, Gemini 4/6 (cobertura clara) |
-| EXP-003 | Geração de testes orientada à detecção de defeitos | Planejado | — |
+| EXP-003 | Geração de testes orientada à detecção de defeitos | Planejado (pré-registro pronto) | — |
 
 ## Estrutura desta pasta
 
 | Arquivo | Conteúdo |
 |---|---|
 | `README.md` | Este índice |
-| `EXP-001-deteccao-defeitos.md` | Ficha EXP-001 (detalhamento abaixo) |
+| `EXP-001-deteccao-defeitos.md` | Ficha EXP-001 (detalhamento acima) |
 | `EXP-002-geracao-casos-de-teste.md` | Ficha EXP-002 |
-| `respostas-brutas/` | Respostas originais não editadas dos modelos (dados primários; pendente de arquivamento dos transcripts) |
+| `EXP-003-geracao-testes-sem-codigo.md` | Pré-registro do EXP-003 (planejado, não executado) |
+| `respostas-brutas/` | Respostas originais não editadas dos modelos (6/6 arquivadas) |
 
 ## A hipótese exploratória cruzada (EXP-001 + EXP-002 → pesquisa formal)
 

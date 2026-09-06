@@ -1,21 +1,19 @@
 # Respostas brutas — dados primários do laboratório exploratório
 
-Os transcripts originais (sem edição) das respostas dos modelos devem ser arquivados aqui como dados primários. Qualquer normalização/correção/interpretação deve ocorrer somente na camada de análise (fichas EXP-*).
+Os transcripts originais (sem edição) das respostas dos modelos são arquivados aqui como dados primários. Qualquer normalização/correção/interpretação ocorre somente na camada de análise (fichas EXP-*).
 
-## Pendências de arquivamento
+## Arquivos arquivados (6/6 — PENDÊNCIA RESOLVIDA em 2026-09-06)
 
-| Experimento | Modelo | Status |
-|---|---|---|
-| EXP-001 | Oreate AI | pendente — colar resposta original |
-| EXP-001 | Claude AI | pendente — colar resposta original |
-| EXP-001 | Gemini | pendente — colar resposta original |
-| EXP-002 | Oreate AI | pendente — colar resposta original |
-| EXP-002 | Claude AI | pendente — colar resposta original |
-| EXP-002 | Gemini | pendente — colar resposta original |
+| Arquivo | Experimento | Conteúdo | Estado do arquivamento |
+|---|---|---|---|
+| `EXP-001_oreate.txt` | EXP-001 | Resposta original Oreate (6/6 defeitos; inclui D1 com `quantity=1.5`) | arquivado, sem edição |
+| `EXP-001_claude.txt` | EXP-001 | Resposta original Claude (6/6 defeitos; inclui D1 com `quantity=2.5`) | arquivado, sem edição |
+| `EXP-001_gemini.txt` | EXP-001 | Resposta original Gemini (5/6 defeitos; D1 ausente) | arquivado, sem edição |
+| `EXP-002_oreate.txt` | EXP-002 | Resposta original Oreate (32 casos; pré-análise B1–B4) | arquivado, sem edição |
+| `EXP-002_claude.txt` | EXP-002 | Resposta original Claude (32 casos; B4 `quantity=2.5` → D1 coberto) | arquivado, sem edição |
+| `EXP-002_gemini.txt` | EXP-002 | Resposta original Gemini (14 casos; D1 não coberto) | arquivado, sem edição |
 
-## Formato de arquivo sugerido
+## Regras de preservação
 
-- `EXP-001_oreate.txt`, `EXP-001_claude.txt`, `EXP-001_gemini.txt`
-- `EXP-002_oreate.txt`, `EXP-002_claude.txt`, `EXP-002_gemini.txt`
-
-Sem edição/correção no conteúdo original.
+- Nenhuma normalização/correção no conteúdo original.
+- Artefatos de copiar/colar (ex.: `pre c¸ o` em EXP-001_gemini; `R\n20\n,\n00...` em EXP-002_oreate) foram **preservados como estavam** e, quando úteis, marcados com `[nota de preservacao: ...]` na linha seguinte — a nota é da camada de arquivamento, não altera o texto original.
