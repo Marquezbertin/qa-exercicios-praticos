@@ -1,0 +1,431 @@
+=== TRANSCRIPT BRUTO — EXP-002 Oreate (não editado) ===
+=== Fonte: conversa original no Oreate (colado pelo autor) ===
+
+Testes para a Função create_order
+Atualizar
+
+Você é um profissional experiente de QA e engenharia de software. Considere os requisitos e a implementação Python abaixo. Sua tarefa é criar uma estratégia de testes para verificar se a função create_order está funcionando corretamente de acordo com os requisitos. Crie casos de teste suficientes para verificar os diferentes comportamentos da função. Para cada caso de teste informe: Nome do teste. Objetivo. Dados de entrada. Resultado esperado. Qual requisito está sendo validado. Considere também: casos positivos; casos negativos; valores de fronteira; entradas inválidas; situações que possam produzir efeitos colaterais; diferentes combinações de regras. Não implemente os testes. Apenas projete os casos de teste. Não informe apenas testes genéricos. Os casos devem ser suficientemente específicos para que outra pessoa consiga implementá-los posteriormente. Requisitos O pedido só pode ser criado para um usuário cujo status seja "active". Cada item do pedido deve possuir uma quantidade inteira maior que zero. O estoque de cada produto deve ser suficiente para atender à quantidade solicitada. Se houver exatamente a quantidade solicitada em estoque, a compra deve ser permitida. O cupom "SAVE10" concede 10% de desconto quando o subtotal do pedido for maior ou igual a R$ 100,00. O estoque só deve ser alterado depois que todos os itens do pedido forem validados com sucesso. O valor final do pedido deve ser: subtotal - desconto + frete Clientes VIP não pagam frete. Clientes não VIP pagam R$ 20,00 de frete, exceto quando o subtotal for maior ou igual a R$ 200,00. Código def create_order(user, items, inventory, coupon=None): if user["status"] != "active": raise ValueError("Usuário inativo") subtotal = 0 for item in items: product_id = item["product_id"] quantity = item["quantity"] if quantity <= 0: raise ValueError("Quantidade inválida") if inventory[product_id] < quantity: raise ValueError("Estoque insuficiente") inventory[product_id] -= quantity subtotal += inventory[product_id] * quantity discount = 0 if coupon == "SAVE10" and subtotal > 100: discount = subtotal * 0.10 if user.get("vip"): shipping = 20 elif subtotal > 200: shipping = 0 else: shipping = 20 total = subtotal - discount + shipping return { "subtotal": round(subtotal, 2), "discount": round(discount, 2), "shipping": round(shipping, 2), "total": round(total, 2) }
+
+=== RESPOSTA DO MODELO ===
+
+Estratégia de Testes — create_order
+
+Análise Prévia: Bugs Identificados na Implementação
+
+Antes de listar os casos de teste, é essencial destacar que a implementação contém bugs que serão evidenciados pelos testes. Os casos de teste foram projetados para cobrir tanto o comportamento correto (segundo os requisitos) quanto o comportamento real (segundo o código), facilitando a detecção de falhas.
+
+#	Bug	Requisito Violado	Linha/Comportamento
+B1	Cupom SAVE10 usa subtotal > 100 em vez de subtotal >= 100	"maior ou igual a R$ 100,00"	if coupon == "SAVE10" and subtotal > 100:
+B2	Clientes VIP pagam frete de R
+20
+e
+m
+v
+e
+z
+d
+e
+R
+20emvezdeR 0	"Clientes VIP não pagam frete"	if user.get("vip"): shipping = 20
+B3	Estoque é alterado dentro do loop de validação, item a item	"O estoque só deve ser alterado depois que todos os itens forem validados"	inventory[product_id] -= quantity dentro do for
+B4	Subtotal calculado com valor do estoque após decremento	Deveria usar preço unitário, não estoque restante	subtotal += inventory[product_id] * quantity
+
+Casos de Teste
+
+1. Casos Positivos
+
+TC-01 — Pedido básico: usuário ativo, itens válidos, estoque suficiente, sem cupom, não VIP
+
+Campo	Detalhe
+Nome	test_create_order_basic_active_user
+Objetivo	Verificar que um pedido é criado com sucesso para um usuário ativo com itens válidos, estoque suficiente, sem cupom e sem VIP
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 2}]; inventory = {"P1": 10}; coupon = None
+Resultado esperado	Retorna dicionário com discount = 0, shipping = 20 (subtotal < 200, não VIP), total = subtotal - 0 + 20
+Requisito validado	R1 (usuário ativo), R2 (quantidade > 0), R3 (estoque suficiente)
+
+Nota: O valor de subtotal depende de como o preço é obtido. Como a implementação não possui campo de preço, este teste evidenciará o Bug B4 — o subtotal será 8 * 2 = 16 (estoque restante × quantidade) em vez de usar o preço unitário original.
+
+TC-02 — Pedido com cupom SAVE10 e subtotal ≥ R$ 100
+
+Campo	Detalhe
+Nome	test_create_order_coupon_save10_subtotal_100_or_more
+Objetivo	Verificar que o cupom SAVE10 aplica 10% de desconto quando o subtotal é ≥ R$ 100
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 5}]; inventory = {"P1": 100}; coupon = "SAVE10"
+Resultado esperado	discount = subtotal * 0.10; total = subtotal - discount + shipping
+Requisito validado	R4 (cupom SAVE10 com subtotal ≥ 100)
+
+Este teste será fundamental para evidenciar o Bug B4 (subtotal calculado incorretamente) e, combinado com TC-03, o Bug B1.
+
+TC-03 — Pedido com cupom SAVE10 e subtotal exatamente R$ 100,00
+
+Campo	Detalhe
+Nome	test_create_order_coupon_save10_subtotal_exactly_100
+Objetivo	Verificar que o cupom SAVE10 aplica desconto quando o subtotal é igual a R$ 100,00
+Dados de entrada	user = {"status": "active", "vip": False}; itens e estoque configurados para que subtotal == 100.00; coupon = "SAVE10"
+Resultado esperado (requisito)	discount = 10.00 (10% de 100) — o requisito diz "maior ou igual"
+Resultado esperado (código)	discount = 0 — pois o código usa > 100 e não >= 100
+Requisito validado	R4 — fronteira "maior ou igual a R$ 100,00"
+
+Evidencia Bug B1: A condição subtotal > 100 falha quando subtotal == 100, violando o requisito.
+
+TC-04 — Pedido com cliente VIP
+
+Campo	Detalhe
+Nome	test_create_order_vip_user_free_shipping
+Objetivo	Verificar que clientes VIP não pagam frete
+Dados de entrada	user = {"status": "active", "vip": True}; items = [{"product_id": "P1", "quantity": 1}]; inventory = {"P1": 10}; coupon = None
+Resultado esperado (requisito)	shipping = 0
+Resultado esperado (código)	shipping = 20 — pois o código atribui 20 ao VIP
+Requisito validado	R6 — "Clientes VIP não pagam frete"
+
+Evidencia Bug B2: O código inverteu a lógica — para VIP, atribui 20 em vez de 0.
+
+TC-05 — Cliente não VIP com subtotal ≥ R$ 200,00 (frete grátis)
+
+Campo	Detalhe
+Nome	test_create_order_non_vip_subtotal_200_free_shipping
+Objetivo	Verificar que cliente não VIP não paga frete quando subtotal ≥ R$ 200
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal >= 200; coupon = None
+Resultado esperado	shipping = 0
+Requisito validado	R7 — frete grátis para não VIP com subtotal ≥ 200
+
+TC-06 — Estoque exatamente igual à quantidade solicitada
+
+Campo	Detalhe
+Nome	test_create_order_exact_stock_quantity
+Objetivo	Verificar que o pedido é permitido quando o estoque é exatamente igual à quantidade solicitada
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 5}]; inventory = {"P1": 5}; coupon = None
+Resultado esperado	Pedido criado com sucesso; inventory["P1"] == 0 após a execução
+Requisito validado	R3 — "Se houver exatamente a quantidade solicitada em estoque, a compra deve ser permitida"
+
+TC-07 — Cálculo do valor final do pedido
+
+Campo	Detalhe
+Nome	test_create_order_total_calculation
+Objetivo	Verificar que total = subtotal - desconto + frete
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 3}]; inventory = {"P1": 50}; coupon = "SAVE10" (assumindo subtotal ≥ 100)
+Resultado esperado	total == subtotal - discount + shipping (com arredondamento a 2 casas)
+Requisito validado	R5 — fórmula do valor final
+
+2. Casos Negativos
+
+TC-08 — Usuário inativo
+
+Campo	Detalhe
+Nome	test_create_order_inactive_user_raises
+Objetivo	Verificar que ValueError("Usuário inativo") é lançado quando o status do usuário não é "active"
+Dados de entrada	user = {"status": "inactive", "vip": False}; items = [{"product_id": "P1", "quantity": 1}]; inventory = {"P1": 10}
+Resultado esperado	ValueError com mensagem "Usuário inativo"
+Requisito validado	R1 — "O pedido só pode ser criado para um usuário cujo status seja 'active'"
+
+TC-09 — Usuário com status inexistente/diferente
+
+Campo	Detalhe
+Nome	test_create_order_user_status_blocked_raises
+Objetivo	Verificar que qualquer status diferente de "active" rejeita o pedido
+Dados de entrada	user = {"status": "blocked", "vip": False}; items = [{"product_id": "P1", "quantity": 1}]; inventory = {"P1": 10}
+Resultado esperado	ValueError("Usuário inativo")
+Requisito validado	R1
+
+TC-10 — Quantidade igual a zero
+
+Campo	Detalhe
+Nome	test_create_order_quantity_zero_raises
+Objetivo	Verificar que ValueError("Quantidade inválida") é lançado quando quantity == 0
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 0}]; inventory = {"P1": 10}
+Resultado esperado	ValueError com mensagem "Quantidade inválida"
+Requisito validado	R2 — "quantidade inteira maior que zero"
+
+TC-11 — Quantidade negativa
+
+Campo	Detalhe
+Nome	test_create_order_negative_quantity_raises
+Objetivo	Verificar que ValueError("Quantidade inválida") é lançado quando quantity < 0
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": -3}]; inventory = {"P1": 10}
+Resultado esperado	ValueError com mensagem "Quantidade inválida"
+Requisito validado	R2
+
+TC-12 — Estoque insuficiente
+
+Campo	Detalhe
+Nome	test_create_order_insufficient_stock_raises
+Objetivo	Verificar que ValueError("Estoque insuficiente") é lançado quando o estoque é menor que a quantidade solicitada
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 15}]; inventory = {"P1": 10}
+Resultado esperado	ValueError com mensagem "Estoque insuficiente"
+Requisito validado	R3 — estoque insuficiente
+
+TC-13 — Estoque insuficiente por diferença mínima (1 unidade)
+
+Campo	Detalhe
+Nome	test_create_order_stock_off_by_one_raises
+Objetivo	Verificar a fronteira: estoque = quantidade - 1 deve rejeitar o pedido
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 6}]; inventory = {"P1": 5}
+Resultado esperado	ValueError("Estoque insuficiente")
+Requisito validado	R3 — fronteira inferior de estoque
+
+3. Valores de Fronteira
+
+TC-14 — Subtotal R$ 99,99 — cupom SAVE10 não deve aplicar
+
+Campo	Detalhe
+Nome	test_create_order_coupon_save10_subtotal_just_below_100
+Objetivo	Verificar que o cupom SAVE10 não aplica desconto quando subtotal é R$ 99,99
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 99.99; coupon = "SAVE10"
+Resultado esperado	discount = 0
+Requisito validado	R4 — fronteira inferior do cupom
+
+TC-15 — Subtotal R$ 100,00 — cupom SAVE10 deve aplicar (fronteira exata)
+
+Campo	Detalhe
+Nome	test_create_order_coupon_save10_subtotal_exactly_100_boundary
+Objetivo	Verificar que o cupom SAVE10 aplica desconto quando subtotal é exatamente R$ 100,00
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 100.00; coupon = "SAVE10"
+Resultado esperado (requisito)	discount = 10.00
+Resultado esperado (código)	discount = 0 (Bug B1)
+Requisito validado	R4 — "maior ou igual a R$ 100,00"
+
+Evidencia Bug B1 na fronteira exata.
+
+TC-16 — Subtotal R$ 199,99 — não VIP deve pagar frete
+
+Campo	Detalhe
+Nome	test_create_order_non_vip_subtotal_just_below_200_shipping_charged
+Objetivo	Verificar que não VIP paga R
+20
+d
+e
+f
+r
+e
+t
+e
+q
+u
+a
+n
+d
+o
+s
+u
+b
+t
+o
+t
+a
+l
+=
+R
+20defretequandosubtotal=R 199,99
+[nota de preservacao: '20defretequandosubtotal=R 199,99' reproduz artefato de copiar/colar da conversa original; provavel 'R$ 20,00 de frete quando subtotal = R$ 199,99']
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 199.99; coupon = None
+Resultado esperado	shipping = 20
+Requisito validado	R7 — fronteira inferior de frete grátis
+
+TC-17 — Subtotal R$ 200,00 — não VIP não deve pagar frete
+
+Campo	Detalhe
+Nome	test_create_order_non_vip_subtotal_exactly_200_free_shipping
+Objetivo	Verificar que não VIP tem frete grátis quando subtotal é exatamente R$ 200,00
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 200.00; coupon = None
+Resultado esperado	shipping = 0
+Requisito validado	R7 — fronteira "maior ou igual a R$ 200,00"
+
+TC-18 — Quantidade = 1 (mínimo inteiro válido)
+
+Campo	Detalhe
+Nome	test_create_order_quantity_one_minimum_valid
+Objetivo	Verificar que quantidade = 1 (mínimo inteiro positivo) é aceita
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 1}]; inventory = {"P1": 5}
+Resultado esperado	Pedido criado com sucesso
+Requisito validado	R2 — fronteira inferior de quantidade
+
+4. Efeitos Colaterais — Atomicidade do Estoque
+
+TC-19 — Falha no 2º item NÃO deve alterar o estoque do 1º item
+
+Campo	Detalhe
+Nome	test_create_order_stock_rollback_on_second_item_failure
+Objetivo	Verificar que, quando a validação do 2º item falha (estoque insuficiente), o estoque do 1º item não é alterado
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 3}, {"product_id": "P2", "quantity": 10}]; inventory = {"P1": 10, "P2": 5} (P2 tem estoque insuficiente)
+Resultado esperado (requisito)	ValueError("Estoque insuficiente"); inventory["P1"] deve permanecer 10 (inalterado)
+Resultado esperado (código)	inventory["P1"] == 7 — pois o estoque foi decrementado dentro do loop antes da falha no 2º item
+Requisito validado	R5 — "O estoque só deve ser alterado depois que todos os itens forem validados"
+
+Evidencia Bug B3: A implementação altera o estoque incrementalmente dentro do loop, violando a atomicidade exigida.
+
+TC-20 — Falha no 2º item por quantidade inválida — estoque do 1º item preservado
+
+Campo	Detalhe
+Nome	test_create_order_stock_rollback_on_quantity_invalid_second_item
+Objetivo	Variante de TC-19: o 2º item tem quantidade = 0; o estoque do 1º item não deve ser alterado
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 3}, {"product_id": "P2", "quantity": 0}]; inventory = {"P1": 10, "P2": 10}
+Resultado esperado (requisito)	ValueError("Quantidade inválida"); inventory["P1"] == 10
+Resultado esperado (código)	inventory["P1"] == 7
+Requisito validado	R5 — atomicidade da atualização de estoque
+
+TC-21 — Falha por usuário inativo — estoque não deve ser alterado
+
+Campo	Detalhe
+Nome	test_create_order_inactive_user_no_stock_change
+Objetivo	Verificar que, quando o usuário é inativo, nenhum estoque é alterado
+Dados de entrada	user = {"status": "inactive", "vip": False}; items = [{"product_id": "P1", "quantity": 5}]; inventory = {"P1": 10}
+Resultado esperado	ValueError("Usuário inativo"); inventory["P1"] == 10 (inalterado)
+Requisito validado	R5 + R1
+
+Neste caso a implementação está correta — o erro é lançado antes do loop.
+
+5. Combinações de Regras
+
+TC-22 — VIP + SAVE10 + subtotal ≥ 100
+
+Campo	Detalhe
+Nome	test_create_order_vip_with_coupon_save10
+Objetivo	Verificar a combinação: VIP (frete 0) + cupom SAVE10 (desconto 10%) com subtotal ≥ 100
+Dados de entrada	user = {"status": "active", "vip": True}; itens configurados para subtotal = 150; coupon = "SAVE10"
+Resultado esperado (requisito)	discount = 15.00; shipping = 0; total = 135.00
+Resultado esperado (código)	shipping = 20 (Bug B2) → total = 155.00
+Requisito validado	R4 + R6
+
+TC-23 — Não VIP + subtotal ≥ 200 + SAVE10
+
+Campo	Detalhe
+Nome	test_create_order_non_vip_subtotal_200_with_coupon_save10
+Objetivo	Verificar a combinação: frete grátis (subtotal ≥ 200) + cupom SAVE10
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 200; coupon = "SAVE10"
+Resultado esperado	discount = 20.00; shipping = 0; total = 180.00
+Requisito validado	R4 + R7
+
+TC-24 — VIP + subtotal ≥ 200 (frete já é 0 por VIP, mas subtotal também garante)
+
+Campo	Detalhe
+Nome	test_create_order_vip_subtotal_200_shipping_zero
+Objetivo	Verificar que VIP com subtotal ≥ 200 tem frete 0 (ambas as regras convergem para 0)
+Dados de entrada	user = {"status": "active", "vip": True}; itens configurados para subtotal = 250; coupon = None
+Resultado esperado	shipping = 0
+Requisito validado	R6 + R7 — ambas convergem para frete zero
+
+TC-25 — VIP + subtotal < 200 + sem cupom
+
+Campo	Detalhe
+Nome	test_create_order_vip_low_subtotal_no_coupon
+Objetivo	Verificar VIP com subtotal baixo: frete deve ser 0 (VIP), desconto 0 (sem cupom)
+Dados de entrada	user = {"status": "active", "vip": True}; itens configurados para subtotal = 50; coupon = None
+Resultado esperado (requisito)	shipping = 0; discount = 0; total = 50
+Resultado esperado (código)	shipping = 20 (Bug B2); total = 70
+Requisito validado	R6
+
+TC-26 — Cupom inválido (diferente de "SAVE10")
+
+Campo	Detalhe
+Nome	test_create_order_invalid_coupon_ignored
+Objetivo	Verificar que um cupom não reconhecido é ignorado (desconto = 0)
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 3}]; inventory = {"P1": 50}; coupon = "SAVE20"
+Resultado esperado	discount = 0
+Requisito validado	R4 — apenas "SAVE10" é reconhecido
+
+TC-27 — Cupom SAVE10 com subtotal < 100 — desconto não deve aplicar
+
+Campo	Detalhe
+Nome	test_create_order_coupon_save10_subtotal_below_100
+Objetivo	Verificar que o cupom SAVE10 não aplica desconto quando subtotal < 100
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 50; coupon = "SAVE10"
+Resultado esperado	discount = 0
+Requisito validado	R4 — cupom exige subtotal ≥ 100
+
+6. Entradas Inválidas / Edge Cases
+
+TC-28 — Lista de itens vazia
+
+Campo	Detalhe
+Nome	test_create_order_empty_items_list
+Objetivo	Verificar o comportamento quando items = [] — o loop não executa; subtotal = 0
+Dados de entrada	user = {"status": "active", "vip": False}; items = []; inventory = {}; coupon = None
+Resultado esperado	subtotal = 0; discount = 0; shipping = 20 (subtotal < 200, não VIP); total = 20
+Requisito validado	Comportamento de borda não especificado nos requisitos — deve ser definido
+
+TC-29 — product_id inexistente no inventário
+
+Campo	Detalhe
+Nome	test_create_order_missing_product_in_inventory
+Objetivo	Verificar o comportamento quando um product_id dos itens não existe no inventário
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P99", "quantity": 1}]; inventory = {"P1": 10}
+Resultado esperado	KeyError (a implementação não trata product_id ausente)
+Requisito validado	Tratamento de entrada inválida
+
+TC-30 — Múltiplos itens, todos válidos
+
+Campo	Detalhe
+Nome	test_create_order_multiple_valid_items
+Objetivo	Verificar que o pedido funciona corretamente com múltiplos itens, todos com estoque suficiente
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 2}, {"product_id": "P2", "quantity": 3}, {"product_id": "P3", "quantity": 1}]; inventory = {"P1": 10, "P2": 10, "P3": 5}; coupon = None
+Resultado esperado	Pedido criado; estoques decrementados corretamente; subtotal = soma de todos os itens
+Requisito validado	R2 + R3 + R5
+
+TC-31 — Mesmo produto em dois itens diferentes do pedido
+
+Campo	Detalhe
+Nome	test_create_order_duplicate_product_id
+Objetivo	Verificar o comportamento quando o mesmo product_id aparece em múltiplos itens
+Dados de entrada	user = {"status": "active", "vip": False}; items = [{"product_id": "P1", "quantity": 3}, {"product_id": "P1", "quantity": 4}]; inventory = {"P1": 10}
+Resultado esperado	Ambos validados contra o estoque; estoque final = 10 - 3 - 4 = 3
+Requisito validado	R3 — estoque deve ser suficiente para cada item (e o Bug B4 afeta o subtotal incrementalmente)
+
+7. Arredondamento
+
+TC-32 — Desconto gera valor com mais de 2 casas decimais
+
+Campo	Detalhe
+Nome	test_create_order_rounding_on_discount
+Objetivo	Verificar que os valores de saída são arredondados a 2 casas decimais
+Dados de entrada	user = {"status": "active", "vip": False}; itens configurados para subtotal = 101.33; coupon = "SAVE10"
+Resultado esperado	discount = round(101.33 * 0.10, 2) = 10.13; total com 2 casas
+Requisito validado	R5 — arredondamento do valor final
+
+Matriz de Cobertura por Requisito
+
+Requisito	Testes que o Cobrem
+R1 — Usuário ativo	TC-01, TC-08, TC-09, TC-21
+R2 — Quantidade inteira > 0	TC-01, TC-10, TC-11, TC-18
+R3 — Estoque suficiente	TC-01, TC-06, TC-12, TC-13, TC-30, TC-31
+R4 — Cupom SAVE10 ≥ R$ 100	TC-02, TC-03, TC-14, TC-15, TC-22, TC-23, TC-26, TC-27
+R5 — Atomicidade do estoque	TC-19, TC-20, TC-21
+R5 — Fórmula total	TC-07, TC-32
+R6 — VIP sem frete	TC-04, TC-22, TC-24, TC-25
+R7 — Frete grátis ≥ R$ 200	TC-05, TC-16, TC-17, TC-23, TC-24
+
+Resumo dos Bugs Detectáveis
+
+Bug	Testes que o Evidenciam	Impacto
+B1 — > 100 em vez de >= 100	TC-03, TC-15	Cliente com subtotal = R
+100
+p
+e
+r
+d
+e
+d
+e
+s
+c
+o
+n
+t
+o
+d
+e
+R
+100perdedescontodeR 10
+[nota de preservacao: '100perdedescontodeR 10' reproduz artefato de copiar/colar da conversa original; provavel 'R$ 100,00 perde desconto de R$ 10,00']
+B2 — VIP paga R
+20
+e
+m
+v
+e
+z
+d
+e
+R
+20emvezdeR 0	TC-04, TC-22, TC-25	Cliente VIP paga frete indevidamente
+B3 — Estoque decrementado antes da validação completa	TC-19, TC-20	Estoque corrompido quando pedido falha parcialmente
+B4 — Subtotal usa estoque pós-decremento como "preço"	TC-01, TC-02, TC-07, TC-30, TC-31	Valor do pedido calculado incorretamente
