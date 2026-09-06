@@ -19,6 +19,8 @@ O site publica o repositório inteiro como um portal navegável:
 
 **📄 Trabalho científico:** a pesquisa em andamento sobre qualidade e defeitos em software gerado por IA fica em `pesquisa/` (revisão bibliográfica, matriz de artigos, problema/hipóteses).
 
+**📋 Pré-print (Zenodo):** [Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de IA](https://zenodo.org/records/22551156) · DOI `10.5281/zenodo.22551156` · CC-BY 4.0 · depositado em 2026-09-06.
+
 **Como rodar com servidor local (recomendado):**
 ```bash
 cd qa-exercicios-praticos
