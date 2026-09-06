@@ -152,7 +152,7 @@
 | Gerar figuras (densidade, perfis, heatmap, bootabilidade, κ) | Ação de produção | **Feito** — `figuras/fig1–5.png`, script `gerar_figuras.py` |
 | Montar seção RQ6/H3 (matriz 2×2 agente vs oráculo) | Ação de análise | **Feito** — metodologia §13.7 + manuscrito §4.5 |
 | Checar redação da seção 5.2 para não vazar "evidência cruzada" | Revisão | Pendente — ressalva incluída no manuscrito §5.2 |
-| Depósito em pré-print (arXiv/OsfTechRxiv) | Ação | Pendente — manuscrito v0.1 pronto |
+| Depósito em pré-print (Zenodo agora; arXiv cs.SE depois) | Ação | Em andamento — v0.1 pronta; pivot OSF→Zenodo (generalista suspenso) |
 | Revisão de pares interna + ajuste ao modelo de citação do veículo | Ação | Pendente — após decisão de veículo/orientador |
 | Idioma (português p/ SBES × inglês p/ EMSE) | Decisão | Pendente — manuscrito em pt, adaptável |
 

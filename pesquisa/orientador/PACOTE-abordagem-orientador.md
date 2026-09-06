@@ -12,7 +12,7 @@
 |---|---|---|
 | Manuscrito completo (PT) | `pesquisa/artigo-manuscrito-v0.1.md` | IMRaD completo, pós-revisão interna — documento principal para ler junto |
 | Manuscrito completo (EN) | `pesquisa/artigo-manuscrito-en-v0.1.md` | Tradução fiel (v0.1-EN), alvo EMSE/internacional |
-| Pré-print pronto (OSF) | `pesquisa/preprint/ROTEIRO-submissao-osf.md` + `preprint-submissao.md` | Decidir com o orientador **quando** depositar (antes/depois da anuência) |
+| Pré-print pronto (Zenodo) | `pesquisa/preprint/ROTEIRO-submissao-zenodo.md` + `preprint-submissao.md` | Decidir com o orientador **quando** depositar (antes/depois da anuência) |
 | Dossiê de veículos | `pesquisa/dossie-veiculo-publicacao.md` | Itens de decisão na §4; executar a mesa redonda com base nele |
 | Figuras 1–5 | `pesquisa/figuras/fig1.png … fig5.png` (script: `gerar_figuras.py`) | Reproduzíveis a partir dos agregados |
 | Resultados e metodologia (públicos) | `pesquisa/metodologia-experimental.md` (§13) | Sintetiza Fase 2 (12 entregas, matriz, estatística) |
@@ -39,7 +39,7 @@
 **O que pedimos na validação (revisão crítica — opcional).**
 1. Validação do desenho experimental e da honestidade das limitações.
 2. Voto de apoio na decisão de **veículo, idioma e formato** (tabela na §4).
-3. Verificação das **regras de afiliação/autor** do veículo escolhido (importante para submissão) e opinião sobre o **momento do pré-print OSF**.
+3. Verificação das **regras de afiliação/autor** do veículo escolhido (importante para submissão) e opinião sobre o **momento do pré-print** (Zenodo).
 4. Opinião sobre **ampliar a amostra** antes da submissão ou publicar com n=12.
 
 ---
@@ -50,7 +50,7 @@
 2. **10–15 min — desenho e honestidade.** Percorrer §§3 e 5 do manuscrito (desenho, oráculo, limitações). Pedir críticas explícitas ao poder estatístico e à operacionalização da RQ6/H3.
 3. **10 min — mesa redonda de decisões** com base no dossiê (§4 abaixo): veículo, idioma, formato, pré-registro.
 4. **5 min — ética e autoria.** Possibilidade de parceria (coautoria/afiliação/endosso arXiv) — deixar explícito ANTES de qualquer submissão.
-5. **5 min — próximos passos e cronograma** (SBES 2027 ~abr/2027; EMSE rolling; depósito OSF).
+5. **5 min — próximos passos e cronograma** (SBES 2027 ~abr/2027; EMSE rolling; depósito do pré-print no Zenodo).
 
 > **Dica:** levar também os *commits* relevantes do repositório público (manuscrito, método, figuras) como demonstrativo de reprodutibilidade — é o ponto forte do estudo perante SBES/EMSE.
 
@@ -70,7 +70,7 @@
 
 ## 5. Aspectos éticos e de autoria
 
-- **Pesquisador independente:** escrever e ser autor **não exige** orientador nem doutorado (regras de autoria de revistas/congressos não exigem titulação do primeiro autor; podem exigir vínculo/afiliação de um autor — verificar por veículo). O pre-print OSF não exige afiliação.
+- **Pesquisador independente:** escrever e ser autor **não exige** orientador nem doutorado (regras de autoria de revistas/congressos não exigem titulação do primeiro autor; podem exigir vínculo/afiliação de um autor — verificar por veículo). O depósito do pré-print no **Zenodo** não exige afiliação.
 - **Anuência institucional:** submeter em veículo *peer-reviewed* pode exigir vinculação/afiliação; se um professor/pesquisador aderir como autor/afiliado, formalizar a contribuição (CRediT) **antes** da submissão.
 - **Autoria/coautoria:** deixar explícitas as contribuições de qualquer coautor eventual antes da primeira submissão para evitar discussões posteriores.
 - **Pre-registro privado:** contém âncoras de decisão e detalhes do oráculo; compartilhar **sob demanda** no contexto de avaliação/parceria; o pre-print público usa a **versão limpa** (sem bloco interno de trabalho).
@@ -82,7 +82,7 @@
 
 ## 6. Próximos passos (independente de reunião com professor)
 
-1. **Depositar o pré-print no OSF** (executável já, sem depender de orientador) via `ROTEIRO-submissao-osf.md` — metadados com ORCID prontos.
+1. **Depositar o pré-print no Zenodo** (executável já, sem depender de orientador) via `ROTEIRO-submissao-zenodo.md` — metadados com ORCID prontos; registrar o DOI no ORCID.
 2. Confirmar **veículo e idioma** com base no dossiê (a reunião de validação crítica é opcional; se houver, ajuda a decidir) → ajustar modelo de citações e limites de páginas.
 3. Decidir **ampliação da amostra** → atualizar pré-registro (n=24/36, Docker em produção) e refazer figuras.
 4. Se houver parceria/coautoria: registrar contribuições (CRediT) e usar eventual endosso para o **arXiv cs.SE** com a versão em inglês.
@@ -90,4 +90,4 @@
 
 ---
 
-*Pacote v0.2 — 2026-09-06. Reframing: pesquisador independente; validação crítica opcional. Consolida manuscrito (PT/EN), dossiê de veículos, pré-print OSF e itens de decisão; não substitui a decisão de veículo nem a consulta às regras do periódico/evento.*
+*Pacote v0.3 — 2026-09-06. Reframing: pesquisador independente; validação crítica opcional. Pivot do pré-print: OSF Preprints generalista suspenso (25/ago/2025) → **Zenodo** (CERN). Consolida manuscrito (PT/EN), dossiê de veículos, pré-print Zenodo e itens de decisão; não substitui a decisão de veículo nem a consulta às regras do periódico/evento.*
