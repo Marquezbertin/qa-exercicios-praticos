@@ -69,24 +69,39 @@
 ## 7. Checklist
 
 - [ ] Obter endosso (Path 2) — iniciar submissão → link → endorser ativo em `cs`
+- [x] Decisão de sequência: **Opção A** (postar agora) — registrada 2026-09-06
+- [x] Pacote de upload gerado: `arXiv-submissao-csSE.zip` (`.tex` + 5 figuras)
 - [ ] Revisar e compilar `artigo-arxiv-csse.tex` localmente (ou Overleaf) e no arXiv (compilação server-side OK)
-- [ ] Empacotar: `.tex` + `figuras/` (5 PNGs) → `arXiv.zip`
+- [ ] Empacotar: `.tex` + `figuras/` (5 PNGs) → `arXiv.zip` ✅ (já feito)
 - [ ] Preencher formulário com os metadados da seção 6 (abstract verbatim)
 - [ ] Confirmar **EN integral** (sem versão não-inglesa necessária) e **não** é survey/position paper
 - [ ] Verificar links públicos (Zenodo DOI) no texto resolvem
 - [ ] Submeter; acompanhar a moderação; pegar o ID arXiv (~24h) e registrar DOI/README
 - [ ] Quando SBES/EMSE publicar: adicionar **Journal-ref** e **DOI** na submissão arXiv (não cria nova versão)
 
-## 8. Decisão de sequência (item em aberto — escolha do autor)
+## 8. Decisão de sequência (registrada)
 
-O Zenodo (público, com nome do autor, DOI) já está publicado há 2026-09. O `artigo-arxiv-csse.tex` é a **mesma** pesquisa em EN integral, com nome do autor — portanto acrescenta exposição mínima à já existente. Duas opções:
+> **AUTOR ESCOLHEU: OPÇÃO A — postar agora** (2026-09-06). O Zenodo (público, com nome do autor, DOI) já está publicado; o `artigo-arxiv-csse.tex` é a mesma pesquisa em EN integral com nome do autor — acrescenta exposição mínima à já existente. SBES permite preprint; a dupla-anonimização do SBES segue mitigada (Zenodo já expõe a autoria).
 
-- **A — Postar agora:** visibilidade/timestamp; paralelo ao ciclo SBES 2027. A dupla-anonimização do SBES já é mitigada (Zenodo público); arXiv não muda a exposição. *(Permitido por SBES, preprint aprovado.)*
-- **B — Postar após decisão do SBES (~mid/late 2027):** caixa de risco de anonimato em zero; arXiv passa a versão-referência da publicação.
+- A — **Postar agora** (escolhida): visibilidade/timestamp do preprint integral imediatamente; arXiv passa a versão-referência.
+- B — Postar após decisão do SBES (~late 2027): não escolhida.
 
-> Recomendação: se o autor quer o máximo isolamento para a revisão dupla-anônima do SBES, **Opção B**; se prioriza visibilidade imediata do preprint integral, **Opção A** (risco residual baixo, pois o Zenodo já expõe a autoria).
+## 9. Pacote de upload (pronto)
 
-## 9. Fontes verificadas (2026-09)
+`arXiv-submissao-csSE.zip` (280 KB, gerado em 2026-09-06, NÃO commitado — redirecionável a qualquer momento via `Compress-Archive`):
+
+```
+artigo-arxiv-csse.tex
+figuras/fig1_densidade.png
+figuras/fig2_heatmap_categoria_agente.png
+figuras/fig3_bootabilidade.png
+figuras/fig4_kappa.png
+figuras/fig5_severidade.png
+```
+
+> O `.zip` é derivável do repositório (git) — não foi adicionado ao controle de versão para evitar binário no histórico.
+
+## 10. Fontes verificadas (2026-09)
 
 - arXiv blog — *Attention Authors: updated endorsement policy* (2026-01-21).
 - info.arxiv.org/help/endorsement.html (endosso; domínios; fluxes Path 1/2).
