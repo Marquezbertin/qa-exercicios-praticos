@@ -47,7 +47,22 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `Overleaf-SBES-upload.zip` | Zip para upload via "Existing project (.zip)" no Overleaf |
 | `plano-submissao-sbes.md` | Plano de submissão SBES 2027 + checklist |
 | `artefatos/` | Figuras (5 PNGs) + `gerar_figuras.py` + README + LICENSE CC-BY-4.0 |
+| `preprint/preprint-submissao.pdf` | PDF do preprint publicado no Zenodo (PT) |
 | `laboratorio-exploratorio/` | Estudos exploratórios de comportamento de chat-LLMs em tarefas de QA (NÃO é evidência da pesquisa formal) — EXP-001 (detecção de defeitos) e EXP-002 (geração de casos de teste) |
+
+## Locais dos artefatos
+
+| Artefato | Local |
+|---|---|
+| Fonte LaTeX SBES (acmart) | `sbes-2027/artigo-sbes-2027.tex` |
+| Fonte LaTeX SBES (article class) | `sbes-2027/main.tex` |
+| PDF compilado SBES | Overleaf (não commitado no repo) |
+| Zip para upload Overleaf | `sbes-2027/Overleaf-SBES-upload.zip` |
+| Preprint Zenodo (PDF + MD) | `preprint/preprint-submissao.pdf` |
+| Figuras do artigo | `sbes-2027/artefatos/` e `figuras/` |
+| Pacote arXiv (.zip) | `arxiv/arXiv-submissao-csSE.zip` (não commitado) |
+| Roteiro submissão arXiv | `arxiv/ROTEIRO-submissao-arxiv.md` |
+| Fonte LaTeX arXiv | `arxiv/artigo-arxiv-csse.tex` |
 
 ## Resultados-resumo (Fase 2 — repo privado tem evidências completas)
 
