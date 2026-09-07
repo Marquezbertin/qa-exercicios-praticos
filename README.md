@@ -17,9 +17,7 @@ O site publica o repositório inteiro como um portal navegável:
 
 **No GitHub:** faça `git clone https://github.com/Marquezbertin/qa-exercicios-praticos` e abra localmente.
 
-**📄 Trabalho científico:** a pesquisa em andamento sobre qualidade e defeitos em software gerado por IA fica em `pesquisa/` (revisão bibliográfica, matriz de artigos, problema/hipóteses).
-
-**📋 Pré-print (Zenodo):** [Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de IA](https://zenodo.org/records/22551156) · DOI `10.5281/zenodo.22551156` · CC-BY 4.0 · depositado em 2026-09-06.
+**📄 Trabalho científico:** artigo completo sobre qualidade e defeitos em software gerado por IA disponível em `pesquisa/`. Preprint publicado no Zenodo: [Avaliação Empírica da Qualidade e dos Defeitos em Software Gerado por Agentes de IA](https://zenodo.org/records/22551156) · DOI `10.5281/zenodo.22551156` · CC-BY 4.0. Submissões: SBES 2027 (aguarda CFI) e arXiv cs.SE (endosso pendente).
 
 **Como rodar com servidor local (recomendado):**
 ```bash
@@ -34,7 +32,7 @@ python -m http.server 8000
 
 | Pasta | O que tem |
 |---|---|
-| `pesquisa/` | **Projeto de artigo científico** em andamento: revisão bibliográfica, matriz de artigos e rascunho de problema/hipóteses |
+| `pesquisa/` | **Projeto de artigo científico**: revisão bibliográfica, matriz de artigos, artigo completo (EN), preprint Zenodo (DOI), submissões SBES 2027 e arXiv em andamento |
 | `sites-para-testar/` | **9 sites simulados** (loja, banco, hotel, delivery, CRM, impostos, saúde, games...) com bugs + roteiros + gabaritos |
 | `encontre-o-bug/codigo/` | Códigos com bugs (6 exercícios: calculadora, banco, carrinho, formulário JS, datas, CPF) |
 | `encontre-o-bug/gabarito/` | Respostas dos exercícios de código |
