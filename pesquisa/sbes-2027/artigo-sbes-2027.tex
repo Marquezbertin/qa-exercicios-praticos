@@ -105,7 +105,7 @@ ultra/e1--e3 & 0 & 0 & 0 & 0 & no\\
 \end{tabular}
 \end{table}
 
-Only \textbf{3/12 were bootable}; pass rates 1/81 and 12/81---no delivery passed 100\% (Fig.~\ref{fig:boot}).
+Only \textbf{3/12 were bootable} (Wilson 95\% CI: 0.07--0.49); pass rates 1/81 and 12/81---no delivery passed 100\% (Fig.~\ref{fig:boot}).
 
 \begin{figure}[t]
 \includegraphics[width=\columnwidth]{figuras/fig1_densidade}
@@ -155,7 +155,7 @@ mimo & 1 & 2 & 0 & 0 & 0 & 0\\
 $\chi^2$ agent$\times$category: \textbf{$\chi^2=25.7$, df=15, $p=0.041$, V=0.85}---informative, not conclusive (cells $<5$). Ultra concentrated 100\% in \texttt{incomplete\_generation} (pointwise Fisher \textbf{$p=0.010$}), the most sustainable finding (Fig.~\ref{fig:heatmap}).
 
 \subsection{Severity (RQ4)}
-All 12 defects were \textbf{Blocker (8) or Critical (4)} (Fig.~\ref{fig:severity}). This is expected and inflated by the detection bias: 10/12 deliveries did not boot.
+All 12 defects were \textbf{Blocker (8/12, Wilson 95\% CI: 0.39--0.84) or Critical (4/12, Wilson 95\% CI: 0.16--0.61)} (Fig.~\ref{fig:severity}). This is expected and inflated by the detection bias: 10/12 deliveries did not boot.
 
 \subsection{Recurring patterns}
 \begin{table}[t]
@@ -194,10 +194,10 @@ Per-defect $2\times2$ matrix (formal executions):
 \end{tabular}
 \end{table}
 
-The agents' own tests detected \textbf{0/12} defects (0/18 matrix lines, including NFR and pilot). In the function-exercisable deliveries, the oracle detected \textbf{4/4} reachable defects (lightning/e3 $\times$2; mimo/e2, e3) while the agent's tests detected 0---even when the agent suite could run against the oracle. The extreme marginal (0-vs-4) is reported as a \emph{strong trend, not significance} (n, selection bias). The transversal datum: \emph{approval by an agent's own tests was, in no case, a guarantee of conformance with the oracle}, consistent with~\cite{C03,C04,C05,C06}.
+The agents' own tests detected \textbf{0/12} defects (Wilson 95\% CI: 0.00--0.26; 0/18 matrix lines, including NFR and pilot). In the function-exercisable deliveries, the oracle detected \textbf{4/4} reachable defects (lightning/e3 $\times$2; mimo/e2, e3) while the agent's tests detected 0---even when the agent suite could run against the oracle. The extreme marginal (0-vs-4) is reported as a \emph{strong trend, not significance} (n, selection bias). The transversal datum: \emph{approval by an agent's own tests was, in no case, a guarantee of conformance with the oracle}, consistent with~\cite{C03,C04,C05,C06}.
 
 \subsection{Inter-rater agreement and reproducibility (RQ7--RQ8)}
-Over 18 matrix items (blinded double classification): \textbf{$\kappa$ category = 0.54 (moderate)}; \textbf{$\kappa$ severity = 0.91 (almost perfect)} (Fig.~\ref{fig:kappa}). The 6 category divergences concentrate on dependency-integration defects (resolved in a recorded meeting). Reproducibility (RQ7): 3/12 ran in a clean environment; the rest failed due to the defects characterized in Sec.~4.4. Variability (RQ8): mimo stable across two runs (pass rate 0.15/0.15); lightning single run; ultra/ling no functional signal.
+Over 18 matrix items (blinded double classification): \textbf{$\kappa$ category = 0.54 (moderate)}; \textbf{$\kappa$ severity = 0.91 (almost perfect)} (Fig.~\ref{fig:kappa}). The 6 category divergences concentrate on dependency-integration defects with multiple plausible classes (e.g., \texttt{silly\_mistake} $\times$ \texttt{wrong\_input\_type} in the \emph{passlib}+\emph{bcrypt} conflict). \textbf{Discrepancy resolution:} divergences were resolved via consensus discussion between the two raters in a recorded meeting; each disagreement was documented with the rationale for the final classification. The moderate $\kappa$ category reflects genuine ambiguity in the Tambon taxonomy when applied to integration defects, not rater error. Reproducibility (RQ7): 3/12 ran in a clean environment; the rest failed due to the defects characterized in Sec.~4.4. Variability (RQ8): mimo stable across two runs (pass rate 0.15/0.15); lightning single run; ultra/ling no functional signal.
 
 \subsection{Global quality: functional $\ne$ non-functional (RQ5/H4)}
 Bootable deliveries still fail 69--80/81 tests (auth/DB defects); non-bootable ones may satisfy static NFRs. A single index would collapse distinct dimensions---descriptively supporting H4.
