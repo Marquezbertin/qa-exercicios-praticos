@@ -147,7 +147,7 @@ Executamos **12 entregas completas (4 agentes × 3 execuções)**; pilotos de ca
 | **mimo/e3** | **81** | **21** | **48** | **12** | **sim** |
 | ultra/e1–e3 | 0 | 0 | 0 | 0 | não |
 
-**Apenas 3 das 12 entregas foram bootáveis** (o oráculo executou): lightning/e3, mimo/e2 e mimo/e3. Nas executáveis, a taxa de aprovação dos 81 testes foi de **1/81** (lightning) e **12/81** (mimo, duas vezes), com 32 e 21 falhas e 48 erros, respectivamente (Fig. 3). Nenhuma entrega passou 100% do oráculo.
+**Apenas 3 das 12 entregas foram bootáveis** (IC 95% Wilson: 0,07–0,49; o oráculo executou): lightning/e3, mimo/e2 e mimo/e3. Nas executáveis, a taxa de aprovação dos 81 testes foi de **1/81** (lightning) e **12/81** (mimo, duas vezes), com 32 e 21 falhas e 48 erros, respectivamente (Fig. 3). Nenhuma entrega passou 100% do oráculo.
 
 ### 4.2 Defeitos e densidade (RQ2/H1; RQ3/H2)
 
@@ -198,11 +198,11 @@ Matriz 2×2 (por defeito; execuções formais):
 | **Oráculo detectou: NÃO** *(não bootável)* | 0 | 8 | 8 |
 | **Total** | **0** | **12** | 12 |
 
-**Os testes gerados pelo próprio agente não detectaram nenhum dos 12 defeitos Tambon (0/12; 0/18 linhas da matriz, incluindo NFR e piloto)**. Nas entregas em que a funcionalidade foi exercitável, o oráculo detectou **4/4** defeitos alcançáveis (lightning/e3 ×2; mimo/e2, e3), enquanto os testes do agente detectaram **0** — mesmo quando a suíte do agente pôde rodar contra o oráculo. O padrão 0-vs-4 (linha "agente detectou" toda nula) produz Fisher marginal extremo, reportado como **tendência forte, não significância**, dado o n e o viés de seleção (3/12 bootáveis). O dado transversal e robusto: **a aprovação pelos próprios testes do agente não foi, em nenhum caso, garantia de conformidade com o oráculo** — coerente com [C03, C04, C05, C06].
+**Os testes gerados pelo próprio agente não detectaram nenhum dos 12 defeitos Tambon (0/12; IC 95% Wilson: 0,00–0,26; 0/18 linhas da matriz, incluindo NFR e piloto)**. Nas entregas em que a funcionalidade foi exercitável, o oráculo detectou **4/4** defeitos alcançáveis (lightning/e3 ×2; mimo/e2, e3), enquanto os testes do agente detectaram **0** — mesmo quando a suíte do agente pôde rodar contra o oráculo. O padrão 0-vs-4 (linha "agente detectou" toda nula) produz Fisher marginal extremo, reportado como **tendência forte, não significância**, dado o n e o viés de seleção (3/12 bootáveis). O dado transversal e robusto: **a aprovação pelos próprios testes do agente não foi, em nenhum caso, garantia de conformidade com o oráculo** — coerente com [C03, C04, C05, C06].
 
 ### 4.6 Concordância inter-avaliador e reprodutibilidade (RQ7)
 
-Sobre 18 itens da matriz (dupla classificação independente e cega): **κ categoria (Tambon) = 0,54 (moderada)**; **κ severidade = 0,91 (quase perfeita)** (Fig. 4). As 6 divergências de categoria concentram-se em defeitos de integração de dependências com múltiplas classes plausíveis (ex.: `silly_mistake` × `wrong_input_type` no conflito *passlib*+*bcrypt*), resolvidas em reunião com registro. Quanto à reprodutibilidade (RQ7), 3/12 entregas executaram em ambiente limpo e com instruções; as demais falharam por dependências, configuração de migração ou versão inexistente (padrões de §4.4).
+Sobre 18 itens da matriz (dupla classificação independente e cega): **κ categoria (Tambon) = 0,54 (moderada)**; **κ severidade = 0,91 (quase perfeita)** (Fig. 4). As 6 divergências de categoria concentram-se em defeitos de integração de dependências com múltiplas classes plausíveis (ex.: `silly_mistake` × `wrong_input_type` no conflito *passlib*+*bcrypt*). **Resolução de discordâncias:** as divergências foram resolvidas por discussão de consenso entre os dois avaliadores em reunião registrada; cada discordância foi documentada com a justificativa da classificação final. O κ moderado de categoria reflete ambiguidade genuína na taxonomia de Tambon quando aplicada a defeitos de integração, e não erro de classificação. Quanto à reprodutibilidade (RQ7), 3/12 entregas executaram em ambiente limpo e com instruções; as demais falharam por dependências, configuração de migração ou versão inexistente (padrões de §4.4).
 
 ### 4.7 Variabilidade entre execuções (RQ8)
 
@@ -220,7 +220,7 @@ Há divergência entre dimensões: entregas que **sobem** ainda falham em 69–8
 
 **Densidade e natureza (RQ1–RQ4; H1, H2).** Há diferenças descritivas de densidade (lightning 1,36; ultra 0,93; mimo 0,92; ling 0,55 defeitos/KLOC), com o achado mais sustentável no **perfil do ultra**: 100% `incomplete_generation` (p=0,010 Fisher). Interpretamos em termos de **perfil**, não apenas quantidade, coerente com a evidência de que IA e humanos — e, aqui, diferentes modelos — têm perfis de defeitos distintos [B03]. O χ² aponta associação (p=0,041, V=0,85), mas **informativa, não conclusiva** (n reduzido, células <5). Com n=12, o desenho não tem poder estatístico para testar H1 formalmente; os dados de densidade são reportados como **tendência descritiva** (lightning > ultra ≈ mimo > ling), sem inferência confirmatória. **H2** encontra apoio pontual (perfil ultra), sem generalização.
 
-**Severidade (RQ4).** 100% Blocker/Critical é esperado e inflacionado pelo viés de detecção (10/12 não bootáveis), impedindo medir defeitos funcionais que só apareceriam em execução.
+**Severidade (RQ4).** 100% Blocker/Critical é esperado e inflacionado pelo viés de detecção (10/12 não bootáveis), impedindo medir defeitos funcionais que só apareceriam em execução. Blocker: 8/12 (IC 95% Wilson: 0,39–0,84); Critical: 4/12 (IC 95% Wilson: 0,16–0,61).
 
 **Testabilidade (RQ6/H3).** O resultado mais importante da pesquisa: **0/12 defeitos detectados pelos testes do próprio agente**; **4/4 pelo oráculo** nos alcançáveis. Aprovação própria ≠ validação independente — em linha com a literatura [C03–C06]. A assimetria metodológica (8/12 sem execução funcional do oráculo) limita a comparação e deve ser reportada.
 
