@@ -64,12 +64,12 @@ bars = ax.bar(AGENTS, [DENS[a] for a in AGENTS], color=colors, alpha=0.85,
               edgecolor="black", linewidth=0.8)
 for b, a in zip(bars, AGENTS):
     ax.text(b.get_x() + b.get_width()/2, b.get_height() + 0.02,
-            f"{DENS[a]:.2f}\n({DEF[a]} defeitos / {KLOC[a]:.2f} KLOC)",
+            f"{DENS[a]:.2f}\n({DEF[a]} defects / {KLOC[a]:.2f} KLOC)",
             ha="center", va="bottom", fontsize=8.5)
-ax.set_ylabel("Defeitos Tambon por KLOC")
+ax.set_ylabel("Tambon defects per KLOC")
 ax.set_ylim(0, 1.6)
 ax.grid(axis="y", linestyle=":", alpha=0.5)
-ax.set_title("Densidade de defeitos por agente (n=12 execuções)")
+ax.set_title("Defect density per agent (n=12 executions)")
 save(fig, "fig1_densidade.png")
 
 # ---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ for i in range(MAT.shape[0]):
         ax.text(j, i, str(v) if v else "", ha="center", va="center",
                 color="black" if v < 3 else "white", fontsize=10)
 cbar = fig.colorbar(im, ax=ax, fraction=0.046)
-ax.set_title("Distribuição de defeitos: categoria Tambon x agente")
+ax.set_title("Defect distribution: Tambon category x agent")
 save(fig, "fig2_heatmap_categoria_agente.png")
 
 # ---------------------------------------------------------------------------
@@ -95,17 +95,17 @@ fig, ax = plt.subplots(figsize=(6.4, 4.0))
 x = np.arange(len(AGENTS))
 boot_vals = [BOOT[a] for a in AGENTS]
 noboot = [3 - BOOT[a] for a in AGENTS]
-p1 = ax.bar(x, noboot, BASE, label="Não bootável", color="#e74c3c", edgecolor="black", linewidth=0.8)
-p2 = ax.bar(x, boot_vals, BASE, bottom=noboot, label="Bootável", color="#2ecc71", edgecolor="black", linewidth=0.8)
+p1 = ax.bar(x, noboot, BASE, label="Non-bootable", color="#e74c3c", edgecolor="black", linewidth=0.8)
+p2 = ax.bar(x, boot_vals, BASE, bottom=noboot, label="Bootable", color="#2ecc71", edgecolor="black", linewidth=0.8)
 ax.set_xticks(x)
 ax.set_xticklabels(AGENTS)
 for xi, bv, nv in zip(x, boot_vals, noboot):
     ax.text(xi, nv + 0.05, f"{nv}/3", ha="center", va="bottom", fontsize=9)
     if bv:
         ax.text(xi, nv + bv + 0.05, f"boot {bv}", ha="center", va="bottom", fontsize=9)
-ax.set_ylabel("Número de execuções (de 3)")
+ax.set_ylabel("Number of executions (out of 3)")
 ax.set_ylim(0, 3.6)
-ax.set_title(f"Bootabilidade por agente — total {BOOT_TOTAL}/12 bootáveis")
+ax.set_title(f"Bootability per agent — total {BOOT_TOTAL}/12 bootable")
 ax.legend()
 ax.grid(axis="y", linestyle=":", alpha=0.5)
 save(fig, "fig3_bootabilidade.png")
@@ -113,22 +113,22 @@ save(fig, "fig3_bootabilidade.png")
 # ---------------------------------------------------------------------------
 # Figura 4 — Concordância inter-avaliador (kappa) categoria vs severidade
 fig, ax = plt.subplots(figsize=(5.2, 4.0))
-labels = ["Categoria\n(Tambon)", "Severidade"]
+labels = ["Category\n(Tambon)", "Severity"]
 kappa = [0.54, 0.91]
-bands = [("Sem concordância", -1, 0, "#cccccc"),
-         ("Leve", 0, 0.2, "#d9d9d9"),
-         ("Razoável", 0.2, 0.4, "#f6f6f6"),
-         ("Moderada", 0.4, 0.6, "#fff3cd"),
-         ("Substancial", 0.6, 0.8, "#d4edda"),
-         ("Quase perfeita", 0.8, 1.0, "#c3e6cb")]
+bands = [("No agreement", -1, 0, "#cccccc"),
+         ("Slight", 0, 0.2, "#d9d9d9"),
+         ("Fair", 0.2, 0.4, "#f6f6f6"),
+         ("Moderate", 0.4, 0.6, "#fff3cd"),
+         ("Substantial", 0.6, 0.8, "#d4edda"),
+         ("Almost perfect", 0.8, 1.0, "#c3e6cb")]
 for lab, lo, hi, c in bands:
     ax.axhspan(lo, hi, color=c, zorder=0)
 bars = ax.bar(labels, kappa, color=["#f39c12", "#2980b9"], edgecolor="black", width=0.55, zorder=3)
 for b, k in zip(bars, kappa):
     ax.text(b.get_x() + b.get_width()/2, k + 0.02, f"κ={k:.2f}", ha="center", va="bottom", fontsize=10)
 ax.set_ylim(0, 1.15)
-ax.set_ylabel("κ de Cohen")
-ax.set_title("Concordância inter-avaliador (Dr. A x Dr. B, n=18)")
+ax.set_ylabel("Cohen's κ")
+ax.set_title("Inter-rater agreement (R1 x R2, n=18)")
 ax.grid(axis="y", linestyle=":", alpha=0.4, zorder=2)
 save(fig, "fig4_kappa.png")
 
@@ -148,9 +148,9 @@ for k, sev in enumerate(SEV):
     left += vals
 ax.set_yticks(y)
 ax.set_yticklabels(AGENTS)
-ax.set_xlabel("Número de defeitos")
+ax.set_xlabel("Number of defects")
 ax.set_xlim(0, 5)
-ax.set_title("Severidade dos defeitos Tambon por agente (12/12 Blocker ou Critical)")
+ax.set_title("Tambon defect severity per agent (12/12 Blocker or Critical)")
 ax.legend(loc="lower right", fontsize=8)
 save(fig, "fig5_severidade.png")
 
