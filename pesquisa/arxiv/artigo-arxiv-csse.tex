@@ -89,7 +89,7 @@ We condense the review into thematic groups; full entries with DOIs are in Sec.~
 
 \subsection{Methodological position, neutrality, and pre-registration}
 
-Controlled, prospective, and reproducible experiment (unlike retrospective studies such as~\cite{D05,F04,F05}). The hypotheses, RQs, analysis plan, exclusion criteria, and the neutrality principle were fixed \textbf{before} data collection (problem-and-hypotheses and methodology documents committed beforehand in the research repository) and later consolidated as a pre-registration \textbf{formalized retrospectively}, with temporal anchors verifiable in the git history (the results section was added in a separate commit). \textbf{Neutrality (C1):} the experiment does not start from ``AI is bad''; if the data shows AI equal or better on some dimension, that is a result, not a limitation.
+Controlled, prospective, and reproducible experiment (unlike retrospective studies such as~\cite{D05,F04,F05}). The hypotheses, RQs, analysis plan, exclusion criteria, and the neutrality principle were fixed \textbf{before} data collection (problem-and-hypotheses and methodology documents committed beforehand in the research repository), as evidenced by timestamped commits in the repository history (\textbf{this does not constitute formal pre-registration} on a public platform such as OSF or AsPredicted; formal pre-registration is planned for the expanded design in future work). \textbf{Neutrality (C1):} the experiment does not start from ``AI is bad''; if the data shows AI equal or better on some dimension, that is a result, not a limitation.
 
 \subsection{Experimental design}
 
@@ -148,7 +148,7 @@ Suite \textbf{independent of the generating AI}, private and immutable during co
 
 Rules: not reviewed by the agent; not exposed in the prompt; covers all FR/NFR; \textbf{coverage is reported but not treated as quality evidence}~\cite{C05}; only real defect detection is credited. The suite has \textbf{81 tests} and is strictly \emph{black-box} with respect to the backend.
 
-\textbf{Validation environment (D9).} The execution machine is a VM \emph{without nested virtualization}; therefore validation was \emph{native} (native PostgreSQL + venv + \texttt{alembic upgrade head} + uvicorn + \texttt{/health} gating). Docker artifacts required in the delivery remain mandatory and are validated structurally; they will be executed in containers on the production machine. This condition is reported as a limitation (Sec.~\ref{sec:limitations}).
+\textbf{Validation environment.} The execution machine is a VM \emph{without nested virtualization}; therefore validation was \emph{native} (native PostgreSQL + venv + \texttt{alembic upgrade head} + uvicorn + \texttt{/health} gating). Docker artifacts required in the delivery remain mandatory and are validated structurally; they will be executed in containers on the production machine. This condition is reported as a limitation (Sec.~\ref{sec:limitations}).
 
 \subsection{Defect matrix and classification}
 
@@ -178,7 +178,7 @@ RQ$\rightarrow$metric$\rightarrow$instrument mapping and pre-defined tests:
   \end{tabular}
 \end{table}
 
-Significance level $\alpha=0.05$ with multiple-comparison correction. Honest rule: $\chi^2$ is only conclusive with expected cells $\geq$5; with expected cells $<$5 we use Fisher exact and \textbf{report as informative, not conclusive}. Negative results are reported as results (neutrality).
+Significance level $\alpha=0.05$. Honest rule: $\chi^2$ is only conclusive with expected cells $\geq$5; with expected cells $<$5 we use Fisher exact and \textbf{report as informative, not conclusive}. Given the exploratory nature of the study (declared in the abstract), all $p$-values are reported \textbf{raw without multiple-comparison adjustment}, as descriptive signals rather than confirmatory tests.
 
 \subsection{Collection procedure}
 
@@ -352,7 +352,7 @@ There is divergence across dimensions: deliveries that \textbf{boot} still fail 
 
 \subsection{Interpretation of the main findings}
 
-\textbf{Density and nature (RQ1--RQ4; H1, H2).} There are descriptive density differences (lightning 1.36; ultra 0.93; mimo 0.92; ling 0.55 defects/KLOC), with the most sustainable finding in the \textbf{ultra profile}: 100\% \texttt{incomplete\_generation} (p=0.010 Fisher). We interpret in terms of \textbf{profile}, not only quantity, consistent with evidence that AI and humans---and, here, different models---have distinct defect profiles~\cite{B03}. The $\chi^2$ points to an association (p=0.041, $V$=0.85) but \textbf{informative, not conclusive} (small $n$, cells $<$5). Thus, \textbf{H1 is neither rejected nor accepted} with this sample; \textbf{H2} finds pointwise support (ultra profile), without generalization.
+\textbf{Density and nature (RQ1--RQ4; H1, H2).} There are descriptive density differences (lightning 1.36; ultra 0.93; mimo 0.92; ling 0.55 defects/KLOC), with the most sustainable finding in the \textbf{ultra profile}: 100\% \texttt{incomplete\_generation} (p=0.010 Fisher). We interpret in terms of \textbf{profile}, not only quantity, consistent with evidence that AI and humans---and, here, different models---have distinct defect profiles~\cite{B03}. The $\chi^2$ points to an association (p=0.041, $V$=0.85) but \textbf{informative, not conclusive} (small $n$, cells $<$5). With $n=12$, the design lacks statistical power to test H1 formally; density data are reported as a \textbf{descriptive trend} (lightning $>$ ultra $\approx$ mimo $>$ ling), not as confirmatory inference. \textbf{H2} finds pointwise support (ultra profile), without generalization.
 
 \textbf{Severity (RQ4).} 100\% Blocker/Critical is expected and inflated by detection bias (10/12 non-bootable), preventing measurement of functional defects that would only appear in execution.
 
@@ -370,7 +370,7 @@ There is divergence across dimensions: deliveries that \textbf{boot} still fail 
 \emph{Methodological caveat:} this subsection compares models and tasks \textbf{distinct} from the formal experiment (chat-LLMs, isolated function; not complete systems). Any convergence is only \textbf{indication}, never cross-evidence. It does not constitute evidence of the controlled experiment.
 \end{quote}
 
-In parallel, we conducted explorations with \textbf{chat-LLMs} (Oreate/Claude/Gemini---models different from the 4 treatments) on isolated QA tasks over a \texttt{create\_order} function with a 6-defect reference (EXP-001: detect; EXP-002: design tests). Findings: in \textbf{detection} (EXP-001), two models identified 6/6 and one 5/6 (missing the type/domain defect D1), echoing the \texttt{wrong input type} category~\cite{B01} and the omission of special cases~\cite{C06}; explicit boundaries ($>$ vs.\ $>=$) were detected by all. In \textbf{test generation} (EXP-002), coverage dropped to 5/6, 4/6, and 4/6; the most informative case was D1: a model that \emph{did not create a test} for the fractional quantity, although it had \emph{identified} the defect in EXP-001. This illustrates, in isolated scale, the same separation underlying RQ6/H3: \textbf{recognizing a defective condition and translating it into a test capable of revealing it are distinct abilities}---consistent with~\cite{C04} (29--60\% detection) and~\cite{C03}.
+In parallel, we conducted explorations with \textbf{chat-LLMs} (Oreate/Claude/Gemini---models different from the 4 treatments, accessed via free web interface, without paid API) on isolated QA tasks over a \texttt{create\_order} function with a 6-defect reference (EXP-001: detect; EXP-002: design tests). Findings: in \textbf{detection} (EXP-001), two models identified 6/6 and one 5/6 (missing the type/domain defect D1), echoing the \texttt{wrong input type} category~\cite{B01} and the omission of special cases~\cite{C06}; explicit boundaries ($>$ vs.\ $>=$) were detected by all. In \textbf{test generation} (EXP-002), coverage dropped to 5/6, 4/6, and 4/6; the most informative case was D1: a model that \emph{did not create a test} for the fractional quantity, although it had \emph{identified} the defect in EXP-001. This illustrates, in isolated scale, the same separation underlying RQ6/H3: \textbf{recognizing a defective condition and translating it into a test capable of revealing it are distinct abilities}---consistent with~\cite{C04} (29--60\% detection) and~\cite{C03}.
 
 \subsection{Central limitations (honest reading)}\label{sec:limitations}
 
