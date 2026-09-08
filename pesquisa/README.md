@@ -25,7 +25,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | Especificação controlada FR/NFR | ✅ **v1.0 congelada** (aprovada em 2026-09-05; decisões D1–D7 registradas) |
 | Experimento controlado | ✅ **CONCLUÍDO** (piloto + batch 4×3 + classificação + análise estatística) |
 | Escrita do artigo | ✅ **CONCLUÍDO** (EN, ≈6 páginas, anônimo, compilado no Overleaf) |
-| Preprint Zenodo | ✅ **PUBLICADO** (DOI `10.5281/zenodo.22551156`, CC-BY-4.0) |
+| Preprint Zenodo | ✅ **PUBLICADO v0.2** (DOI versão `10.5281/zenodo.22660595`; DOI original `10.5281/zenodo.22551156`; conceito `10.5281/zenodo.22551155`, CC-BY-4.0) |
 | Submissão arXiv cs.SE | ⏳ **BLOQUEADA** (endosso pendente: Tanu Malik, código `HXMLXI`) |
 | Submissão SBES 2027 | ⏳ aguarda CFI oficial |
 
@@ -79,7 +79,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 
 | Veículo | Status | Link/DOI |
 |---|---|---|
-| Zenodo (preprint) | ✅ Publicado | `10.5281/zenodo.22551156` |
+| Zenodo (preprint) | ✅ v0.2 Publicado | DOI `10.5281/zenodo.22660595` (original `10.5281/zenodo.22551156`) |
 | arXiv cs.SE | ⏳ Endosso pendente | `submit/8044051` (código `HXMLXI`) |
 | SBES 2027 | ⏳ Aguarda CFI | — |
 
