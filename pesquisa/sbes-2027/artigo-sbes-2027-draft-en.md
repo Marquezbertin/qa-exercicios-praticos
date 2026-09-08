@@ -37,7 +37,7 @@ Organized by theme (full entries with DOIs in References):
 
 ### 3.1 Position, neutrality, pre-registration
 
-Controlled, prospective, reproducible experiment. Hypotheses, RQs, analysis plan, and the neutrality principle were fixed **before** data collection and consolidated as a pre-registration with temporal anchors in the repository history. **Neutrality (C1):** the experiment does not start from "AI is bad"; if data shows AI equal or better on a dimension, that is a result.
+Controlled, prospective, reproducible experiment. Hypotheses, RQs, analysis plan, and the neutrality principle were fixed **before** data collection, as evidenced by timestamped commits in the repository history (this does not constitute formal pre-registration on a public platform such as OSF; formal pre-registration is planned for the expanded design in future work). **Neutrality (C1):** the experiment does not start from "AI is bad"; if data shows AI equal or better on a dimension, that is a result.
 
 ### 3.2 Experimental design
 
@@ -60,7 +60,7 @@ Target system: **task-management REST API** (moderate scope), Python + FastAPI +
 
 ### 3.4 Independent oracle
 
-The **81-test** suite is independent of the generating AI, private and immutable during collection, validated against a golden (non-AI) reference. Layers: functional (pytest covering FR1–FR8); negative (invalid/extreme inputs, permissions); security (bandit, pip-audit); structural (Ruff + radon); testability (agent's tests run against the oracle). Coverage is **reported but not treated as quality evidence** [C05]; only real defect detection is credited. **Environment (D9):** validation ran **native** (VM without nested virtualization; PostgreSQL + venv + `alembic upgrade head` + `/health` gate); Docker artifacts remain required and are validated structurally, to be executed later on the production machine — reported as a limitation (§5.2).
+The **81-test** suite is independent of the generating AI, private and immutable during collection, validated against a golden (non-AI) reference. Layers: functional (pytest covering FR1–FR8); negative (invalid/extreme inputs, permissions); security (bandit, pip-audit); structural (Ruff + radon); testability (agent's tests run against the oracle). Coverage is **reported but not treated as quality evidence** [C05]; only real defect detection is credited. **Environment:** validation ran **native** (VM without nested virtualization; PostgreSQL + venv + `alembic upgrade head` + `/health` gate); Docker artifacts remain required and are validated structurally, to be executed later on the production machine — reported as a limitation (§5.2).
 
 ### 3.5 Defect matrix
 
@@ -68,7 +68,7 @@ Each defect: ID; agent/execution; location; **category** (Tambon, 10 patterns [B
 
 ### 3.6 Metrics and statistical analysis
 
-RQ/H → metric → instrument: RQ1 pass rate (pytest); RQ2/H1 defects/KLOC (descriptive + Poisson CI); RQ3/H2 category distribution (χ² + Cramér's V; pointwise Fisher); RQ4 severity (descriptive); RQ5/H4 functional vs. NFR (per-dimension, no single index); RQ6/H3 detection matrix (2×2, Fisher exact); RQ7 reproducibility (executability check); RQ8 variability (CV). α=0.05 with multiple-comparison correction; χ² only conclusive with expected cells ≥5, otherwise Fisher exact **reported as informative, not conclusive**. Negative results are results (neutrality).
+RQ/H → metric → instrument: RQ1 pass rate (pytest); RQ2/H1 defects/KLOC (descriptive + Poisson CI); RQ3/H2 category distribution (χ² + Cramér's V; pointwise Fisher); RQ4 severity (descriptive); RQ5/H4 functional vs. NFR (per-dimension, no single index); RQ6/H3 detection matrix (2×2, Fisher exact); RQ7 reproducibility (executability check); RQ8 variability (CV). α=0.05; χ² only conclusive with expected cells ≥5, otherwise Fisher exact **reported as informative, not conclusive**. Given the exploratory nature of the study (declared in the abstract), all p-values are reported **raw without multiple-comparison adjustment**, as descriptive signals rather than confirmatory tests.
 
 ## 4. Results
 
@@ -140,7 +140,7 @@ Bootable deliveries still fail 69–80/81 tests (auth/DB defects); non-bootable 
 
 ### 5.1 Interpretation
 
-**Profile, not quantity.** Density differences are descriptive; the sustainable finding is ultra's 100% `incomplete_generation` profile (p=0.010), coherent with evidence that AI and humans—and here distinct models—have distinct defect profiles [B03]. **H1 neither rejected nor accepted** with this sample; **H2** finds pointwise support.
+**Profile, not quantity.** Density differences are descriptive; the sustainable finding is ultra's 100% `incomplete_generation` profile (p=0.010), coherent with evidence that AI and humans—and here distinct models—have distinct defect profiles [B03]. With n=12, the design lacks statistical power to test H1 formally; density data are reported as a **descriptive trend** (lightning > ultra ≈ mimo > ling), not as confirmatory inference. **H2** finds pointwise support.
 
 **Testability (RQ6/H3).** The central result: **0/12** by the agents' own tests vs. **4/4** by the oracle. Self-approval ≠ independent validation, in line with the literature [C03–C06]. The asymmetry (8/12 without functional oracle execution) limits the comparison.
 
@@ -150,7 +150,7 @@ Bootable deliveries still fail 69–80/81 tests (auth/DB defects); non-bootable 
 
 ### 5.2 Central limitations (honest reading)
 
-1. **Statistical power** (n=12; expected cells <5): H1–H3 are trends, not conclusions. 2. **Functional evaluation on 3/12**: latent defects in non-bootable deliveries were unmeasurable. 3. **Environment conditioning** (native validation, no Docker): container-only configurations were treated as portability defects with care to separate "defect" from "environment assumption" (D9). 4. **Manual classification**: moderate category κ (0.54). 5. **"Free" models at collection time**: results describe these models on that date; versions/routes change the picture. 6. **Blocker bias** from non-bootability. 7. **No generalization**: one system/stack.
+1. **Statistical power** (n=12; expected cells <5): H1–H3 are trends, not conclusions. 2. **Functional evaluation on 3/12**: latent defects in non-bootable deliveries were unmeasurable. 3. **Environment conditioning** (native validation, no Docker): container-only configurations were treated as portability defects with care to separate "defect" from "environment assumption". 4. **Manual classification**: moderate category κ (0.54). 5. **"Free" models at collection time**: results describe these models on that date; versions/routes change the picture. 6. **Blocker bias** from non-bootability. 7. **No generalization**: one system/stack.
 
 ### 5.3 Synthesis
 
