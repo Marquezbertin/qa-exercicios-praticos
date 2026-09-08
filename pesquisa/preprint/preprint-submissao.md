@@ -60,7 +60,7 @@ Condensamos a revisão em grupos temáticos; fichas completas com DOI encontram-
 
 ### 3.1 Posição metodológica, neutralidade e pré-registro
 
-Experimento **controlado, prospectivo e reproduzível** (diferentemente de estudos retrospectivos como [D05, F04, F05]). As hipóteses, RQs, plano de análise, critérios de exclusão e o princípio de neutralidade foram fixados **antes** da coleta (documentos de problema-e-hipóteses e metodologia commitados previamente no repositório de pesquisa) e consolidados posteriormente como um pré-registro **formalizado retrospectivamente** com âncoras temporais verificáveis no histórico de *git* (a seção de resultados foi adicionada em um commit separado). **Neutralidade (C1):** o experimento não parte de "IA é ruim"; se os dados mostrarem IA igual ou melhor em alguma dimensão, isso é resultado, não limitação.
+Experimento **controlado, prospectivo e reproduzível** (diferentemente de estudos retrospectivos como [D05, F04, F05]). As hipóteses, RQs, plano de análise, critérios de exclusão e o princípio de neutralidade foram fixados **antes** da coleta (documentos de problema-e-hipóteses e metodologia commitados previamente no repositório de pesquisa), evidenciado por commits com timestamp no repositório (isso **não constitui pré-registro formal em plataforma pública** como OSF ou AsPredicted; pré-registro formal está planejado para o desenho ampliado, ver Trabalhos Futuros). **Neutralidade (C1):** o experimento não parte de "IA é ruim"; se os dados mostrarem IA igual ou melhor em alguma dimensão, isso é resultado, não limitação.
 
 ### 3.2 Desenho experimental
 
@@ -99,7 +99,7 @@ Suíte **independente da IA geradora**, privada e imutável durante a coleta, va
 
 Regras: não revisado pelo agente; não exposto em prompt; cobre todos os FR/NFR; **coverage é reportado mas não tratado como evidência de qualidade** ([C05]); vale a detecção real de defeitos. A suíte tem **81 testes** e é exclusivamente *black-box* em relação ao backend.
 
-**Ambiente de validação (D9).** A máquina de execução é uma VM **sem virtualização aninhada**; por isso a validação foi **nativa** (PostgreSQL nativo + venv + `alembic upgrade head` + uvicorn + gating por `/health`). Artefatos Docker exigidos na entrega continuam obrigatórios e são validados estruturalmente; serão executados em contêineres na máquina de produção. Essa condicionante é reportada como limitação (§5.3).
+**Ambiente de validação.** A máquina de execução é uma VM **sem virtualização aninhada**; por isso a validação foi **nativa** (PostgreSQL nativo + venv + `alembic upgrade head` + uvicorn + gating por `/health`). Artefatos Docker exigidos na entrega continuam obrigatórios e são validados estruturalmente; serão executados em contêineres na máquina de produção. Essa condicionante é reportada como limitação (§5.3).
 
 ### 3.5 Matriz de defeitos e classificação
 
@@ -120,7 +120,7 @@ Mapeamento RQ→métrica→instrumento e testes pré-definidos:
 | RQ7 reprodutibilidade | Executa em ambiente limpo; instruções; dependências | verificação de executabilidade |
 | RQ8 variabilidade | Variância entre as ≥3 execuções | descritiva (CV) |
 
-Nível α=0,05 com correção para múltiplas comparações. Regra honesta: χ² só é conclusivo com células esperadas ≥5; com células esperadas <5 usamos Fisher exato e **reportamos como informativo, não conclusivo**. Resultados negativos são reportados como resultados (neutralidade).
+Nível α=0,05. Regra honesta: χ² só é conclusivo com células esperadas ≥5; com células esperadas <5 usamos Fisher exato e **reportamos como informativo, não conclusivo**. Dado o caráter exploratório do estudo (declarado no resumo), todos os p-valores são reportados **brutos, sem ajuste para múltiplas comparações**, como sinais descritivos e não como testes confirmatórios.
 
 ### 3.7 Procedimento de coleta
 
@@ -218,7 +218,7 @@ Há divergência entre dimensões: entregas que **sobem** ainda falham em 69–8
 
 ### 5.1 Interpretação dos achados principais
 
-**Densidade e natureza (RQ1–RQ4; H1, H2).** Há diferenças descritivas de densidade (lightning 1,36; ultra 0,93; mimo 0,92; ling 0,55 defeitos/KLOC), com o achado mais sustentável no **perfil do ultra**: 100% `incomplete_generation` (p=0,010 Fisher). Interpretamos em termos de **perfil**, não apenas quantidade, coerente com a evidência de que IA e humanos — e, aqui, diferentes modelos — têm perfis de defeitos distintos [B03]. O χ² aponta associação (p=0,041, V=0,85), mas **informativa, não conclusiva** (n reduzido, células <5). Logo, **H1 não é rejeitada nem aceita** com esta amostra; **H2** encontra apoio pontual (perfil ultra), sem generalização.
+**Densidade e natureza (RQ1–RQ4; H1, H2).** Há diferenças descritivas de densidade (lightning 1,36; ultra 0,93; mimo 0,92; ling 0,55 defeitos/KLOC), com o achado mais sustentável no **perfil do ultra**: 100% `incomplete_generation` (p=0,010 Fisher). Interpretamos em termos de **perfil**, não apenas quantidade, coerente com a evidência de que IA e humanos — e, aqui, diferentes modelos — têm perfis de defeitos distintos [B03]. O χ² aponta associação (p=0,041, V=0,85), mas **informativa, não conclusiva** (n reduzido, células <5). Com n=12, o desenho não tem poder estatístico para testar H1 formalmente; os dados de densidade são reportados como **tendência descritiva** (lightning > ultra ≈ mimo > ling), sem inferência confirmatória. **H2** encontra apoio pontual (perfil ultra), sem generalização.
 
 **Severidade (RQ4).** 100% Blocker/Critical é esperado e inflacionado pelo viés de detecção (10/12 não bootáveis), impedindo medir defeitos funcionais que só apareceriam em execução.
 
@@ -234,7 +234,7 @@ Há divergência entre dimensões: entregas que **sobem** ainda falham em 69–8
 
 > **Ressalva metodológica:** esta subseção compara modelos e tarefas **distintos** do experimento formal (chat-LLMs, função isolada; não sistemas completos). Qualquer convergência é apenas **indício**, nunca evidência cruzada. Não constitui evidência do experimento controlado.
 
-Em paralelo, realizamos explorações com **chat-LLMs** (Oreate/Claude/Gemini — modelos diferentes dos 4 tratamentos) em tarefas isoladas de QA sobre uma função `create_order` com gabarito de 6 defeitos (EXP-001: detectar; EXP-002: projetar testes). Achados: na **detecção** (EXP-001), dois modelos identificaram 6/6 e um 5/6 (perdendo o defeito de tipo/domínio D1), ecoando a categoria `wrong input type` [B01] e a omissão de casos especiais [C06]; fronteiras explícitas (`>` vs `>=`) foram detectadas por todos. Na **geração de testes** (EXP-002), a cobertura caiu para 5/6, 4/6 e 4/6; o caso mais informativo foi D1: um modelo que **não criou teste** para a quantidade fracionária, embora tivesse **identificado** o defeito no EXP-001. Isso ilustra, em escala isolada, a mesma separação subjacente à RQ6/H3: **reconhecer uma condição defeituosa e traduzi-la em um teste capaz de revelá-la são capacidades distintas** — coerente com [C04] (29–60% de detecção) e [C03].
+Em paralelo, realizamos explorações com **chat-LLMs** (Oreate/Claude/Gemini — modelos diferentes dos 4 tratamentos, acesso via interface web gratuita, sem uso de API paga) em tarefas isoladas de QA sobre uma função `create_order` com gabarito de 6 defeitos (EXP-001: detectar; EXP-002: projetar testes). Achados: na **detecção** (EXP-001), dois modelos identificaram 6/6 e um 5/6 (perdendo o defeito de tipo/domínio D1), ecoando a categoria `wrong input type` [B01] e a omissão de casos especiais [C06]; fronteiras explícitas (`>` vs `>=`) foram detectadas por todos. Na **geração de testes** (EXP-002), a cobertura caiu para 5/6, 4/6 e 4/6; o caso mais informativo foi D1: um modelo que **não criou teste** para a quantidade fracionária, embora tivesse **identificado** o defeito no EXP-001. Isso ilustra, em escala isolada, a mesma separação subjacente à RQ6/H3: **reconhecer uma condição defeituosa e traduzi-la em um teste capaz de revelá-la são capacidades distintas** — coerente com [C04] (29–60% de detecção) e [C03].
 
 ### 5.3 Limitações centrais (leitura honesta)
 
