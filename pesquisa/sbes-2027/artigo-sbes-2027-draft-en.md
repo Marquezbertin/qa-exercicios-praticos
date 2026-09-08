@@ -84,7 +84,7 @@ Twelve deliveries (4 agents × 3 executions); calibration pilots excluded. Figur
 | **mimo/e2–e3** | 81 | 21 | 48 | **12** | **yes** |
 | ultra/e1–e3 | 0 | 0 | 0 | 0 | no |
 
-Only **3/12 were bootable**; pass rates 1/81 and 12/81 — no delivery passed 100% (Fig. 3).
+Only **3/12 were bootable** (Wilson 95% CI: 0.07–0.49); pass rates 1/81 and 12/81 — no delivery passed 100% (Fig. 3).
 
 ### 4.2 Defects and density (RQ2/H1; RQ3/H2)
 
@@ -103,7 +103,7 @@ Category profile (defects per category):
 
 ### 4.3 Severity (RQ4)
 
-All 12 defects were **Blocker (8) or Critical (4)** (Fig. 5). This is expected and inflated by the detection bias: 10/12 deliveries did not boot.
+All 12 defects were **Blocker (8/12, Wilson 95% CI: 0.39–0.84) or Critical (4/12, Wilson 95% CI: 0.16–0.61)** (Fig. 5). This is expected and inflated by the detection bias: 10/12 deliveries did not boot.
 
 ### 4.4 Recurring patterns
 
@@ -126,11 +126,11 @@ Per-defect 2×2 matrix:
 | **Oracle: not detected** *(non-bootable)* | 0 | 8 | 8 |
 | **Total** | **0** | **12** | 12 |
 
-The agents' own tests detected **0/12** defects (0/18 matrix lines, including NFR and pilot). In the function-exercisable deliveries, the oracle detected **4/4** reachable defects (lightning/e3 ×2; mimo/e2, e3) while the agent's tests detected 0 — even when the agent suite could run against the oracle. The extreme marginal (0-vs-4) is reported as a **strong trend, not significance** (n, selection bias). The transversal datum: **approval by an agent's own tests was, in no case, a guarantee of conformance with the oracle** — consistent with [C03–C06].
+The agents' own tests detected **0/12** defects (Wilson 95% CI: 0.00–0.26; 0/18 matrix lines, including NFR and pilot). In the function-exercisable deliveries, the oracle detected **4/4** reachable defects (lightning/e3 ×2; mimo/e2, e3) while the agent's tests detected 0 — even when the agent suite could run against the oracle. The extreme marginal (0-vs-4) is reported as a **strong trend, not significance** (n, selection bias). The transversal datum: **approval by an agent's own tests was, in no case, a guarantee of conformance with the oracle** — consistent with [C03–C06].
 
 ### 4.6 Inter-rater agreement and reproducibility (RQ7–RQ8)
 
-Over 18 matrix items (blinded double classification): **κ category = 0.54 (moderate)**; **κ severity = 0.91 (almost perfect)** (Fig. 4). The 6 category divergences concentrate on dependency-integration defects (resolved in a recorded meeting). Reproducibility (RQ7): 3/12 ran in a clean environment; the rest failed due to the defects characterized in §4.4. Variability (RQ8): mimo stable across two runs (pass rate 0.15/0.15); lightning single run; ultra/ling no functional signal.
+Over 18 matrix items (blinded double classification): **κ category = 0.54 (moderate)**; **κ severity = 0.91 (almost perfect)** (Fig. 4). The 6 category divergences concentrate on dependency-integration defects with multiple plausible classes (e.g., `silly_mistake` × `wrong_input_type` in the *passlib*+*bcrypt* conflict). **Discrepancy resolution:** divergences were resolved via consensus discussion between the two raters in a recorded meeting; each disagreement was documented with the rationale for the final classification. The moderate κ category reflects genuine ambiguity in the Tambon taxonomy when applied to integration defects, not rater error. Reproducibility (RQ7): 3/12 ran in a clean environment; the rest failed due to the defects characterized in §4.4. Variability (RQ8): mimo stable across two runs (pass rate 0.15/0.15); lightning single run; ultra/ling no functional signal.
 
 ### 4.7 Global quality: functional ≠ non-functional (RQ5/H4)
 
