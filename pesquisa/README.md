@@ -48,6 +48,7 @@ Engenharia de Software · Software Quality / Software Testing / Generative AI
 | `plano-submissao-sbes.md` | Plano de submissão SBES 2027 + checklist |
 | `artefatos/` | Figuras (5 PNGs) + `gerar_figuras.py` + README + LICENSE CC-BY-4.0 |
 | `preprint/preprint-submissao.pdf` | PDF do preprint publicado no Zenodo (PT) |
+| `expansao-fase2/` | Plano de expansão Fase 2: codebook RQ3 agrupado, draft do pré-registro OSF, plano consolidado, checklist de auditoria do oráculo |
 | `laboratorio-exploratorio/` | Estudos exploratórios de comportamento de chat-LLMs em tarefas de QA (NÃO é evidência da pesquisa formal) — EXP-001 (detecção de defeitos) e EXP-002 (geração de casos de teste) |
 
 ## Locais dos artefatos
